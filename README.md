@@ -1,17 +1,25 @@
 # iDIoT Project
 
 # Système de Surveillance Domotique avec IoT
-Spécifications fonctionnelles
-L'utilisateur final
+## Spécifications fonctionnelles
+### L'utilisateur final
+&nbsp;
 C'est le propriétaire de la maison, l'occupant ou toute personne autorisée à accéder à la plateforme de surveillance. Il doit
 être en mesure de :
+&nbsp;
 Créer, modifier, supprimer, éditer son compte
+&nbsp;
 Visualiser en temps réel ou en différé le flux vidéo de chaque caméra
+&nbsp;
 Activer/désactiver la surveillance
+&nbsp;
 Recevoir des alertes en cas d'incidents (intrusion, incendie, etc.)
+&nbsp;
 Consulter l'historique des incidents et alertes
+&nbsp;
 Configurer des règles d'alertes spécifiques (par exemple, des alertes lors d'une détection de mouvement à un moment
 précis de la journée)
+&nbsp;
 L'installateur
 Il est un technicien chargé de l'installation et de la maintenance du système. Il doit être en mesure de :
 Créer, modifier, supprimer, éditer son compte
