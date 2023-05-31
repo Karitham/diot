@@ -2,15 +2,11 @@
 
 # Système de Surveillance Domotique avec IoT
 ## Spécifications fonctionnelles
-### L'utilisateur final
-&nbsp;
+### L'utilisateur final  
 C'est le propriétaire de la maison, l'occupant ou toute personne autorisée à accéder à la plateforme de surveillance. Il doit
-être en mesure de :
-&nbsp;
-Créer, modifier, supprimer, éditer son compte
-&nbsp;
-Visualiser en temps réel ou en différé le flux vidéo de chaque caméra
-&nbsp;
+être en mesure de :  
+Créer, modifier, supprimer, éditer son compte  
+Visualiser en temps réel ou en différé le flux vidéo de chaque caméra  
 Activer/désactiver la surveillance
 &nbsp;
 Recevoir des alertes en cas d'incidents (intrusion, incendie, etc.)
