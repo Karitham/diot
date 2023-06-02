@@ -1,0 +1,28 @@
+version: '3'
+
+volumes:
+  scylla-data:
+    driver: local
+
+services:
+  scylla-main:
+    image: scylladb/scylla
+    container_name: scylla-master
+    ports:
+      - "9042:9042"
+    volumes:
+      - scylla-data:/var/lib/scylla
+
+  scylla-slave1:
+    image: scylladb/scylla
+    container_name: scylla-slave1
+    depends_on:
+      - scylla-master
+    command: --seeds=scylla-master
+
+  scylla-slave2:
+    image: scylladb/scylla
+    container_name: scylla-slave2
+    depends_on:
+      - scylla-master
+    command: --seeds=scylla-master

@@ -1,0 +1,162 @@
+openapi: '3.1.0'
+servers:
+  - url: /v1
+info:
+  description: |-
+    iDIoT backend API
+  version: 0.0.1
+  title: iDIoT backend API
+tags:
+  - name: device
+    description: Operations about device
+  - name: user
+    description: Operations about user
+paths:
+  /users:
+    post:
+      tags:
+        - user
+      summary: Create a user
+      operationId: createUser
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        description: Create a new user
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+    get:
+      tags:
+        - user
+      summary: Get all users
+      operationId: getUsers
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/{id}:
+    get:
+      tags:
+        - user
+      summary: Get a user by id
+      operationId: getUserById
+      parameters:
+        - name: id
+          in: path
+          description: id of user to return
+          required: true
+          schema:
+            type: string
+            x-go-type: 
+              type: ULID
+              import: github.com/oklog/ulid
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - user
+      summary: Delete a user by id
+      operationId: deleteUserById
+      parameters:
+        - name: id
+          in: path
+          description: id of user to delete
+          required: true
+          schema:
+            type: string
+            x-go-type: 
+              type: ULID
+              import: github.com/oklog/ulid
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    User:
+      properties:
+        id:
+          type: string
+          x-go-type: 
+            type: ULID
+            import: github.com/oklog/ulid
+        name:
+          type: string
+          example: hi mark
+        email:
+          type: string
+          example: x@example.com
+      required:
+        - id
+        - name
+        - email
+    UserCreate:
+      properties:
+        name:
+          type: string
+          example: hi mark
+        email:
+          type: string
+          example: x@example.com
+        password:
+          type: string
+          example: DWD21378udh#g3@#d
+      required:
+        - name
+        - email
+        - password
+    Error:
+      properties:
+        message:
+          type: string
+          description: Error message
+        request_id:
+          type: string
+          description: Request ID
+      required:
+        - message

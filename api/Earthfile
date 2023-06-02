@@ -1,0 +1,44 @@
+VERSION 0.7
+FROM golang:1.20.4-alpine
+WORKDIR /go-workdir
+
+download-deps:
+    RUN go install github.com/discord-gophers/goapi-gen@latest
+
+deps:
+    FROM +download-deps
+    COPY go.* ./
+    RUN go mod download
+    SAVE ARTIFACT go.* AS LOCAL ./
+
+api:
+    FROM +download-deps
+
+    COPY go.* ./
+    RUN go mod download
+
+    COPY openapi.yml ./
+    
+    RUN goapi-gen --out types.gen.go --generate types --package api -- openapi.yml
+    RUN goapi-gen --out srv.gen.go --generate server --package api -- openapi.yml
+
+    SAVE ARTIFACT *.gen.go AS LOCAL ./httpd/api/
+
+build:
+    FROM +deps
+    COPY . ./
+    RUN go build -o idiot .
+    SAVE ARTIFACT idiot AS LOCAL ./idiot
+
+docker:
+    FROM alpine:3.15.0
+    COPY +build/idiot ./idiot
+    ENTRYPOINT ["./idiot"]
+    SAVE IMAGE ghcr.io/karitham/idiot/api:latest
+
+docs:
+    FROM node:20-alpine
+    RUN npm install -g widdershins
+    COPY openapi.yml ./
+    RUN widdershins openapi.yml -o docs.md --language_tabs 'javascript:JS' 'shell:Shell'
+    SAVE ARTIFACT docs.md AS LOCAL docs.md
