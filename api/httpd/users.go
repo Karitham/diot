@@ -63,7 +63,7 @@ func newULID() ulid.ULID {
 
 // (GET /users/{id})
 func (us Service) GetUserByID(w http.ResponseWriter, r *http.Request, id ulid.ULID) *api.Response {
-	u, err := us.store.GetUserByID(r.Context(), id)
+	u, err := us.store.GetUser(r.Context(), id)
 	if err != nil {
 		return WError(r.Context(), 404, api.Error{Message: err.Error()})
 	}

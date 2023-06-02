@@ -10,8 +10,8 @@ type Store struct {
 	conn gocqlx.Session
 }
 
-func New(clusterAddr string) *Store {
-	cluster := gocql.NewCluster(clusterAddr)
+func New(clusterAddr ...string) *Store {
+	cluster := gocql.NewCluster(clusterAddr...)
 	session, err := gocqlx.WrapSession(cluster.CreateSession())
 	if err != nil {
 		panic(err)
@@ -40,8 +40,9 @@ var migrations = []string{
 		email varchar,
 		name varchar,
 		password varchar,
-		PRIMARY KEY (id)
-	);`,
+		PRIMARY KEY (id, email)
+	)`,
+	`CREATE INDEX IF NOT EXISTS users_email_idx ON idiot.users (email);`,
 }
 
 func Migrate(conn gocqlx.Session) error {

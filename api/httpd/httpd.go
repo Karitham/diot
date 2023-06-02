@@ -12,7 +12,7 @@ import (
 type Store interface {
 	CreateUser(ctx context.Context, user store.User) error
 	GetUsers(ctx context.Context) ([]store.User, error)
-	GetUserByID(ctx context.Context, id ulid.ULID) (store.User, error)
+	GetUser(ctx context.Context, id ulid.ULID) (store.User, error)
 	GetUserByEmail(ctx context.Context, email string) (store.User, error)
 	DeleteUser(ctx context.Context, id ulid.ULID) error
 }

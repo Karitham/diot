@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/Karitham/iDIoT/api/httpd"
 	"github.com/Karitham/iDIoT/api/httpd/api"
@@ -16,10 +17,11 @@ import (
 
 func main() {
 	port := flag.Int("port", 7667, "Port for test HTTP server")
-	cassIP := flag.String("cass", "localhost", "IP address of cassandra")
+	cassIPs := flag.String("cass", "localhost:9040", "IP address of cassandra")
 	flag.Parse()
 
-	store := store.New(*cassIP)
+	IPs := strings.Split(*cassIPs, ",")
+	store := store.New(IPs...)
 	defer store.Close()
 
 	r := chi.NewRouter()
