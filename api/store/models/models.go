@@ -8,6 +8,32 @@ import (
 
 // Table models.
 var (
+	Migrations = table.New(table.Metadata{
+		Name: "migrations",
+		Columns: []string{
+			"content",
+			"time",
+		},
+		PartKey: []string{
+			"content",
+		},
+		SortKey: []string{
+			"time",
+		},
+	})
+
+	Sessions = table.New(table.Metadata{
+		Name: "sessions",
+		Columns: []string{
+			"id",
+			"permissions",
+		},
+		PartKey: []string{
+			"id",
+		},
+		SortKey: []string{},
+	})
+
 	Users = table.New(table.Metadata{
 		Name: "users",
 		Columns: []string{
@@ -41,6 +67,14 @@ var (
 	})
 )
 
+type MigrationsStruct struct {
+	Content string
+	Time    [16]byte
+}
+type SessionsStruct struct {
+	Id          string
+	Permissions []string
+}
 type UsersStruct struct {
 	Email    string
 	Id       string

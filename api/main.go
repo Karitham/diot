@@ -1,10 +1,11 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
-	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/Karitham/iDIoT/api/httpd"
@@ -15,13 +16,15 @@ import (
 	"golang.org/x/exp/slog"
 )
 
+var log = slog.New(slog.NewTextHandler(os.Stderr)).With("pkg", "main")
+
 func main() {
 	port := flag.Int("port", 7667, "Port for test HTTP server")
 	cassIPs := flag.String("cass", "localhost:9040", "IP address of cassandra")
 	flag.Parse()
 
 	IPs := strings.Split(*cassIPs, ",")
-	store := store.New(IPs...)
+	store := store.New(context.Background(), IPs...)
 	defer store.Close()
 
 	r := chi.NewRouter()
@@ -29,12 +32,16 @@ func main() {
 		api.Handler(httpd.New(store), api.WithRouter(r), api.WithErrorHandler(errorH))
 	})
 
+	log.Info(fmt.Sprintf("Listening on port %d", *port))
 	s := &http.Server{
 		Handler: r,
 		Addr:    fmt.Sprintf("0.0.0.0:%d", *port),
 	}
 
-	log.Fatal(s.ListenAndServe())
+	err := s.ListenAndServe()
+	if err != nil {
+		log.Error("ListenAndServe", "error", err)
+	}
 }
 
 func errorH(w http.ResponseWriter, r *http.Request, err error) {
