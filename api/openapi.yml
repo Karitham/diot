@@ -7,13 +7,72 @@ info:
   version: 0.0.1
   title: iDIoT backend API
 tags:
-  - name: device
-    description: Operations about device
   - name: user
     description: Operations about user
+  - name: auth
+    description: Operations about auth
 paths:
-  /users:
+  /auth/login:
     post:
+      tags:
+        - auth
+      summary: Login
+      operationId: authLogin
+      queryParams:
+        - name: email
+          in: query
+          description: email
+          required: true
+          schema:
+            type: string
+            example: abc@efg.xyz
+        - name: password
+          in: query
+          description: password
+          required: true
+          schema:
+            type: string
+            example: DHBUD@&#W(IJOQDJCNE@DQFX$#D)
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                properties:
+                  token:
+                    type: string
+                    example: sess_dwquijlbndwqbyuidhkwqdyuibqwd89d30y12dh22389d:dh189gd2d1ghod921
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /auth/logout:
+    post:
+      x-go-middlewares: [auth]
+      security:
+        - bearerAuth: []
+      tags:
+        - auth
+      summary: Logout
+      operationId: authLogout
+      responses:
+        '200':
+          description: ok
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+  /users:
+    x-go-middlewares: [auth]
+    post:
+      security:
+        - bearerAuth: [users:create]
       tags:
         - user
       summary: Create a user
@@ -39,6 +98,8 @@ paths:
             schema:
               $ref: '#/components/schemas/UserCreate'
     get:
+      security:
+        - bearerAuth: [users:read]
       tags:
         - user
       summary: Get all users
@@ -60,9 +121,12 @@ paths:
                 $ref: '#/components/schemas/Error'
 
   /users/{id}:
+    x-go-middlewares: [auth]
     get:
       tags:
         - user
+      security:
+        - bearerAuth: []
       summary: Get a user by id
       operationId: getUserById
       parameters:
@@ -92,6 +156,8 @@ paths:
       tags:
         - user
       summary: Delete a user by id
+      security:
+        - bearerAuth: [users:delete]
       operationId: deleteUserById
       parameters:
         - name: id
@@ -160,3 +226,14 @@ components:
           description: Request ID
       required:
         - message
+security:
+  # grep -oP 'Permission\s*=\s*"(.*)"' api/session/perms.go | awk '{print $3 ","}' | uniq
+  - bearerAuth: [
+      "users:create",
+      "users:read",
+      "users:delete",
+      "sensors:read",
+      "sensors:update",
+      "sensors:delete",
+      "sensors:state:update",
+    ]

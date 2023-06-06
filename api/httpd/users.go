@@ -13,7 +13,6 @@ import (
 	"github.com/Karitham/iDIoT/api/store"
 )
 
-// TODO(@Karitham): auth
 // (POST /users)
 func (s Service) CreateUser(w http.ResponseWriter, r *http.Request) *api.Response {
 	var u api.CreateUserJSONRequestBody

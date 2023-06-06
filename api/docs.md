@@ -108,8 +108,9 @@ curl -X POST /v1/users \
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|ok|[User](#schemauser)|
 |default|Default|unexpected error|[Error](#schemaerror)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+None ( Scopes: users:create )
 </aside>
 
 ## getUsers
@@ -181,8 +182,9 @@ Status Code **200**
 |» name|string|true|none|none|
 |» email|string|true|none|none|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+None ( Scopes: users:read )
 </aside>
 
 ## getUserById
@@ -247,8 +249,9 @@ curl -X GET /v1/users/{id} \
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|ok|[User](#schemauser)|
 |default|Default|unexpected error|[Error](#schemaerror)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+None
 </aside>
 
 ## deleteUserById
@@ -313,8 +316,140 @@ curl -X DELETE /v1/users/{id} \
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|ok|[User](#schemauser)|
 |default|Default|unexpected error|[Error](#schemaerror)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+None ( Scopes: users:delete )
+</aside>
+
+<h1 id="idiot-backend-api-auth">auth</h1>
+
+Operations about auth
+
+## authLogin
+
+<a id="opIdauthLogin"></a>
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'application/json'
+};
+
+fetch('/v1/auth/login',
+{
+  method: 'POST',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```shell
+# You can also use wget
+curl -X POST /v1/auth/login \
+  -H 'Accept: application/json'
+
+```
+
+`POST /auth/login`
+
+*Login*
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "token": "sess_dwquijlbndwqbyuidhkwqdyuibqwd89d30y12dh22389d:dh189gd2d1ghod921"
+}
+```
+
+<h3 id="authlogin-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|ok|Inline|
+|default|Default|unexpected error|[Error](#schemaerror)|
+
+<h3 id="authlogin-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» token|string|false|none|none|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+None ( Scopes: users:create users:read users:delete sensors:read sensors:update sensors:delete sensors:state:update )
+</aside>
+
+## authLogout
+
+<a id="opIdauthLogout"></a>
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'application/json'
+};
+
+fetch('/v1/auth/logout',
+{
+  method: 'POST',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```shell
+# You can also use wget
+curl -X POST /v1/auth/logout \
+  -H 'Accept: application/json'
+
+```
+
+`POST /auth/logout`
+
+*Logout*
+
+> Example responses
+
+> default Response
+
+```json
+{
+  "message": "string",
+  "request_id": "string"
+}
+```
+
+<h3 id="authlogout-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|ok|None|
+|default|Default|unexpected error|[Error](#schemaerror)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+None
 </aside>
 
 # Schemas

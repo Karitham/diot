@@ -11,14 +11,21 @@ import (
 type Permission string
 
 const (
+	// Root has all permissions
+	Root Permission = "perm"
+
 	// UserCreate is the permission to create a user
-	UserCreate Permission = "users:create"
+	UserCreate Permission = "perm:users:create"
+	UserRead   Permission = "perm:users:read"
+	UserDelete Permission = "perm:users:delete"
 
 	// SensorRead is the permission to read a sensor
-	SensorRead Permission = "sensors:read"
+	SensorRead   Permission = "perm:sensors:read"
+	SensorUpdate Permission = "perm:sensors:update"
+	SensorDelete Permission = "perm:sensors:delete"
 
 	// SensorsStateUpdate is the permission to update a sensor state
-	SensorsStateUpdate Permission = "sensors:state:update"
+	SensorsStateUpdate Permission = "perm:sensors:state:update"
 )
 
 // Permissions is a list of permissions

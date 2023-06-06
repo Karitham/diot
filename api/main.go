@@ -27,9 +27,20 @@ func main() {
 	store := store.New(context.Background(), IPs...)
 	defer store.Close()
 
+	httpdApi := httpd.New(store)
+
 	r := chi.NewRouter()
+	r.Use(httpd.Log(slog.New(slog.NewTextHandler(os.Stderr)).With("pkg", "httpd")))
 	r.Route("/v1", func(r chi.Router) {
-		api.Handler(httpd.New(store), api.WithRouter(r), api.WithErrorHandler(errorH))
+		api.Handler(
+			httpdApi,
+			api.WithRouter(r),
+			api.WithErrorHandler(errorH),
+			api.WithMiddleware("auth", func(h http.Handler) http.Handler {
+				return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+					httpdApi.AuthMiddleware(httpdApi.PermissionsMiddleware(h)).ServeHTTP(w, r)
+				})
+			}))
 	})
 
 	log.Info(fmt.Sprintf("Listening on port %d", *port))

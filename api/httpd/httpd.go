@@ -22,6 +22,7 @@ type Store interface {
 
 	NewSession(ctx context.Context, sess session.Permissions) (session.ID, error)
 	GetSession(ctx context.Context, id session.ID) (session.Session, error)
+	DeleteSession(ctx context.Context, id session.ID) error
 }
 
 func New(store Store) *Service {
@@ -35,8 +36,6 @@ type Service struct {
 }
 
 func WError(ctx context.Context, code int, m api.Error) *api.Response {
-	r := api.GetUserByIDJSONDefaultResponse(m)
-	r.Status(code)
 	log.WarnCtx(ctx, "api returned an error", "message", m.Message, "code", code)
-	return r
+	return api.GetUserByIDJSONDefaultResponse(m).Status(code)
 }
