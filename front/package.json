@@ -10,7 +10,6 @@
         "@types/node": "^16.11.14",
         "@types/react": "^18.0.28",
         "@types/react-dom": "^18.0.11",
-        "prettier": "^2.8.8",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-router-dom": "^6.2.1",
@@ -41,6 +40,8 @@
     },
     "devDependencies": {
         "electron": "^25.0.1",
-        "eslint-plugin-prettier": "^4.2.1"
+        "eslint": "^8.42.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "prettier": "^2.8.8"
     }
 }
