@@ -26,6 +26,13 @@ Base URLs:
 
 * <a href="/v1">/v1</a>
 
+# Authentication
+
+- HTTP Authentication, scheme: bearer 
+
+* API Key (cookieAuth)
+    - Parameter Name: **idiot_session_id**, in: cookie. 
+
 <h1 id="idiot-backend-api-user">user</h1>
 
 Operations about user
@@ -44,7 +51,8 @@ const inputBody = '{
 }';
 const headers = {
   'Content-Type':'application/json',
-  'Accept':'application/json'
+  'Accept':'application/json',
+  'Authorization':'Bearer {access-token}'
 };
 
 fetch('/v1/users',
@@ -65,7 +73,8 @@ fetch('/v1/users',
 # You can also use wget
 curl -X POST /v1/users \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -110,7 +119,7 @@ curl -X POST /v1/users \
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
-None ( Scopes: users:create )
+bearerAuth ( Scopes: users:create )
 </aside>
 
 ## getUsers
@@ -122,7 +131,8 @@ None ( Scopes: users:create )
 ```javascript
 
 const headers = {
-  'Accept':'application/json'
+  'Accept':'application/json',
+  'Authorization':'Bearer {access-token}'
 };
 
 fetch('/v1/users',
@@ -142,7 +152,8 @@ fetch('/v1/users',
 ```shell
 # You can also use wget
 curl -X GET /v1/users \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -184,7 +195,7 @@ Status Code **200**
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
-None ( Scopes: users:read )
+bearerAuth ( Scopes: users:read )
 </aside>
 
 ## getUserById
@@ -196,7 +207,8 @@ None ( Scopes: users:read )
 ```javascript
 
 const headers = {
-  'Accept':'application/json'
+  'Accept':'application/json',
+  'Authorization':'Bearer {access-token}'
 };
 
 fetch('/v1/users/{id}',
@@ -216,7 +228,8 @@ fetch('/v1/users/{id}',
 ```shell
 # You can also use wget
 curl -X GET /v1/users/{id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -251,7 +264,7 @@ curl -X GET /v1/users/{id} \
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
-None
+bearerAuth
 </aside>
 
 ## deleteUserById
@@ -263,7 +276,8 @@ None
 ```javascript
 
 const headers = {
-  'Accept':'application/json'
+  'Accept':'application/json',
+  'Authorization':'Bearer {access-token}'
 };
 
 fetch('/v1/users/{id}',
@@ -283,7 +297,8 @@ fetch('/v1/users/{id}',
 ```shell
 # You can also use wget
 curl -X DELETE /v1/users/{id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -318,7 +333,7 @@ curl -X DELETE /v1/users/{id} \
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
-None ( Scopes: users:delete )
+bearerAuth ( Scopes: users:delete )
 </aside>
 
 <h1 id="idiot-backend-api-auth">auth</h1>
@@ -334,7 +349,8 @@ Operations about auth
 ```javascript
 
 const headers = {
-  'Accept':'application/json'
+  'Accept':'application/json',
+  'Authorization':'Bearer {access-token}'
 };
 
 fetch('/v1/auth/login',
@@ -354,7 +370,8 @@ fetch('/v1/auth/login',
 ```shell
 # You can also use wget
 curl -X POST /v1/auth/login \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -389,7 +406,7 @@ Status Code **200**
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
-None ( Scopes: users:create users:read users:delete sensors:read sensors:update sensors:delete sensors:state:update )
+bearerAuth ( Scopes: users:create users:read users:delete sensors:read sensors:update sensors:delete sensors:state:update )
 </aside>
 
 ## authLogout
@@ -401,7 +418,8 @@ None ( Scopes: users:create users:read users:delete sensors:read sensors:update 
 ```javascript
 
 const headers = {
-  'Accept':'application/json'
+  'Accept':'application/json',
+  'Authorization':'Bearer {access-token}'
 };
 
 fetch('/v1/auth/logout',
@@ -421,7 +439,8 @@ fetch('/v1/auth/logout',
 ```shell
 # You can also use wget
 curl -X POST /v1/auth/logout \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -449,7 +468,7 @@ curl -X POST /v1/auth/logout \
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
-None
+bearerAuth
 </aside>
 
 # Schemas

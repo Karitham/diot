@@ -226,6 +226,14 @@ components:
           description: Request ID
       required:
         - message
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+    cookieAuth:
+        type: apiKey
+        in: cookie
+        name: idiot_session_id
 security:
   # grep -oP 'Permission\s*=\s*"(.*)"' api/session/perms.go | awk '{print $3 ","}' | uniq
   - bearerAuth: [
