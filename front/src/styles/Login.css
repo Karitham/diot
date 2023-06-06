@@ -38,6 +38,7 @@
 }
 .login {
   position: relative;
+  text-align: center;
   background-color: var(--text-textneg);
   width: 100%;
   height: 57.88rem;
@@ -50,4 +51,10 @@
   font-size: var(--font-size-sm-7);
   color: var(--colors-primary);
   font-family: var(--title);
+  max-width: 30rem;
+}
+
+.main {
+  display: flex;
+  justify-content: center;
 }
