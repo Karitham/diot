@@ -1,48 +1,26 @@
-import { Text } from '@chakra-ui/react'
-import { Box, Heading, VStack } from '@chakra-ui/layout'
-import { FormControl, FormLabel, Input, Checkbox, Button, HStack } from '@chakra-ui/react'
-import React from 'react'
+import { FunctionComponent, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import LoginContainer from "../components/LoginContainer";
+import "../styles/Register.css";
+const Register: FunctionComponent = () => {
+  const navigate = useNavigate();
 
-const Connection: React.FC = () => {
+  const onLogoSloganContainerClick = useCallback(() => {
+    navigate("/dashboard");
+  }, [navigate]);
+
   return (
-    <Box
-      w={['full', 'md']}
-      p={[8, 10]}
-      mt={[20, '10vh']}
-      mx="auto"
-      border={['none', '1px']}
-      borderColor={['', 'gray.300']}
-      borderRadius={10}
-      textAlign={'center'}>
-      <VStack spacing={4} align="flex-start" w="full">
-        <VStack>
-          <img src="../assets/logo_more.png" alt="" />
-          <p></p>
-          <p></p>
-          <Heading>Register</Heading>
-        </VStack>
+    <div className="register">
+      <div className="logoslogan3" onClick={onLogoSloganContainerClick}>
+        <img className="logotext-icon3" alt="" src="/logotext2.svg" />
+        <b className="smart-homes-smarter3">Smart homes, smarter</b>
+      </div>
+      <div className="titre-parent">
+        <div className="titre3">Register</div>
+        <LoginContainer />
+      </div>
+    </div>
+  );
+};
 
-        <FormControl>
-          <FormLabel>E-mail</FormLabel>
-          <Input rounded="none" variant="filled"></Input>
-        </FormControl>
-        <FormControl>
-          <FormLabel>Password</FormLabel>
-          <Input rounded="none" variant="filled" type="password"></Input>
-        </FormControl>
-        <FormControl>
-          <FormLabel>Confirm Password</FormLabel>
-          <Input rounded="none" variant="filled" type="password"></Input>
-        </FormControl>
-        <HStack w="full" justify="space-between">
-          <Checkbox>Remember me.</Checkbox>
-        </HStack>
-        <Button rounded="none" colorScheme="blue" w={['auto', 'full']}>
-          Register
-        </Button>
-      </VStack>
-    </Box>
-  )
-}
-
-export default Connection
+export default Register;

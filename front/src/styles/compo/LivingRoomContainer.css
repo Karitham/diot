@@ -1,0 +1,79 @@
+.login1 {
+  position: relative;
+  font-family: var(--title);
+}
+.logging-in-will {
+  align-self: stretch;
+  font-size: var(--breadcrumb-size);
+  color: var(--text-text2);
+  display: none;
+}
+.lessgo-we-on,
+.logging-in-will,
+.vector-icon16 {
+  position: relative;
+}
+.vector-icon16 {
+  width: 0.75rem;
+  height: 0.75rem;
+  display: none;
+}
+.magnifyingglass1 {
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  padding: var(--padding-11xs);
+  align-items: center;
+  justify-content: center;
+}
+.input1,
+.input2 {
+  align-self: stretch;
+  display: flex;
+}
+.input2 {
+  border-radius: var(--br-9xs);
+  background-color: var(--text-textneg);
+  box-shadow: var(--sm);
+  border: 1px solid var(--bg-bg2);
+  overflow: hidden;
+  flex-direction: row;
+  padding: var(--padding-xs);
+  align-items: center;
+  justify-content: space-between;
+  mix-blend-mode: normal;
+  color: var(--text-text0);
+}
+.input1 {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-7xs);
+}
+.this-documentation {
+  color: var(--colors-primary);
+}
+.logging-in-will-container {
+  align-self: stretch;
+  position: relative;
+  font-size: var(--breadcrumb-size);
+  color: var(--text-text2);
+}
+.input3,
+.properties16 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.input3 {
+  width: 18.31rem;
+  gap: var(--gap-7xs);
+}
+.properties16 {
+  gap: var(--gap-base);
+  text-align: left;
+  font-size: var(--label-size);
+  color: var(--color-darkslategray-100);
+  font-family: var(--label);
+}

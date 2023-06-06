@@ -1,0 +1,21 @@
+.bell-icon,
+.pen-icon {
+  position: relative;
+  width: 0.75rem;
+  height: 0.75rem;
+}
+.bell-icon {
+  width: 0.7rem;
+}
+.icons1 {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: var(--padding-xs);
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-xs);
+}

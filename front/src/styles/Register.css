@@ -1,0 +1,54 @@
+.logotext-icon3 {
+  position: relative;
+  width: 3.4rem;
+  height: 2rem;
+}
+.smart-homes-smarter3 {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  width: 6.14rem;
+  flex-shrink: 0;
+}
+.logoslogan3 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.57rem;
+  cursor: pointer;
+}
+.titre3 {
+  position: relative;
+  font-weight: 500;
+  display: none;
+  text-shadow: var(--sm);
+}
+.register,
+.titre-parent {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.titre-parent {
+  align-self: stretch;
+  align-items: flex-start;
+  gap: var(--gap-17xl);
+  font-size: var(--title-size);
+  color: var(--text-text0);
+}
+.register {
+  position: relative;
+  background-color: var(--text-textneg);
+  width: 100%;
+  height: 57.88rem;
+  overflow-y: auto;
+  padding: var(--padding-77xl) var(--padding-29xl);
+  box-sizing: border-box;
+  align-items: center;
+  gap: var(--gap-77xl);
+  text-align: left;
+  font-size: var(--font-size-sm-7);
+  color: var(--colors-primary);
+  font-family: var(--title);
+}

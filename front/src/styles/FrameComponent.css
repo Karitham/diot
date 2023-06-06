@@ -1,0 +1,31 @@
+.vector-icon1 {
+  position: relative;
+  width: 0.59rem;
+  height: 0.75rem;
+}
+.pin {
+  width: 0.75rem;
+  height: 0.75rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.clock-icon,
+.vector-icon3 {
+  position: relative;
+  width: 0.75rem;
+  height: 0.75rem;
+}
+.vector-icon3 {
+  width: 0.61rem;
+}
+.pin-parent {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.63rem;
+}

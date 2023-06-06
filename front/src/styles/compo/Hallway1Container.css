@@ -1,0 +1,59 @@
+.start-icon1 {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+.living-room9,
+.start-icon1 {
+  position: relative;
+}
+.icons5,
+.label1,
+.text1 {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.text1 {
+  align-items: center;
+  gap: var(--gap-5xs);
+}
+.icons5,
+.label1 {
+  align-items: flex-start;
+}
+.label1 {
+  align-self: stretch;
+  align-items: center;
+  justify-content: space-between;
+}
+.start-icon2 {
+  position: relative;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.cam1,
+.pause {
+  align-self: stretch;
+  display: flex;
+}
+.pause {
+  border-radius: var(--br-5xs);
+  background-color: var(--bg-bg2);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+  height: 12.94rem;
+  overflow: hidden;
+  flex-shrink: 0;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.cam1 {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-xs);
+  text-align: left;
+  font-size: var(--label-size);
+  color: var(--text-text2);
+  font-family: var(--label);
+}

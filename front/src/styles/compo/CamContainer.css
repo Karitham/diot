@@ -1,0 +1,55 @@
+.pause-icon1 {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+.living-room8,
+.pause-icon1 {
+  position: relative;
+}
+.text {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-5xs);
+}
+.pen-icon2 {
+  position: relative;
+  width: 0.75rem;
+  height: 0.75rem;
+  cursor: pointer;
+}
+.icons4,
+.label {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.label {
+  align-self: stretch;
+  align-items: center;
+  justify-content: space-between;
+}
+.livingroom-icon {
+  align-self: stretch;
+  position: relative;
+  border-radius: var(--br-5xs);
+  max-width: 100%;
+  overflow: hidden;
+  height: 16.06rem;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+.cam {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-xs);
+  text-align: left;
+  font-size: var(--label-size);
+  color: var(--text-text0);
+  font-family: var(--label);
+}

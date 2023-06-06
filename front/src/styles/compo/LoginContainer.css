@@ -1,0 +1,42 @@
+.inputs {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-base);
+}
+.click-me1 {
+  position: relative;
+}
+.button1 {
+  align-self: stretch;
+  border-radius: var(--br-9xs);
+  background-color: var(--colors-primary);
+  box-shadow: var(--sm);
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  padding: var(--padding-xs) var(--padding-13xl);
+  align-items: center;
+  justify-content: center;
+  mix-blend-mode: normal;
+  cursor: pointer;
+}
+.already-got-an {
+  position: relative;
+  color: var(--colors-secondary);
+  cursor: pointer;
+}
+.inputs-parent {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-5xl);
+  text-align: left;
+  font-size: var(--label-size);
+  color: var(--text-textneg);
+  font-family: var(--title);
+}
