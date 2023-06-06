@@ -41,6 +41,7 @@ var (
 			"id",
 			"name",
 			"password",
+			"permissions",
 		},
 		PartKey: []string{
 			"id",
@@ -76,10 +77,11 @@ type SessionsStruct struct {
 	Permissions []string
 }
 type UsersStruct struct {
-	Email    string
-	Id       string
-	Name     string
-	Password string
+	Email       string
+	Id          string
+	Name        string
+	Password    string
+	Permissions []string
 }
 type UsersEmailIdxIndexStruct struct {
 	Email    string

@@ -59,7 +59,7 @@ func Migrate(ctx context.Context, conn gocqlx.Session) error {
 	}
 
 	if id == len(migrations) {
-		log.Info("database is up to date")
+		log.Debug("database is up to date")
 		return nil
 	}
 
@@ -73,6 +73,7 @@ func Migrate(ctx context.Context, conn gocqlx.Session) error {
 
 		err = conn.Query(qb.Insert("idiot.migrations").Columns(models.Migrations.Metadata().Columns...).ToCql()).BindMap(qb.M{
 			"content": m,
+			"time":    gocql.TimeUUID(),
 		}).WithContext(ctx).Exec()
 		if err != nil {
 			return err

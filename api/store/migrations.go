@@ -13,6 +13,7 @@ var migrations = []string{
 		email varchar,
 		name varchar,
 		password varchar,
+		permissions set<varchar>,
 		PRIMARY KEY (id, email)
 	);`,
 	`CREATE INDEX IF NOT EXISTS users_email_idx ON idiot.users (email);`,

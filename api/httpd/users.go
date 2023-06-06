@@ -37,7 +37,7 @@ func (s Service) CreateUser(w http.ResponseWriter, r *http.Request) *api.Respons
 		Email:    u.Email,
 		Name:     u.Name,
 		ID:       newULID().String(),
-		Password: p,
+		Password: string(p),
 	}
 
 	err = s.store.CreateUser(r.Context(), su)
