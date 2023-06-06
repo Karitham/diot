@@ -7,12 +7,12 @@ require (
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/go-chi/render v1.0.2
 	github.com/gocql/gocql v1.4.0
+	github.com/google/uuid v1.3.0
 	github.com/oklog/ulid v1.3.1
 	github.com/scylladb/gocqlx/v2 v2.8.0
 	golang.org/x/crypto v0.9.0
+	golang.org/x/exp v0.0.0-20230315142452-642cacee5cc0
 )
-
-require golang.org/x/exp v0.0.0-20230315142452-642cacee5cc0
 
 require (
 	github.com/ajg/form v1.5.1 // indirect

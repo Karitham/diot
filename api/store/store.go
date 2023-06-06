@@ -2,22 +2,30 @@ package store
 
 // scyllab
 import (
+	"context"
+	"os"
+
+	"github.com/Karitham/iDIoT/api/store/models"
 	"github.com/gocql/gocql"
 	"github.com/scylladb/gocqlx/v2"
+	"github.com/scylladb/gocqlx/v2/qb"
+	"golang.org/x/exp/slog"
 )
+
+var log = slog.New(slog.NewTextHandler(os.Stderr)).With("pkg", "store")
 
 type Store struct {
 	conn gocqlx.Session
 }
 
-func New(clusterAddr ...string) *Store {
+func New(ctx context.Context, clusterAddr ...string) *Store {
 	cluster := gocql.NewCluster(clusterAddr...)
 	session, err := gocqlx.WrapSession(cluster.CreateSession())
 	if err != nil {
 		panic(err)
 	}
 
-	err = Migrate(session)
+	err = Migrate(ctx, session)
 	if err != nil {
 		panic(err)
 	}
@@ -33,25 +41,46 @@ func New(clusterAddr ...string) *Store {
 	}
 }
 
-var migrations = []string{
-	`CREATE KEYSPACE IF NOT EXISTS idiot WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };`,
-	`CREATE TABLE IF NOT EXISTS idiot.users (
-		id varchar,
-		email varchar,
-		name varchar,
-		password varchar,
-		PRIMARY KEY (id, email)
-	)`,
-	`CREATE INDEX IF NOT EXISTS users_email_idx ON idiot.users (email);`,
-}
+func Migrate(ctx context.Context, conn gocqlx.Session) error {
+	err := conn.ExecStmt(keyspace)
+	if err != nil {
+		return err
+	}
 
-func Migrate(conn gocqlx.Session) error {
+	err = conn.ExecStmt(migTable)
+	if err != nil {
+		return err
+	}
+
+	var id int
+	err = conn.Query(`SELECT COUNT(*) FROM idiot.migrations`, nil).WithContext(ctx).GetRelease(&id)
+	if err != nil {
+		return err
+	}
+
+	if id == len(migrations) {
+		log.Info("database is up to date")
+		return nil
+	}
+
+	log.Info("migrating database", "current", id, "target", len(migrations))
+
 	for _, m := range migrations {
 		err := conn.ExecStmt(m)
 		if err != nil {
 			return err
 		}
+
+		err = conn.Query(qb.Insert("idiot.migrations").Columns(models.Migrations.Metadata().Columns...).ToCql()).BindMap(qb.M{
+			"content": m,
+		}).WithContext(ctx).Exec()
+		if err != nil {
+			return err
+		}
 	}
+
+	log.Info("database migrated")
+
 	return nil
 }
 
