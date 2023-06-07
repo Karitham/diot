@@ -79,7 +79,7 @@ func (s Service) AuthLogin(w http.ResponseWriter, r *http.Request) *api.Response
 		return WError(r.Context(), 400, api.Error{Message: "password is required"})
 	}
 
-	u, err := s.store.GetUserByEmail(r.Context(), password)
+	u, err := s.store.GetUserByEmail(r.Context(), email)
 	if err != nil {
 		return WError(r.Context(), 500, api.Error{Message: err.Error()})
 	}
@@ -101,7 +101,11 @@ func (s Service) AuthLogin(w http.ResponseWriter, r *http.Request) *api.Response
 		HttpOnly: true,
 	})
 
-	return nil
+	return api.AuthLoginJSON200Response(struct {
+		Token string `json:"token"`
+	}{
+		Token: id.String(),
+	})
 }
 
 // Logout

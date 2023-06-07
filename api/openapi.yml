@@ -39,6 +39,8 @@ paths:
           content:
             application/json:
               schema:
+                required:
+                  - token
                 properties:
                   token:
                     type: string

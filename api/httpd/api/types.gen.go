@@ -94,7 +94,7 @@ func (resp *Response) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 // AuthLoginJSON200Response is a constructor method for a AuthLogin response.
 // A *Response is returned with the configured status code and content type from the spec.
 func AuthLoginJSON200Response(body struct {
-	Token *string `json:"token,omitempty"`
+	Token string `json:"token"`
 }) *Response {
 	return &Response{
 		body:        body,
