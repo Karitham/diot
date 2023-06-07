@@ -3,16 +3,18 @@ package store
 import (
 	"context"
 
+	"github.com/Karitham/iDIoT/api/session"
 	"github.com/Karitham/iDIoT/api/store/models"
 	"github.com/oklog/ulid"
 	"github.com/scylladb/gocqlx/v2/qb"
 )
 
 type User struct {
-	ID       string `db:"id"`
-	Email    string `db:"email"`
-	Name     string `db:"name"`
-	Password []byte `db:"password"`
+	ID          string              `db:"id"`
+	Email       string              `db:"email"`
+	Name        string              `db:"name"`
+	Password    string              `db:"password"`
+	Permissions session.Permissions `db:"permissions"`
 }
 
 func (s *Store) CreateUser(ctx context.Context, user User) error {
@@ -42,7 +44,7 @@ func (s *Store) UpdateUser(ctx context.Context, user User) error {
 func (s *Store) GetUserByEmail(ctx context.Context, email string) (User, error) {
 	var user User
 
-	err := s.conn.Query(models.Users.Select()).
+	err := s.conn.Query(`SELECT * FROM idiot.users WHERE email=?`, []string{"email"}).
 		BindMap(qb.M{"email": email}).
 		WithContext(ctx).
 		GetRelease(&user)

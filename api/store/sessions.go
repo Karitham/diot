@@ -36,3 +36,13 @@ func (s *Store) GetSession(ctx context.Context, sessionID session.ID) (session.S
 		Permissions: session.FromString(ss.Permissions...),
 	}, err
 }
+
+// DeleteSession deletes a session
+func (s *Store) DeleteSession(ctx context.Context, sessionID session.ID) error {
+	return s.conn.Query(models.Sessions.Delete()).
+		BindStruct(models.SessionsStruct{
+			Id: sessionID.String(),
+		}).
+		WithContext(ctx).
+		ExecRelease()
+}

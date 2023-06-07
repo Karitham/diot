@@ -12,6 +12,10 @@ import (
 	"github.com/oklog/ulid"
 )
 
+const (
+	BearerAuthScopes = "bearerAuth.Scopes"
+)
+
 // Error defines model for Error.
 type Error struct {
 	// Error message
@@ -85,6 +89,38 @@ func (resp *Response) MarshalJSON() ([]byte, error) {
 // This is used to only marshal the body of the response.
 func (resp *Response) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return e.Encode(resp.body)
+}
+
+// AuthLoginJSON200Response is a constructor method for a AuthLogin response.
+// A *Response is returned with the configured status code and content type from the spec.
+func AuthLoginJSON200Response(body struct {
+	Token string `json:"token"`
+}) *Response {
+	return &Response{
+		body:        body,
+		Code:        200,
+		contentType: "application/json",
+	}
+}
+
+// AuthLoginJSONDefaultResponse is a constructor method for a AuthLogin response.
+// A *Response is returned with the configured status code and content type from the spec.
+func AuthLoginJSONDefaultResponse(body Error) *Response {
+	return &Response{
+		body:        body,
+		Code:        200,
+		contentType: "application/json",
+	}
+}
+
+// AuthLogoutJSONDefaultResponse is a constructor method for a AuthLogout response.
+// A *Response is returned with the configured status code and content type from the spec.
+func AuthLogoutJSONDefaultResponse(body Error) *Response {
+	return &Response{
+		body:        body,
+		Code:        200,
+		contentType: "application/json",
+	}
 }
 
 // GetUsersJSON200Response is a constructor method for a GetUsers response.

@@ -2,46 +2,82 @@ package main
 
 import (
 	"context"
-	"flag"
 	"fmt"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/Karitham/iDIoT/api/httpd"
 	"github.com/Karitham/iDIoT/api/httpd/api"
 	"github.com/Karitham/iDIoT/api/store"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
+	"github.com/urfave/cli/v2"
 	"golang.org/x/exp/slog"
 )
 
 var log = slog.New(slog.NewTextHandler(os.Stderr)).With("pkg", "main")
 
 func main() {
-	port := flag.Int("port", 7667, "Port for test HTTP server")
-	cassIPs := flag.String("cass", "localhost:9040", "IP address of cassandra")
-	flag.Parse()
+	app := cli.NewApp()
+	app.Name = "iDIoT"
+	app.Usage = "iDIoT"
+	app.Commands = []*cli.Command{
+		DB(),
+	}
+	app.Flags = []cli.Flag{
+		&cli.StringSliceFlag{
+			Name:    "cass",
+			Usage:   "IP address of cassandra nodes",
+			EnvVars: []string{"CASSANDRA_IPS"},
+			Value:   cli.NewStringSlice("localhost:9042"),
+		},
+		&cli.IntFlag{
+			Name:    "port",
+			Usage:   "Port for HTTP server",
+			EnvVars: []string{"PORT"},
+			Value:   7667,
+		},
+	}
+	app.Action = HTTPD
+	if err := app.Run(os.Args); err != nil {
+		log.Error("main", "error", err)
+	}
+}
 
-	IPs := strings.Split(*cassIPs, ",")
-	store := store.New(context.Background(), IPs...)
+func HTTPD(c *cli.Context) error {
+	port := c.Int("port")
+	cassIPs := c.StringSlice("cass")
+
+	store := store.New(context.Background(), cassIPs...)
 	defer store.Close()
 
+	httpdApi := httpd.New(store)
+
 	r := chi.NewRouter()
+	r.Use(httpd.Log(slog.New(slog.NewTextHandler(os.Stderr)).With("pkg", "httpd")))
+	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("OK"))
+	})
 	r.Route("/v1", func(r chi.Router) {
-		api.Handler(httpd.New(store), api.WithRouter(r), api.WithErrorHandler(errorH))
+		api.Handler(
+			httpdApi,
+			api.WithRouter(r),
+			api.WithErrorHandler(errorH),
+			api.WithMiddleware("auth", func(h http.Handler) http.Handler {
+				return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+					httpdApi.AuthMiddleware(httpdApi.PermissionsMiddleware(h)).ServeHTTP(w, r)
+				})
+			}))
 	})
 
-	log.Info(fmt.Sprintf("Listening on port %d", *port))
+	log.Info(fmt.Sprintf("Listening on port %d", port))
 	s := &http.Server{
 		Handler: r,
-		Addr:    fmt.Sprintf("0.0.0.0:%d", *port),
+		Addr:    fmt.Sprintf("0.0.0.0:%d", port),
 	}
 
-	err := s.ListenAndServe()
-	if err != nil {
-		log.Error("ListenAndServe", "error", err)
-	}
+	return s.ListenAndServe()
 }
 
 func errorH(w http.ResponseWriter, r *http.Request, err error) {

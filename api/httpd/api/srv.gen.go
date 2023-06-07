@@ -4,6 +4,7 @@
 package api
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
@@ -15,6 +16,12 @@ import (
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+	// Login
+	// (POST /auth/login)
+	AuthLogin(w http.ResponseWriter, r *http.Request) *Response
+	// Logout
+	// (POST /auth/logout)
+	AuthLogout(w http.ResponseWriter, r *http.Request) *Response
 	// Get all users
 	// (GET /users)
 	GetUsers(w http.ResponseWriter, r *http.Request) *Response
@@ -36,12 +43,14 @@ type ServerInterfaceWrapper struct {
 	ErrorHandlerFunc func(w http.ResponseWriter, r *http.Request, err error)
 }
 
-// GetUsers operation middleware
-func (siw *ServerInterfaceWrapper) GetUsers(w http.ResponseWriter, r *http.Request) {
+// AuthLogin operation middleware
+func (siw *ServerInterfaceWrapper) AuthLogin(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
+	ctx = context.WithValue(ctx, BearerAuthScopes, []string{"users:create", "users:read", "users:delete", "sensors:read", "sensors:update", "sensors:delete", "sensors:state:update"})
+
 	var handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		resp := siw.Handler.GetUsers(w, r)
+		resp := siw.Handler.AuthLogin(w, r)
 		if resp != nil {
 			if resp.body != nil {
 				render.Render(w, r, resp)
@@ -54,9 +63,57 @@ func (siw *ServerInterfaceWrapper) GetUsers(w http.ResponseWriter, r *http.Reque
 	handler(w, r.WithContext(ctx))
 }
 
+// AuthLogout operation middleware
+func (siw *ServerInterfaceWrapper) AuthLogout(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, BearerAuthScopes, []string{""})
+
+	var handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		resp := siw.Handler.AuthLogout(w, r)
+		if resp != nil {
+			if resp.body != nil {
+				render.Render(w, r, resp)
+			} else {
+				w.WriteHeader(resp.Code)
+			}
+		}
+	})
+
+	// Operation specific middleware
+	handler = siw.Middlewares["auth"](handler).ServeHTTP
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetUsers operation middleware
+func (siw *ServerInterfaceWrapper) GetUsers(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, BearerAuthScopes, []string{"users:read"})
+
+	var handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		resp := siw.Handler.GetUsers(w, r)
+		if resp != nil {
+			if resp.body != nil {
+				render.Render(w, r, resp)
+			} else {
+				w.WriteHeader(resp.Code)
+			}
+		}
+	})
+
+	// Operation specific middleware
+	handler = siw.Middlewares["auth"](handler).ServeHTTP
+
+	handler(w, r.WithContext(ctx))
+}
+
 // CreateUser operation middleware
 func (siw *ServerInterfaceWrapper) CreateUser(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, BearerAuthScopes, []string{"users:create"})
 
 	var handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		resp := siw.Handler.CreateUser(w, r)
@@ -68,6 +125,9 @@ func (siw *ServerInterfaceWrapper) CreateUser(w http.ResponseWriter, r *http.Req
 			}
 		}
 	})
+
+	// Operation specific middleware
+	handler = siw.Middlewares["auth"](handler).ServeHTTP
 
 	handler(w, r.WithContext(ctx))
 }
@@ -84,6 +144,8 @@ func (siw *ServerInterfaceWrapper) DeleteUserByID(w http.ResponseWriter, r *http
 		return
 	}
 
+	ctx = context.WithValue(ctx, BearerAuthScopes, []string{"users:delete"})
+
 	var handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		resp := siw.Handler.DeleteUserByID(w, r, id)
 		if resp != nil {
@@ -94,6 +156,9 @@ func (siw *ServerInterfaceWrapper) DeleteUserByID(w http.ResponseWriter, r *http
 			}
 		}
 	})
+
+	// Operation specific middleware
+	handler = siw.Middlewares["auth"](handler).ServeHTTP
 
 	handler(w, r.WithContext(ctx))
 }
@@ -110,6 +175,8 @@ func (siw *ServerInterfaceWrapper) GetUserByID(w http.ResponseWriter, r *http.Re
 		return
 	}
 
+	ctx = context.WithValue(ctx, BearerAuthScopes, []string{""})
+
 	var handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		resp := siw.Handler.GetUserByID(w, r, id)
 		if resp != nil {
@@ -120,6 +187,9 @@ func (siw *ServerInterfaceWrapper) GetUserByID(w http.ResponseWriter, r *http.Re
 			}
 		}
 	})
+
+	// Operation specific middleware
+	handler = siw.Middlewares["auth"](handler).ServeHTTP
 
 	handler(w, r.WithContext(ctx))
 }
@@ -241,7 +311,16 @@ func Handler(si ServerInterface, opts ...ServerOption) http.Handler {
 		ErrorHandlerFunc: options.ErrorHandlerFunc,
 	}
 
+	middlewares := []string{"auth"}
+	for _, m := range middlewares {
+		if _, ok := wrapper.Middlewares[m]; !ok {
+			panic("goapi-gen: could not find tagged middleware " + m)
+		}
+	}
+
 	r.Route(options.BaseURL, func(r chi.Router) {
+		r.Post("/auth/login", wrapper.AuthLogin)
+		r.Post("/auth/logout", wrapper.AuthLogout)
 		r.Get("/users", wrapper.GetUsers)
 		r.Post("/users", wrapper.CreateUser)
 		r.Delete("/users/{id}", wrapper.DeleteUserByID)
