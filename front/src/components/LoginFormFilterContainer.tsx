@@ -30,9 +30,6 @@ const LoginFormFilterContainer: FunctionComponent = () => {
       <div className="button2" onClick={onButtonContainerClick}>
         <b className="click-me2">Log In</b>
       </div>
-      <div className="dont-have-an" onClick={onDontHaveAnClick}>
-        Don’t have an account?
-      </div>
     </div>
   )
 }
