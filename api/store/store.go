@@ -30,7 +30,7 @@ func New(ctx context.Context, clusterAddr ...string) *Store {
 		panic(err)
 	}
 
-	cluster.Keyspace = "idiot"
+	cluster.Keyspace = keyspace
 	session, err = gocqlx.WrapSession(cluster.CreateSession())
 	if err != nil {
 		panic(err)
@@ -42,7 +42,7 @@ func New(ctx context.Context, clusterAddr ...string) *Store {
 }
 
 func Migrate(ctx context.Context, conn gocqlx.Session) error {
-	err := conn.ExecStmt(keyspace)
+	err := conn.ExecStmt(migKeyspace)
 	if err != nil {
 		return err
 	}

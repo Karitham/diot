@@ -29,7 +29,7 @@ func main() {
 			Name:    "cass",
 			Usage:   "IP address of cassandra nodes",
 			EnvVars: []string{"CASSANDRA_IPS"},
-			Value:   cli.NewStringSlice("localhost:9040"),
+			Value:   cli.NewStringSlice("localhost:9042"),
 		},
 		&cli.IntFlag{
 			Name:    "port",
@@ -55,6 +55,10 @@ func HTTPD(c *cli.Context) error {
 
 	r := chi.NewRouter()
 	r.Use(httpd.Log(slog.New(slog.NewTextHandler(os.Stderr)).With("pkg", "httpd")))
+	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("OK"))
+	})
 	r.Route("/v1", func(r chi.Router) {
 		api.Handler(
 			httpdApi,

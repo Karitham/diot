@@ -1,6 +1,7 @@
 package store
 
-const keyspace = `CREATE KEYSPACE IF NOT EXISTS idiot WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };`
+const keyspace = "idiot"
+const migKeyspace = `CREATE KEYSPACE IF NOT EXISTS idiot WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };`
 const migTable = `CREATE TABLE IF NOT EXISTS idiot.migrations (
 	content text,
 	time timeuuid,
