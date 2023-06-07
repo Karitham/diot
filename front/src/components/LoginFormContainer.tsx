@@ -1,47 +1,29 @@
-import { FunctionComponent, useMemo } from 'react'
-import CSS, { Property } from 'csstype'
+import { FunctionComponent } from 'react'
 import '../styles/compo/LoginFormContainer.css'
 
 type LoginFormContainerType = {
-  loginEmail?: string
-  loginPassword?: string
-  loginEmailAddress?: string
+  title?: string
+  description?: string
+  value?: string
+  type?: string
 
-  /** Style props */
-  propDisplay?: Property.Display
-  onChange?: (value: string) => void
+  onInput?: (value: string) => void
 }
 
-const LoginFormContainer: FunctionComponent<LoginFormContainerType> = ({
-  loginEmail: title,
-  loginPassword: description,
-  loginEmailAddress: value,
-  propDisplay,
-  onChange
-}) => {
-  const loggingInWillStyle: CSS.Properties = useMemo(() => {
-    return {
-      display: propDisplay
-    }
-  }, [propDisplay])
-
+const LoginFormContainer: FunctionComponent<LoginFormContainerType> = (props: LoginFormContainerType) => {
   return (
     <div className="login-wrapper">
-      <label htmlFor={title} className="login-label">
-        {title}
+      <label htmlFor={props.title} className="login-label">
+        {props.title}
       </label>
-      {description && (
-        <p className="login-description" style={loggingInWillStyle}>
-          {description}
-        </p>
-      )}
+      {props.description && <p className="login-description">{props.description}</p>}
       <input
-        name={title}
-        title={title}
-        type="text"
+        name={props.title}
+        title={props.title}
+        type={props.type}
         className="login-input"
-        value={value}
-        onChange={e => onChange?.(e.target.value)}
+        value={props.value}
+        onInput={e => props.onInput?.(e.currentTarget.value)}
       />
     </div>
   )

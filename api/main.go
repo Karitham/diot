@@ -10,6 +10,7 @@ import (
 	"github.com/Karitham/iDIoT/api/httpd/api"
 	"github.com/Karitham/iDIoT/api/store"
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/cors"
 	"github.com/go-chi/render"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/exp/slog"
@@ -53,7 +54,16 @@ func HTTPD(c *cli.Context) error {
 
 	httpdApi := httpd.New(store)
 
+	ch := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowCredentials: true,
+		AllowedHeaders:   []string{"*"},
+		MaxAge:           300,
+	})
+
 	r := chi.NewRouter()
+	r.Use(ch.Handler)
 	r.Use(httpd.Log(slog.New(slog.NewTextHandler(os.Stderr)).With("pkg", "httpd")))
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
