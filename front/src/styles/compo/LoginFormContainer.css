@@ -54,3 +54,7 @@
   color: var(--color-darkslategray-100);
   font-family: var(--label);
 }
+
+.input5 input {
+  border: none;
+}

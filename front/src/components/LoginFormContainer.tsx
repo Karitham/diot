@@ -9,6 +9,7 @@ type LoginFormContainerType = {
 
   /** Style props */
   propDisplay?: Property.Display;
+  onChange?: (value: string) => void;
 };
 
 const LoginFormContainer: FunctionComponent<LoginFormContainerType> = ({
@@ -16,6 +17,7 @@ const LoginFormContainer: FunctionComponent<LoginFormContainerType> = ({
   loginPassword,
   loginEmailAddress,
   propDisplay,
+  onChange,
 }) => {
   const loggingInWillStyle: CSS.Properties = useMemo(() => {
     return {
@@ -30,7 +32,12 @@ const LoginFormContainer: FunctionComponent<LoginFormContainerType> = ({
         {loginPassword}
       </div>
       <div className="input6">
-        <div className="lessgo-we-on2">{loginEmailAddress}</div>
+        <input
+          type="text"
+          className="lessgo-we-on2"
+          value={loginEmailAddress}
+          onChange={(e) => onChange?.(e.target.value)}
+        />
         <div className="magnifyingglass3">
           <img className="vector-icon18" alt="" src="/vector7.svg" />
         </div>

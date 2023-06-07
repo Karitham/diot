@@ -1,10 +1,13 @@
-import { FunctionComponent, useCallback } from "react";
+import { FunctionComponent, useCallback, useState } from "react";
 import LoginFormContainer from "./LoginFormContainer";
 import { useNavigate } from "react-router-dom";
 import "../styles/compo/LoginFormFilterContainer.css";
+
 const LoginFormFilterContainer: FunctionComponent = () => {
   const navigate = useNavigate();
-
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  
   const onButtonContainerClick = useCallback(() => {
     navigate("/dashboard");
   }, [navigate]);
@@ -19,13 +22,15 @@ const LoginFormFilterContainer: FunctionComponent = () => {
         <LoginFormContainer
           loginEmail="Email"
           loginPassword="Logging in will help you access actions such as viewing video feeds. To log in, please enter your username below."
-          loginEmailAddress="charlus@perrus.com"
+          loginEmailAddress={email}
+          onChange={(value) => setEmail(value)}
         />
         <LoginFormContainer
           loginEmail="Password"
           loginPassword="Logging in will help you access actions such as viewing video feeds. To log in, please enter your username below."
-          loginEmailAddress="********************"
+          loginEmailAddress={password}
           propDisplay="none"
+          onChange={(value) => setPassword(value)}
         />
       </div>
       <div className="button2" onClick={onButtonContainerClick}>
