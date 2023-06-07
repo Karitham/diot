@@ -2,3 +2,4 @@
 .env*
 api/idiot
 .DS_Store
+aiAPI/Redis/__pycache__
