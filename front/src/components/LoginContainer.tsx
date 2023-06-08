@@ -23,21 +23,19 @@ const LoginContainer: FunctionComponent = () => {
         <LoginFormContainer
           title="Email"
           description="Logging in will help you access actions such as viewing video feeds. To log in, please enter your username below."
-          input={email}
+          value={email}
           onInput={value => setEmail(value)}
         />
         <LoginFormContainer
           title="Password"
           description="Logging in will help you access actions such as viewing video feeds. To log in, please enter your username below."
-          input={password}
-          propDisplay="none"
+          value={password}
           onInput={value => setPassword(value)}
         />
         <LoginFormContainer
           title="Password 2: Electric Boogaloo"
           description="Please type your password a second time so you can make sure to have typed it right."
-          input={password2}
-          propDisplay="inline-block"
+          value={password2}
           onInput={value => setPassword2(value)}
         />
       </div>

@@ -237,13 +237,13 @@ components:
         in: cookie
         name: idiot_session_id
 security:
-  # grep -oP 'Permission\s*=\s*"(.*)"' api/session/perms.go | awk '{print $3 ","}' | uniq
-  - bearerAuth: [
-      "users:create",
-      "users:read",
-      "users:delete",
-      "sensors:read",
-      "sensors:update",
-      "sensors:delete",
-      "sensors:state:update",
-    ]
+  # grep -oP 'Permission\s*=\s*"(.*)"' api/session/perms.go | awk '{print "- " $3}' | uniq
+  - bearerAuth:
+    - "perm"
+    - "perm:users:create"
+    - "perm:users:read"
+    - "perm:users:delete"
+    - "perm:sensors:read"
+    - "perm:sensors:update"
+    - "perm:sensors:delete"
+    - "perm:sensors:state:update"

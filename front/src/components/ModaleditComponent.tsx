@@ -1,14 +1,12 @@
-import { FunctionComponent } from "react";
-import LivingRoomContainer from "./LivingRoomContainer";
-import "../styles/compo/ModaleditComponent.css";
+import { FunctionComponent } from 'react'
+import LivingRoomContainer from './LivingRoomContainer'
+import '../styles/compo/ModaleditComponent.css'
 
 type ModaleditComponentType = {
-  onClose?: () => void;
-};
+  onClose?: () => void
+}
 
-const ModaleditComponent: FunctionComponent<ModaleditComponentType> = ({
-  onClose,
-}) => {
+const ModaleditComponent: FunctionComponent<ModaleditComponentType> = (props: ModaleditComponentType) => {
   return (
     <div className="modaledit-component">
       <div className="alert7">
@@ -22,14 +20,14 @@ const ModaleditComponent: FunctionComponent<ModaleditComponentType> = ({
           <img className="pen-icon1" alt="" src="/vector8.svg" />
         </div>
         <LivingRoomContainer />
-        <div className="buttoncontainer">
+        <div className="buttoncontainer" onClick={props.onClose}>
           <div className="button">
             <b className="click-me">Save</b>
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ModaleditComponent;
+export default ModaleditComponent

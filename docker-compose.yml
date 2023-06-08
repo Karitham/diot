@@ -26,7 +26,7 @@ services:
     ports:
       - "7667:7667"
     environment:
-      CASSANDRA_IPS: scylla-0:9042
+      CASSANDRA_IPS: scylla-0
       PORT: 7667
     depends_on:
       scylla-0: 
