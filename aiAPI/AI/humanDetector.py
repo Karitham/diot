@@ -1,3 +1,6 @@
+import sys
+sys.path.append("../Redis")
+
 from cvzone.PoseModule import PoseDetector
 
 class HumanDetection:

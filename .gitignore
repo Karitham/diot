@@ -3,3 +3,6 @@
 api/idiot
 .DS_Store
 aiAPI/Redis/__pycache__
+aiAPI/Data/__pycache__
+aiAPI/AI/__pycache__
+aiAPI/__pycache__

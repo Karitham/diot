@@ -2,19 +2,21 @@ import sys
 sys.path.append("./Redis")
 
 from flask import Flask
-from redisClient import RedisClient
-
-redis_client = RedisClient()
+from redisSubscriber import RedisSubscriber
 
 app = Flask(__name__)
 
-# Connexion au client Redis
-redis_conn = redis_client.connection()
+redis_subscriber = RedisSubscriber()
 
-# Appel de la fonction process_data pour traiter les données
-redis_client.process_data(redis_conn)
+try:
+    redis_subscriber.subscribe_key_sensor()
+except Exception as e:
+    print("Erreur lors de l'appel de la fonction subscribe_key dans la classe RedisClient", str(e))
 
-redis_conn.close()
+try:
+    redis_subscriber.close()
+except Exception as e:
+    print("Erreur lors de la fermeture de la connexion Redis :", str(e))
 
 if __name__ == '__main__':
     app.run(port=5200)
