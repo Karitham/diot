@@ -8,6 +8,8 @@ class DataSchema:
         data = {
                     'id': id_iot,
                     'temperature': temperature,
+                    #timestamp
+                    #criticité
                 }
         
         json_data = self.convert_to_json(data)
