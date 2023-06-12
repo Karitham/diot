@@ -8,7 +8,7 @@ type Store struct {
 	client rueidis.Client
 }
 
-func NewConnection(address []string) (*Store, error) {
+func NewStore(address []string) (*Store, error) {
 	client, err := rueidis.NewClient(rueidis.ClientOption{
 		InitAddress: address,
 	})
