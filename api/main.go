@@ -74,11 +74,10 @@ func HTTPD(c *cli.Context) error {
 			httpdApi,
 			api.WithRouter(r),
 			api.WithErrorHandler(errorH),
-			api.WithMiddleware("auth", func(h http.Handler) http.Handler {
-				return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-					httpdApi.AuthMiddleware(httpdApi.PermissionsMiddleware(h)).ServeHTTP(w, r)
-				})
-			}))
+			api.WithAuthMiddleware(func(h http.Handler) http.Handler {
+				return httpdApi.AuthMiddleware(httpdApi.PermissionsMiddleware(h))
+			}),
+		)
 	})
 
 	log.Info(fmt.Sprintf("Listening on port %d", port))
