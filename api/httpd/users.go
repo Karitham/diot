@@ -1,9 +1,8 @@
 package httpd
 
 import (
-	prgn "math/rand"
+	"crypto/rand"
 	"net/http"
-	"time"
 
 	"github.com/go-json-experiment/json"
 	"github.com/oklog/ulid"
@@ -36,7 +35,7 @@ func (s Service) CreateUser(w http.ResponseWriter, r *http.Request) *api.Respons
 	su := store.User{
 		Email:    u.Email,
 		Name:     u.Name,
-		ID:       newULID().String(),
+		ID:       ulid.MustNew(ulid.Now(), rand.Reader).String(),
 		Password: string(p),
 	}
 
@@ -50,14 +49,6 @@ func (s Service) CreateUser(w http.ResponseWriter, r *http.Request) *api.Respons
 		Email: su.Email,
 		Name:  su.Name,
 	})
-}
-
-var prngR = prgn.New(prgn.NewSource(time.Now().UnixNano()))
-
-func newULID() ulid.ULID {
-	return ulid.MustNew(
-		ulid.Timestamp(time.Now()), prngR,
-	)
 }
 
 // (GET /users/{id})
