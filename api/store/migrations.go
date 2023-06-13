@@ -17,6 +17,19 @@ var migrations = []string{
 		permissions set<varchar>,
 		PRIMARY KEY (id, email)
 	);`,
+
 	`CREATE INDEX IF NOT EXISTS users_email_idx ON idiot.users (email);`,
+
 	`CREATE TABLE IF NOT EXISTS idiot.sessions (id varchar PRIMARY KEY, permissions set<varchar>);`,
+
+	`CREATE TABLE IF NOT EXISTS idiot.webpush_subscriptions (
+		user_id varchar PRIMARY KEY,
+		subscription set<blob>
+	);`,
+
+	`CREATE TABLE IF NOT EXISTS idiot.keys (
+		id varchar PRIMARY KEY,
+		private_key blob,
+		public_key blob
+	);`,
 }

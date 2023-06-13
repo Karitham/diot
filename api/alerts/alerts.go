@@ -57,12 +57,11 @@ func SubFan[T any](ctx context.Context) *SubFanHandle[T] {
 	return sh
 }
 
+type EventHandler interface {
+	OnEvent(message rueidis.PubSubMessage)
+}
+
 // AlertSub blocks and waits for messages on the alerts channel.
-func (s *Store) AlertSub(
-	ctx context.Context,
-	ctxEvent interface {
-		OnEvent(message rueidis.PubSubMessage)
-	},
-) error {
-	return s.client.Receive(ctx, s.client.B().Subscribe().Channel("alerts").Build(), ctxEvent.OnEvent)
+func (s *Store) AlertSub(ctx context.Context, eh EventHandler) error {
+	return s.client.Receive(ctx, s.client.B().Subscribe().Channel("alerts").Build(), eh.OnEvent)
 }

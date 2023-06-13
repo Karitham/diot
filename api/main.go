@@ -16,7 +16,7 @@ import (
 	"golang.org/x/exp/slog"
 )
 
-var log = slog.New(slog.NewTextHandler(os.Stderr)).With("pkg", "main")
+var log = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{})).With("pkg", "main")
 
 func main() {
 	app := cli.NewApp()
@@ -29,14 +29,30 @@ func main() {
 		&cli.StringSliceFlag{
 			Name:    "cass",
 			Usage:   "IP address of cassandra nodes",
-			EnvVars: []string{"CASSANDRA_IPS"},
+			EnvVars: []string{"CASS_ADDR"},
 			Value:   cli.NewStringSlice("localhost:9042"),
+			Hidden:  true,
 		},
 		&cli.IntFlag{
 			Name:    "port",
 			Usage:   "Port for HTTP server",
 			EnvVars: []string{"PORT"},
 			Value:   7667,
+			Hidden:  true,
+		},
+		&cli.StringSliceFlag{
+			Name:    "redis-addr",
+			Usage:   "Redis address",
+			EnvVars: []string{"REDIS_ADDR"},
+			Value:   cli.NewStringSlice("localhost:6379"),
+			Hidden:  true,
+		},
+		&cli.StringFlag{
+			Name:    "redis-pass",
+			Usage:   "Redis password",
+			EnvVars: []string{"REDIS_PASS"},
+			Value:   "",
+			Hidden:  true,
 		},
 	}
 	app.Action = HTTPD
@@ -64,8 +80,8 @@ func HTTPD(c *cli.Context) error {
 
 	r := chi.NewRouter()
 	r.Use(ch.Handler)
-	r.Use(httpd.Log(slog.New(slog.NewTextHandler(os.Stderr)).With("pkg", "httpd")))
-	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
+	r.Use(httpd.Log(slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{})).With("pkg", "httpd")))
+	r.Get("/health", func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("OK"))
 	})

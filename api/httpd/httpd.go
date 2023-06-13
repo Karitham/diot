@@ -11,7 +11,7 @@ import (
 	"golang.org/x/exp/slog"
 )
 
-var log = slog.New(slog.NewTextHandler(os.Stderr)).With("pkg", "httpd")
+var log = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{})).With("pkg", "httpd")
 
 type Store interface {
 	CreateUser(ctx context.Context, user store.User) error

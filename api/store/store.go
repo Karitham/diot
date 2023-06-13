@@ -12,7 +12,7 @@ import (
 	"golang.org/x/exp/slog"
 )
 
-var log = slog.New(slog.NewTextHandler(os.Stderr)).With("pkg", "store")
+var log = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{})).With("pkg", "store")
 
 type Store struct {
 	conn gocqlx.Session

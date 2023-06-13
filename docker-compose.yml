@@ -3,7 +3,6 @@ name: idiot
 
 volumes:
   scylla-data-0:
-  scylla-data-1:
   redis-data:
 
 services:
@@ -13,29 +12,14 @@ services:
     restart: always
     ports:
       - "9042:9042"
-    command: --seeds=scylla-0,scylla-1 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
+    command: --seeds=scylla-0 --smp 1 --memory 2G --overprovisioned 1 --api-address 0.0.0.0
     volumes:
       - scylla-data-0:/var/lib/scylla
     healthcheck:
       test: ["CMD", "nodetool", "status"]
-      interval: 5s
+      interval: 2s
       timeout: 5s
-      retries: 10
-
-  scylla-1:
-    image: scylladb/scylla
-    container_name: scylla-1
-    restart: always
-    ports:
-      - "9043:9042"
-    volumes:
-      - scylla-data-1:/var/lib/scylla
-    command: --seeds=scylla-0,scylla-1 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
-    healthcheck:
-      test: ["CMD", "nodetool", "status"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+      retries: 15
 
   api:
     image: ghcr.io/karitham/idiot/api
@@ -44,12 +28,11 @@ services:
     ports:
       - "7667:7667"
     environment:
-      CASSANDRA_IPS: "scylla-0,scylla-1"
+      CASS_ADDR: "scylla-0"
+      REDIS_ADDR: "redis"
       PORT: 7667
     depends_on:
       scylla-0: 
-        condition: service_healthy
-      scylla-1:
         condition: service_healthy
 
   redis:
@@ -60,3 +43,6 @@ services:
       - "6379:6379"
     volumes:
       - redis-data:/data
+    command: --requirepass $${REDIS_PASS}
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASS}

@@ -19,6 +19,7 @@ func DB() *cli.Command {
 		Usage: "Database commands",
 		Subcommands: []*cli.Command{
 			DBUsers(),
+			DBKeys(),
 		},
 	}
 }
@@ -94,6 +95,48 @@ func DBUsersAdd() *cli.Command {
 			&cli.BoolFlag{
 				Name:  "admin",
 				Usage: "Admin",
+			},
+		},
+	}
+}
+
+func DBKeys() *cli.Command {
+	return &cli.Command{
+		Name:    "key",
+		Aliases: []string{"keys"},
+		Usage:   "interact with keys",
+		Subcommands: []*cli.Command{
+			{
+				Name:  "rotate",
+				Usage: "Rotate keys",
+				Action: func(c *cli.Context) error {
+					s := store.New(context.Background(), c.StringSlice("cass")...)
+					defer s.Close()
+
+					k, err := s.RotateKeyPair(c.Context)
+					if err != nil {
+						return err
+					}
+
+					log.Info("Keys rotated", "id", k.ID)
+					return nil
+				},
+			},
+			{
+				Name:  "get",
+				Usage: "Get key",
+				Action: func(c *cli.Context) error {
+					s := store.New(context.Background(), c.StringSlice("cass")...)
+					defer s.Close()
+
+					k, err := s.GetKeypair(c.Context)
+					if err != nil {
+						return err
+					}
+
+					log.Info("Key", "id", k.ID, "public", k.PublicKey, "private", k.PrivateKey)
+					return nil
+				},
 			},
 		},
 	}

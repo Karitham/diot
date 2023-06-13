@@ -8,6 +8,19 @@ import (
 
 // Table models.
 var (
+	Keys = table.New(table.Metadata{
+		Name: "keys",
+		Columns: []string{
+			"id",
+			"private_key",
+			"public_key",
+		},
+		PartKey: []string{
+			"id",
+		},
+		SortKey: []string{},
+	})
+
 	Migrations = table.New(table.Metadata{
 		Name: "migrations",
 		Columns: []string{
@@ -66,8 +79,25 @@ var (
 			"id",
 		},
 	})
+
+	WebpushSubscriptions = table.New(table.Metadata{
+		Name: "webpush_subscriptions",
+		Columns: []string{
+			"subscription",
+			"user_id",
+		},
+		PartKey: []string{
+			"user_id",
+		},
+		SortKey: []string{},
+	})
 )
 
+type KeysStruct struct {
+	Id         string
+	PrivateKey []byte
+	PublicKey  []byte
+}
 type MigrationsStruct struct {
 	Content string
 	Time    [16]byte
@@ -87,4 +117,8 @@ type UsersEmailIdxIndexStruct struct {
 	Email    string
 	Id       string
 	IdxToken int64
+}
+type WebpushSubscriptionsStruct struct {
+	Subscription [][]byte
+	UserId       string
 }

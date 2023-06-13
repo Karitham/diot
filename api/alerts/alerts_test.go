@@ -15,11 +15,11 @@ import (
 )
 
 func TestAlertSubFan(t *testing.T) {
-	if os.Getenv("REDIS_ADDRESS") == "" {
-		t.Skip("skipping test; $REDIS_ADDRESS not set")
+	if os.Getenv("REDIS_ADDR") == "" {
+		t.Skip("skipping test; $REDIS_ADDR not set")
 	}
 
-	s, err := NewStore([]string{os.Getenv("REDIS_ADDRESS")})
+	s, err := NewStore([]string{os.Getenv("REDIS_ADDR")}, os.Getenv("REDIS_PASS"))
 	if err != nil {
 		t.Fatal(err)
 	}

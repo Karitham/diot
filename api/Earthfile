@@ -5,12 +5,6 @@ WORKDIR /go-workdir
 download-deps:
     RUN go install github.com/discord-gophers/goapi-gen@v0.3.0
 
-deps:
-    FROM +download-deps
-    COPY go.* ./
-    RUN go mod download
-    SAVE ARTIFACT go.* AS LOCAL ./
-
 api:
     FROM +download-deps
 
@@ -27,19 +21,7 @@ api:
 db:
     LOCALLY
     RUN go install github.com/scylladb/gocqlx/v2/cmd/schemagen@latest
-    RUN "$HOME/go/bin/schemagen" -output store/models -keyspace idiot -cluster localhost:9040
-
-build:
-    FROM +deps
-    COPY . ./
-    RUN go build -o idiot .
-    SAVE ARTIFACT idiot AS LOCAL ./idiot
-
-docker:
-    FROM alpine:3.15.0
-    COPY +build/idiot ./idiot
-    ENTRYPOINT ["./idiot"]
-    SAVE IMAGE ghcr.io/karitham/idiot/api:latest
+    RUN "$HOME/go/bin/schemagen" -output store/models -keyspace idiot -cluster localhost:9042
 
 docs:
     FROM node:20-alpine

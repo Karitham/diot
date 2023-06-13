@@ -8,9 +8,10 @@ type Store struct {
 	client rueidis.Client
 }
 
-func NewStore(address []string) (*Store, error) {
+func NewStore(address []string, pass string) (*Store, error) {
 	client, err := rueidis.NewClient(rueidis.ClientOption{
 		InitAddress: address,
+		Password:    pass,
 	})
 	if err != nil {
 		return nil, err
