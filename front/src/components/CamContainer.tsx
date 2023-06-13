@@ -1,28 +1,18 @@
-import { FunctionComponent, useState, useMemo, useCallback } from "react";
+import { FunctionComponent, useState, useCallback } from "react";
 import ModaleditComponent from "./ModaleditComponent";
 import PortalPopup from "./PortalPopup";
-import CSS, { Property } from "csstype";
 import "../styles/compo/CamContainer.css";
 
 type CamContainerType = {
   roomName?: string;
   roomImageUrl?: string;
-
-  /** Style props */
-  propHeight?: Property.Height;
 };
 
 const CamContainer: FunctionComponent<CamContainerType> = ({
   roomName,
   roomImageUrl,
-  propHeight,
 }) => {
   const [isModaleditComponentOpen, setModaleditComponentOpen] = useState(false);
-  const livingroomIconStyle: CSS.Properties = useMemo(() => {
-    return {
-      height: propHeight,
-    };
-  }, [propHeight]);
 
   const openModaleditComponent = useCallback(() => {
     setModaleditComponentOpen(true);
@@ -49,11 +39,7 @@ const CamContainer: FunctionComponent<CamContainerType> = ({
             />
           </div>
         </div>
-        <img
-          className="livingroom-icon"
-          alt=""
-          src={roomImageUrl}
-        />
+        <img className="livingroom-icon" alt="" src={roomImageUrl} />
       </div>
       {isModaleditComponentOpen && (
         <PortalPopup
