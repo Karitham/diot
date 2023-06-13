@@ -10,7 +10,6 @@ import FrameComponent from "./pages/FrameComponent";
 import MagnifyingGlass from "./pages/MagnifyingGlass";
 import Dashboard1 from "./pages/Dashboard1";
 import Notifications from "./pages/Notifications";
-import Cross from "./pages/Cross";
 import { useEffect } from "react";
 
 function App() {
@@ -53,10 +52,6 @@ function App() {
         title = "";
         metaDescription = "";
         break;
-      case "/cross":
-        title = "";
-        metaDescription = "";
-        break;
     }
 
     if (title) {
@@ -81,7 +76,6 @@ function App() {
       <Route path="/magnifyingglass" element={<MagnifyingGlass />} />
       <Route path="/dashboard" element={<Dashboard1 />} />
       <Route path="/notifications" element={<Notifications />} />
-      <Route path="/cross" element={<Cross />} />
     </Routes>
   );
 }
