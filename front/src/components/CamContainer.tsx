@@ -53,7 +53,6 @@ const CamContainer: FunctionComponent<CamContainerType> = ({
           className="livingroom-icon"
           alt=""
           src={roomImageUrl}
-          style={livingroomIconStyle}
         />
       </div>
       {isModaleditComponentOpen && (

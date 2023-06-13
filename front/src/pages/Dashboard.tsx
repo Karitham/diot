@@ -55,6 +55,7 @@ const Dashboard: FunctionComponent = () => {
           <CamContainer
             roomName="Living Room"
             roomImageUrl="/livingroom@2x.png"
+            propHeight="16.06rem"
           />
           <CamContainer
             roomName="Bedroom"

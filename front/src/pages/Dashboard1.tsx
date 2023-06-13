@@ -38,6 +38,17 @@ const Dashboard1: FunctionComponent = () => {
           <div className="notifications1">Notifications</div>
         </div>
       </div>
+      <div className="alert-card">
+        <div className="input">
+          <div className="intrusion-alert-parent">
+            <div className="intrusion-alert">Intrusion Alert</div>
+            <div className="intrusion-alert-someone">
+              Intrusion alert. Someone was located in the living room.
+            </div>
+          </div>
+          <img className="vector-icon" alt="" src="/vector.svg" />
+        </div>
+      </div>
       <div className="camscontainer1">
         <div className="titre1">Dashboard</div>
         <div className="cams1">

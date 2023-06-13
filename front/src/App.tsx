@@ -6,12 +6,10 @@ import {
 } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import Icons from "./pages/Icons";
 import FrameComponent from "./pages/FrameComponent";
 import MagnifyingGlass from "./pages/MagnifyingGlass";
 import Dashboard1 from "./pages/Dashboard1";
 import Notifications from "./pages/Notifications";
-import Register from "./pages/Register";
 import Cross from "./pages/Cross";
 import { useEffect } from "react";
 
@@ -39,10 +37,6 @@ function App() {
         title = "";
         metaDescription = "";
         break;
-      case "/icons":
-        title = "";
-        metaDescription = "";
-        break;
       case "/frame-1":
         title = "";
         metaDescription = "";
@@ -56,10 +50,6 @@ function App() {
         metaDescription = "";
         break;
       case "/notifications":
-        title = "";
-        metaDescription = "";
-        break;
-      case "/register":
         title = "";
         metaDescription = "";
         break;
@@ -87,12 +77,10 @@ function App() {
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/dashboard1" element={<Dashboard />} />
-      <Route path="/icons" element={<Icons />} />
       <Route path="/frame-1" element={<FrameComponent />} />
       <Route path="/magnifyingglass" element={<MagnifyingGlass />} />
       <Route path="/dashboard" element={<Dashboard1 />} />
       <Route path="/notifications" element={<Notifications />} />
-      <Route path="/register" element={<Register />} />
       <Route path="/cross" element={<Cross />} />
     </Routes>
   );

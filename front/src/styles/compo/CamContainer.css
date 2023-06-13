@@ -52,4 +52,5 @@
   font-size: var(--label-size);
   color: var(--text-text0);
   font-family: var(--label);
+  aspect-ratio: 16/9;
 }

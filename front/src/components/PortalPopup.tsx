@@ -1,15 +1,4 @@
-import {
-  CSSProperties,
-  RefObject,
-  FunctionComponent,
-  ReactNode,
-  useMemo,
-  useCallback,
-  useState,
-  useRef,
-  useEffect,
-} from "react";
-
+import { FunctionComponent, ReactNode, useMemo, useCallback, useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import "../styles/compo/PortalPopup.css";
 
@@ -30,7 +19,7 @@ type PopupProps = {
   right?: number;
   top?: number;
   bottom?: number;
-  relativeLayerRef?: RefObject<HTMLElement>;
+  relativeLayerRef?: React.RefObject<HTMLElement>;
 };
 
 const PortalPopup: FunctionComponent<PopupProps> = ({
@@ -46,16 +35,15 @@ const PortalPopup: FunctionComponent<PopupProps> = ({
   relativeLayerRef,
 }) => {
   const relContainerRef = useRef<HTMLDivElement>(null);
-  const [relativeStyle, setRelativeStyle] = useState<CSSProperties>({
-    opacity: 0,
-  });
+  const [relativeStyle, setRelativeStyle] = useState<React.CSSProperties>({ opacity: 0 });
+
   const popupStyle = useMemo(() => {
-    const style: CSSProperties = {};
-    style.zIndex = zIndex;
+    const style: React.CSSProperties = { zIndex };
 
     if (overlayColor) {
       style.backgroundColor = overlayColor;
     }
+
     if (!relativeLayerRef?.current) {
       switch (placement) {
         case "Centered":
@@ -85,6 +73,7 @@ const PortalPopup: FunctionComponent<PopupProps> = ({
           break;
       }
     }
+
     style.opacity = 1;
     return style;
   }, [placement, overlayColor, zIndex, relativeLayerRef?.current]);
@@ -92,15 +81,12 @@ const PortalPopup: FunctionComponent<PopupProps> = ({
   const setPosition = useCallback(() => {
     const relativeItem = relativeLayerRef?.current?.getBoundingClientRect();
     const containerItem = relContainerRef?.current?.getBoundingClientRect();
-    const style: CSSProperties = { opacity: 1 };
+    const style: React.CSSProperties = { opacity: 1 };
+
     if (relativeItem && containerItem) {
-      const {
-        x: relativeX,
-        y: relativeY,
-        width: relativeW,
-        height: relativeH,
-      } = relativeItem;
+      const { x: relativeX, y: relativeY, width: relativeW, height: relativeH } = relativeItem;
       const { width: containerW, height: containerH } = containerItem;
+
       style.position = "absolute";
       switch (placement) {
         case "Top left":
@@ -127,15 +113,7 @@ const PortalPopup: FunctionComponent<PopupProps> = ({
       style.maxHeight = "90%";
       setRelativeStyle(style);
     }
-  }, [
-    left,
-    right,
-    top,
-    bottom,
-    placement,
-    relativeLayerRef?.current,
-    relContainerRef?.current,
-  ]);
+  }, [left, right, top, bottom, placement, relativeLayerRef?.current, relContainerRef?.current]);
 
   useEffect(() => {
     setPosition();
@@ -164,11 +142,7 @@ const PortalPopup: FunctionComponent<PopupProps> = ({
 
   return (
     <Portal>
-      <div
-        className={"portalPopupOverlay"}
-        style={popupStyle}
-        onClick={onOverlayClick}
-      >
+      <div className={"portalPopupOverlay"} style={popupStyle} onClick={onOverlayClick}>
         <div ref={relContainerRef} style={relativeStyle}>
           {children}
         </div>
@@ -182,10 +156,7 @@ type PortalProps = {
   containerId?: string;
 };
 
-export const Portal: FunctionComponent<PortalProps> = ({
-  children,
-  containerId = "portals",
-}) => {
+export const Portal: FunctionComponent<PortalProps> = ({ children, containerId = "portals" }) => {
   let portalsDiv = document.getElementById(containerId);
   if (!portalsDiv) {
     portalsDiv = document.createElement("div");
@@ -195,4 +166,5 @@ export const Portal: FunctionComponent<PortalProps> = ({
 
   return createPortal(children, portalsDiv);
 };
+
 export default PortalPopup;

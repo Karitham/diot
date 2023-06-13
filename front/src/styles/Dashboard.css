@@ -125,13 +125,20 @@
 }
 .cams {
   align-self: stretch;
+  align-items: flex-start;
+  justify-content: flex-start;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--gap-5xl);
+  width: 100%;
+  align-content: center;
 }
-.cams,
 .camscontainer,
 .dashboard {
   display: flex;
-  flex-direction: column;
   align-items: flex-start;
+  flex-direction: column;
   justify-content: flex-start;
   gap: var(--gap-5xl);
 }
@@ -152,4 +159,8 @@
   font-size: var(--font-size-7xs);
   color: var(--colors-primary);
   font-family: var(--title);
+}
+
+.cam{
+  aspect-ratio: 16/9;
 }
