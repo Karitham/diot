@@ -3,7 +3,7 @@ FROM golang:1.20.4-alpine
 WORKDIR /go-workdir
 
 download-deps:
-    RUN go install github.com/discord-gophers/goapi-gen@latest
+    RUN go install github.com/discord-gophers/goapi-gen@v0.3.0
 
 deps:
     FROM +download-deps

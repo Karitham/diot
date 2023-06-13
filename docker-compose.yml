@@ -1,8 +1,10 @@
 version: '3'
+name: idiot
 
 volumes:
   scylla-data-0:
   scylla-data-1:
+  redis-data:
 
 services:
   scylla-0:
@@ -11,8 +13,24 @@ services:
     restart: always
     ports:
       - "9042:9042"
+    command: --seeds=scylla-0,scylla-1 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
     volumes:
       - scylla-data-0:/var/lib/scylla
+    healthcheck:
+      test: ["CMD", "nodetool", "status"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  scylla-1:
+    image: scylladb/scylla
+    container_name: scylla-1
+    restart: always
+    ports:
+      - "9043:9042"
+    volumes:
+      - scylla-data-1:/var/lib/scylla
+    command: --seeds=scylla-0,scylla-1 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
     healthcheck:
       test: ["CMD", "nodetool", "status"]
       interval: 5s
@@ -26,8 +44,19 @@ services:
     ports:
       - "7667:7667"
     environment:
-      CASSANDRA_IPS: scylla-0
+      CASSANDRA_IPS: "scylla-0,scylla-1"
       PORT: 7667
     depends_on:
       scylla-0: 
         condition: service_healthy
+      scylla-1:
+        condition: service_healthy
+
+  redis:
+    image: redis:7.0.11-alpine
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
