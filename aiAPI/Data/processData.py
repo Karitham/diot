@@ -1,12 +1,6 @@
-import sys, os, json
-
-current_path = os.path.dirname(os.path.abspath(__file__))
-parent_path = os.path.abspath(os.path.join(current_path, os.pardir))
-data_path = os.path.join(parent_path, 'AI')
-sys.path.append(data_path)
-
-from incidentDetector import IncidentDetection
-from humanDetector import HumanDetection
+import json
+from AI import IncidentDetection
+from AI import HumanDetection
 
 class ProcessData:
     def __init__(self):

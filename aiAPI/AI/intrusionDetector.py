@@ -1,5 +1,3 @@
-import sys
-sys.path.append("../Redis")
 
 class IntrusionDetection:
     def __init__(self):

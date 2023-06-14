@@ -1,8 +1,5 @@
-import sys
-sys.path.append("./Redis")
-
+from Redis import RedisSubscriber
 from flask import Flask
-from redisSubscriber import RedisSubscriber
 
 app = Flask(__name__)
 

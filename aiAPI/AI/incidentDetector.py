@@ -1,14 +1,5 @@
-import sys, os
-
-current_path = os.path.dirname(os.path.abspath(__file__))
-parent_path = os.path.abspath(os.path.join(current_path, os.pardir))
-data_path = os.path.join(parent_path, 'Data')
-redis_path = os.path.join(parent_path, 'Redis')
-sys.path.append(data_path)
-sys.path.append(redis_path)
-
-from dataSchema import DataSchema
-from redisPublisher import RedisPublisher
+from Data import DataSchema
+from Redis import RedisPublisher
 
 dataSchema = DataSchema()
 redisPublisher = RedisPublisher()

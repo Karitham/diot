@@ -1,11 +1,5 @@
-import sys, os, redis
-
-current_path = os.path.dirname(os.path.abspath(__file__))
-parent_path = os.path.abspath(os.path.join(current_path, os.pardir))
-data_path = os.path.join(parent_path, 'Data')
-sys.path.append(data_path)
-
-from processData import ProcessData
+import redis
+from Data import ProcessData
 
 class RedisSubscriber:
     def __init__(self):
