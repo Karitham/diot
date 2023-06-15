@@ -20,7 +20,7 @@ const AdminPanel: FunctionComponent = () => {
   }, []);
 
   const onLogoutContainerClick = useCallback(() => {
-    navigate("/login");
+    navigate("/");
   }, [navigate]);
 
   return (

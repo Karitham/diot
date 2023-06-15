@@ -33,7 +33,6 @@ const Dashboard: FunctionComponent = () => {
               <CamContainer
                 roomName="Bedroom"
                 roomImageId="/bedroom@2x.png"
-                propHeight="16.06rem"
               />
               <CamDisableContainer
                 roomId="/start.svg"
@@ -43,12 +42,10 @@ const Dashboard: FunctionComponent = () => {
               <CamContainer
                 roomName="Bathroom"
                 roomImageId="/livingroom1@2x.png"
-                propHeight="12.94rem"
               />
               <CamContainer
                 roomName="Living Room"
                 roomImageId="/bedroom@2x.png"
-                propHeight="16.06rem"
               />
             </div>
           </div>

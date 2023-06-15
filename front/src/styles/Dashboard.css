@@ -147,17 +147,20 @@
   gap: var(--gap-17xl);
 }
 .contentwrapper1 {
-  align-self: stretch;
-  flex: 1;
+  display: flex;
   padding: 0 var(--padding-251xl);
   font-size: var(--title-size);
   color: var(--text-text0);
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: auto;
+  max-width: 1000px;
 }
 .dashboard2 {
   position: relative;
   background-color: var(--text-textneg);
   width: 100%;
-  height: 57.88rem;
   overflow-y: auto;
   padding: var(--padding-5xl);
   box-sizing: border-box;
@@ -166,3 +169,16 @@
   color: var(--colors-primary);
   font-family: var(--title);
 }
+/*
+@media (width < 550px) {
+  .contentwrapper1 {
+    display: flex;
+    padding: 0 var(--padding-251xl);
+    font-size: var(--title-size);
+    color: var(--text-text0);
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: auto;
+  }
+}*/

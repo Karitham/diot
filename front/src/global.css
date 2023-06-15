@@ -2,9 +2,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
 body {
   margin: 0;
+  padding: 0;
   line-height: normal;
   box-sizing: border-box;
+  min-height: 100vh;
 }
+
+footer{
+  background-color: #c33e22;
+}
+
 :root {
   /* fonts */
   --label: Inter;
@@ -41,6 +48,7 @@ body {
   /* Paddings */
   --padding-5xl: 1.5rem;
   --padding-xs: 0.75rem;
+  --padding-xxs: 0.5rem;
   --padding-11xs: 0.13rem;
   --padding-77xl: 6rem;
   --padding-29xl: 3rem;

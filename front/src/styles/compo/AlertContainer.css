@@ -48,16 +48,18 @@
   gap: var(--gap-5xs);
 }
 .alert1 {
-  align-self: stretch;
-  border-radius: var(--br-xs);
+  border-radius: var(--br-5xs);
   background-color: var(--bg-bg1);
   box-shadow: var(--sm);
   flex-direction: row;
-  padding: var(--padding-5xs);
+  padding: var(--padding-xxs);
   align-items: center;
   gap: var(--gap-xs);
   text-align: left;
   font-size: var(--label-size);
   color: var(--text-text0);
   font-family: var(--title);
+  flex-grow: 1;
+  max-width: 260px;
+  width: 100%;
 }

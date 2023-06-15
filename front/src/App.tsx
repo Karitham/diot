@@ -1,9 +1,9 @@
+import { useEffect } from 'react'
 import { Routes, Route, useNavigationType, useLocation } from 'react-router-dom'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import AdminPanel from './pages/AdminPanel'
 import Notifications from './pages/Notifications'
-import { useEffect } from 'react'
 
 function App() {
   const action = useNavigationType()
