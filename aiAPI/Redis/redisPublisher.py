@@ -1,15 +1,17 @@
 import redis
+import os
 
 class RedisPublisher:
     def __init__(self):
-        self.redis_ip = "127.0.0.1"
-        self.redis_port = 6379   
+        self.redis_ip = os.environ.get('REDIS_ADDR')
+        self.redis_port = os.environ.get('PORT') 
         self.key = "alert"
         self.redis_client = self.connection()
     
     def connection(self):
         try:
             r = redis.Redis(host=self.redis_ip, port=self.redis_port)
+            print(f"Connection to Redis at {self.redis_ip} and port {self.redis_port} for listening")
             return r
         except redis.ConnectionError as e:
             print("Erreur de connexion à Redis :", str(e))

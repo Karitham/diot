@@ -16,4 +16,4 @@ except Exception as e:
     print("Erreur lors de la fermeture de la connexion Redis :", str(e))
 
 if __name__ == '__main__':
-    app.run(port=5200)
+    app.run()
