@@ -10,10 +10,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Définit le répertoire de travail dans le conteneur
 WORKDIR /app
 
-RUN apt-get update && apt-get install python3-opencv -y
+# Copie les fichiers de l'hôte vers le conteneur
+COPY . /app
 
-COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
+# Installe les dépendances du projet
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Installe les dépendances du projet
 RUN pip install --no-cache-dir -r requirements.txt
