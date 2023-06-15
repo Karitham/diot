@@ -1,9 +1,14 @@
 package session
 
-import "context"
+import (
+	"context"
+
+	"github.com/oklog/ulid"
+)
 
 type Session struct {
 	ID          ID
+	UserID      ulid.ULID
 	Permissions Permissions
 }
 

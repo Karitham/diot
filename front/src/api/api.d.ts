@@ -13,6 +13,12 @@ export interface paths {
     /** Logout */
     post: operations["authLogout"];
   };
+  "/notifications/webpush": {
+    /** Send a webpush notification key */
+    get: operations["getWebpushKey"];
+    /** Send a webpush notification registration payload */
+    post: operations["registerWebpush"];
+  };
   "/users": {
     /** Get all users */
     get: operations["getUsers"];
@@ -52,6 +58,21 @@ export interface components {
       /** @description Request ID */
       request_id?: string;
     };
+    WebpushKey: {
+      /** @description Webpush key */
+      key: string;
+    };
+    WebpushRegistration: {
+      /** @description Webpush endpoint */
+      endpoint: string;
+      /** @description Webpush keys */
+      keys: {
+        /** @description Webpush p256dh key */
+        p256dh: string;
+        /** @description Webpush auth key */
+        auth: string;
+      };
+    };
   };
   responses: never;
   parameters: never;
@@ -86,6 +107,42 @@ export interface operations {
   };
   /** Logout */
   authLogout: {
+    responses: {
+      /** @description ok */
+      200: never;
+      /** @description unexpected error */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /** Send a webpush notification key */
+  getWebpushKey: {
+    responses: {
+      /** @description ok */
+      200: {
+        content: {
+          "application/json": components["schemas"]["WebpushKey"];
+        };
+      };
+      /** @description unexpected error */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /** Send a webpush notification registration payload */
+  registerWebpush: {
+    /** @description Create a new user */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["WebpushRegistration"];
+      };
+    };
     responses: {
       /** @description ok */
       200: never;

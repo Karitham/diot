@@ -40,6 +40,7 @@ var (
 		Columns: []string{
 			"id",
 			"permissions",
+			"user_id",
 		},
 		PartKey: []string{
 			"id",
@@ -105,6 +106,7 @@ type MigrationsStruct struct {
 type SessionsStruct struct {
 	Id          string
 	Permissions []string
+	UserId      string
 }
 type UsersStruct struct {
 	Email       string

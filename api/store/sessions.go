@@ -5,15 +5,17 @@ import (
 
 	"github.com/Karitham/iDIoT/api/session"
 	"github.com/Karitham/iDIoT/api/store/models"
+	"github.com/oklog/ulid"
 )
 
 // NewSession creates a new session
-func (s *Store) NewSession(ctx context.Context, permissions session.Permissions) (session.ID, error) {
+func (s *Store) NewSession(ctx context.Context, userID ulid.ULID, permissions session.Permissions) (session.ID, error) {
 	sid := session.New()
 	err := s.conn.Query(models.Sessions.Insert()).
 		WithContext(ctx).
 		BindStruct(models.SessionsStruct{
 			Id:          sid.String(),
+			UserId:      userID.String(),
 			Permissions: permissions.Strings(),
 		}).
 		ExecRelease()
@@ -33,6 +35,7 @@ func (s *Store) GetSession(ctx context.Context, sessionID session.ID) (session.S
 
 	return session.Session{
 		ID:          sessionID,
+		UserID:      ulid.MustParse(ss.UserId),
 		Permissions: session.FromString(ss.Permissions...),
 	}, err
 }

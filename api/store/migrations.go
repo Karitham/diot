@@ -32,4 +32,6 @@ var migrations = []string{
 		private_key blob,
 		public_key blob
 	);`,
+
+	`ALTER TABLE idiot.sessions ADD user_id varchar;`,
 }

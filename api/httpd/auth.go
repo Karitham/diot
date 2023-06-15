@@ -7,6 +7,7 @@ import (
 
 	"github.com/Karitham/iDIoT/api/httpd/api"
 	"github.com/Karitham/iDIoT/api/session"
+	"github.com/oklog/ulid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -88,7 +89,7 @@ func (s Service) AuthLogin(w http.ResponseWriter, r *http.Request) *api.Response
 		return WError(w, r, 401, "Unauthorized")
 	}
 
-	id, err := s.store.NewSession(r.Context(), session.Permissions{})
+	id, err := s.store.NewSession(r.Context(), ulid.MustParse(u.ID), session.Permissions{})
 	if err != nil {
 		return WError(w, r, 500, err.Error())
 	}

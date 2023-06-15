@@ -58,7 +58,7 @@ func Migrate(ctx context.Context, conn gocqlx.Session) error {
 		return err
 	}
 
-	if id == len(migrations) {
+	if id >= len(migrations) {
 		log.Debug("database is up to date")
 		return nil
 	}

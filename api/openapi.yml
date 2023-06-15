@@ -92,6 +92,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - notification
+      summary: Send a webpush notification registration payload
+      operationId: registerWebpush
+      responses:
+        '200':
+          description: ok
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        description: Create a new user
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebpushRegistration'
+
 
   /users:
     x-go-middlewares: [auth]
@@ -258,6 +282,28 @@ components:
           description: Webpush key
       required:
         - key
+    WebpushRegistration:
+      properties:
+        endpoint:
+          type: string
+          description: Webpush endpoint
+        keys:
+          type: object
+          description: Webpush keys
+          required:
+            - p256dh
+            - auth
+          properties:
+            p256dh:
+              type: string
+              description: Webpush p256dh key
+            auth:
+              type: string
+              description: Webpush auth key
+      required:
+        - endpoint
+        - keys
+        
   securitySchemes:
     bearerAuth:
       type: http

@@ -22,11 +22,12 @@ type Store interface {
 	GetUserByEmail(ctx context.Context, email string) (store.User, error)
 	DeleteUser(ctx context.Context, id ulid.ULID) error
 
-	NewSession(ctx context.Context, sess session.Permissions) (session.ID, error)
+	NewSession(ctx context.Context, userID ulid.ULID, sess session.Permissions) (session.ID, error)
 	GetSession(ctx context.Context, id session.ID) (session.Session, error)
 	DeleteSession(ctx context.Context, id session.ID) error
 
 	GetWebpushKey(ctx context.Context) (store.KeyPair, error)
+	RegisterWebpush(ctx context.Context, userID ulid.ULID, endpoint, auth, p256dh string) error
 }
 
 func New(store Store) *Service {

@@ -45,8 +45,34 @@ type WebpushKey struct {
 	Key string `json:"key"`
 }
 
+// WebpushRegistration defines model for WebpushRegistration.
+type WebpushRegistration struct {
+	// Webpush endpoint
+	Endpoint string `json:"endpoint"`
+
+	// Webpush keys
+	Keys struct {
+		// Webpush auth key
+		Auth string `json:"auth"`
+
+		// Webpush p256dh key
+		P256dh string `json:"p256dh"`
+	} `json:"keys"`
+}
+
+// RegisterWebpushJSONBody defines parameters for RegisterWebpush.
+type RegisterWebpushJSONBody WebpushRegistration
+
 // CreateUserJSONBody defines parameters for CreateUser.
 type CreateUserJSONBody UserCreate
+
+// RegisterWebpushJSONRequestBody defines body for RegisterWebpush for application/json ContentType.
+type RegisterWebpushJSONRequestBody RegisterWebpushJSONBody
+
+// Bind implements render.Binder.
+func (RegisterWebpushJSONRequestBody) Bind(*http.Request) error {
+	return nil
+}
 
 // CreateUserJSONRequestBody defines body for CreateUser for application/json ContentType.
 type CreateUserJSONRequestBody CreateUserJSONBody
@@ -142,6 +168,16 @@ func GetWebpushKeyJSON200Response(body WebpushKey) *Response {
 // GetWebpushKeyJSONDefaultResponse is a constructor method for a GetWebpushKey response.
 // A *Response is returned with the configured status code and content type from the spec.
 func GetWebpushKeyJSONDefaultResponse(body Error) *Response {
+	return &Response{
+		body:        body,
+		Code:        200,
+		contentType: "application/json",
+	}
+}
+
+// RegisterWebpushJSONDefaultResponse is a constructor method for a RegisterWebpush response.
+// A *Response is returned with the configured status code and content type from the spec.
+func RegisterWebpushJSONDefaultResponse(body Error) *Response {
 	return &Response{
 		body:        body,
 		Code:        200,

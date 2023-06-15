@@ -1,21 +1,16 @@
 import { FunctionComponent, useCallback, useState } from 'react'
 import LoginFormContainer from './LoginFormContainer'
 import { useNavigate } from 'react-router-dom'
-import createClient from 'openapi-fetch'
-import { paths } from '../api/api'
 import '../styles/compo/LoginFormFilterContainer.css'
+import { client } from '../api/client'
 
 const LoginFormFilterContainer: FunctionComponent = () => {
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const client = createClient<paths>({
-    baseUrl: 'https://api.idiot.0xf.fr/v1'
-  })
-
   const onButtonContainerClick = useCallback(async () => {
-    const resp = await client.post('/auth/login', { 
+    const resp = await client.post('/auth/login', {
       params: {
         query: {
           email: email,
@@ -28,6 +23,8 @@ const LoginFormFilterContainer: FunctionComponent = () => {
       console.log(resp.error)
       return
     }
+
+    localStorage.setItem('token', resp.data.token)
 
     navigate('/dashboard')
   }, [navigate, email, password])
