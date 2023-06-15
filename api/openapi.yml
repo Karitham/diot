@@ -69,7 +69,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-    
+  
+  /notifications/webpush:
+    x-go-middlewares: [auth]
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - notification
+      summary: Send a webpush notification key
+      operationId: getWebpushKey
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebpushKey'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /users:
     x-go-middlewares: [auth]
     post:
@@ -228,6 +251,13 @@ components:
           description: Request ID
       required:
         - message
+    WebpushKey:
+      properties:
+        key:
+          type: string
+          description: Webpush key
+      required:
+        - key
   securitySchemes:
     bearerAuth:
       type: http

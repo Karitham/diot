@@ -39,6 +39,12 @@ type UserCreate struct {
 	Password string `json:"password"`
 }
 
+// WebpushKey defines model for WebpushKey.
+type WebpushKey struct {
+	// Webpush key
+	Key string `json:"key"`
+}
+
 // CreateUserJSONBody defines parameters for CreateUser.
 type CreateUserJSONBody UserCreate
 
@@ -116,6 +122,26 @@ func AuthLoginJSONDefaultResponse(body Error) *Response {
 // AuthLogoutJSONDefaultResponse is a constructor method for a AuthLogout response.
 // A *Response is returned with the configured status code and content type from the spec.
 func AuthLogoutJSONDefaultResponse(body Error) *Response {
+	return &Response{
+		body:        body,
+		Code:        200,
+		contentType: "application/json",
+	}
+}
+
+// GetWebpushKeyJSON200Response is a constructor method for a GetWebpushKey response.
+// A *Response is returned with the configured status code and content type from the spec.
+func GetWebpushKeyJSON200Response(body WebpushKey) *Response {
+	return &Response{
+		body:        body,
+		Code:        200,
+		contentType: "application/json",
+	}
+}
+
+// GetWebpushKeyJSONDefaultResponse is a constructor method for a GetWebpushKey response.
+// A *Response is returned with the configured status code and content type from the spec.
+func GetWebpushKeyJSONDefaultResponse(body Error) *Response {
 	return &Response{
 		body:        body,
 		Code:        200,
