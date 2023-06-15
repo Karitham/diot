@@ -1,5 +1,5 @@
 import redis
-from Data import ProcessData
+from Data.processData import ProcessData
 
 class RedisSubscriber:
     def __init__(self):

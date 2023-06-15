@@ -22,6 +22,9 @@ type ServerInterface interface {
 	// Logout
 	// (POST /auth/logout)
 	AuthLogout(w http.ResponseWriter, r *http.Request) *Response
+	// Send a webpush notification key
+	// (GET /notifications/webpush)
+	GetWebpushKey(w http.ResponseWriter, r *http.Request) *Response
 	// Get all users
 	// (GET /users)
 	GetUsers(w http.ResponseWriter, r *http.Request) *Response
@@ -71,6 +74,29 @@ func (siw *ServerInterfaceWrapper) AuthLogout(w http.ResponseWriter, r *http.Req
 
 	var handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		resp := siw.Handler.AuthLogout(w, r)
+		if resp != nil {
+			if resp.body != nil {
+				render.Render(w, r, resp)
+			} else {
+				w.WriteHeader(resp.Code)
+			}
+		}
+	})
+
+	// Operation specific middleware
+	handler = siw.Middlewares.Auth(handler).ServeHTTP
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetWebpushKey operation middleware
+func (siw *ServerInterfaceWrapper) GetWebpushKey(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, BearerAuthScopes, []string{""})
+
+	var handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		resp := siw.Handler.GetWebpushKey(w, r)
 		if resp != nil {
 			if resp.body != nil {
 				render.Render(w, r, resp)
@@ -324,6 +350,7 @@ func Handler(si ServerInterface, opts ...ServerOption) http.Handler {
 	r.Route(options.BaseURL, func(r chi.Router) {
 		r.Post("/auth/login", wrapper.AuthLogin)
 		r.Post("/auth/logout", wrapper.AuthLogout)
+		r.Get("/notifications/webpush", wrapper.GetWebpushKey)
 		r.Get("/users", wrapper.GetUsers)
 		r.Post("/users", wrapper.CreateUser)
 		r.Delete("/users/{id}", wrapper.DeleteUserByID)

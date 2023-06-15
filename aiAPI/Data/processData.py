@@ -1,6 +1,9 @@
 import json
-from AI import IncidentDetection
-from AI import HumanDetection
+from AI.fireDetector import FireDetection
+from AI.floodingDetector import FloodingDetection
+from AI.iaqDetector import IaqDetection
+from AI.batteryDetector import BatteryDetection
+from AI.humanDetector import HumanDetection
 
 class ProcessData:
     def __init__(self):
@@ -17,24 +20,34 @@ class ProcessData:
             temperature = data.get('temperature')
             humidity = data.get('humidity')
             iaq = data.get('iaq')
-            motion = data.get('motion')
+            battery = data.get('battery')
         except Exception as e:
             print("Erreur lors de l'extraction des valeurs à partir des données JSON :", str(e))
             
-        incident_detector = IncidentDetection(id_iot, temperature, humidity, iaq)
+        fire_detector = FireDetection(id_iot, temperature)
+        flooding_detector = FloodingDetection(id_iot, humidity)
+        iaq_detector = IaqDetection(id_iot, iaq)
+        battery_detector = BatteryDetection(id_iot, battery)
         
         try:
-            incident_detector.check_fire()
+            fire_detector.check_fire()
         except Exception as e:
-            print("Erreur lors de l'appel de la fonction check_fire dans la classe IncidentDetector", str(e))
+            print("Erreur lors de l'appel de la fonction check_fire dans la classe FireDetector", str(e))
+        
         try:
-            incident_detector.check_flooding()
+            flooding_detector.check_flooding()
         except Exception as e:
-            print("Erreur lors de l'appel de la fonction check_flooding dans la classe IncidentDetector", str(e))
-        try:
-            incident_detector.check_air_quality()
-        except Exception as e:
-            print("Erreur lors de l'appel de la fonction check_air_quality dans la classe IncidentDetector", str(e))
+            print("Erreur lors de l'appel de la fonction check_flooding dans la classe FloodingDetector", str(e))
             
+        try:
+            iaq_detector.check_iaq()
+        except Exception as e:
+            print("Erreur lors de l'appel de la fonction check_iaq dans la classe IaqDetector", str(e))
+        
+        try:
+            battery_detector.check_battery()
+        except Exception as e:
+            print("Erreur élors de l'appel de la fonction check_battery dans la classe BatteryDetector", str(e))
+              
     def process_data_camera(self, json_data):
         pass

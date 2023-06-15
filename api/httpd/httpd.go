@@ -2,11 +2,13 @@ package httpd
 
 import (
 	"context"
+	"net/http"
 	"os"
 
 	"github.com/Karitham/iDIoT/api/httpd/api"
 	"github.com/Karitham/iDIoT/api/session"
 	"github.com/Karitham/iDIoT/api/store"
+	"github.com/go-chi/render"
 	"github.com/oklog/ulid"
 	"golang.org/x/exp/slog"
 )
@@ -23,6 +25,8 @@ type Store interface {
 	NewSession(ctx context.Context, sess session.Permissions) (session.ID, error)
 	GetSession(ctx context.Context, id session.ID) (session.Session, error)
 	DeleteSession(ctx context.Context, id session.ID) error
+
+	GetWebpushKey(ctx context.Context) (store.KeyPair, error)
 }
 
 func New(store Store) *Service {
@@ -35,7 +39,9 @@ type Service struct {
 	store Store
 }
 
-func WError(ctx context.Context, code int, m api.Error) *api.Response {
-	log.WarnCtx(ctx, "api returned an error", "message", m.Message, "code", code)
-	return api.GetUserByIDJSONDefaultResponse(m).Status(code)
+func WError(w http.ResponseWriter, r *http.Request, code int, m string) *api.Response {
+	log.WarnCtx(r.Context(), "api returned an error", "message", m, "code", code)
+	render.Status(r, code)
+	render.JSON(w, r, api.Error{Message: m})
+	return nil
 }
