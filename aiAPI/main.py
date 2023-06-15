@@ -1,4 +1,4 @@
-from Redis import RedisSubscriber
+from Redis.redisSubscriber import RedisSubscriber
 from flask import Flask
 
 app = Flask(__name__)
