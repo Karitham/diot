@@ -1,73 +1,57 @@
-import { FunctionComponent, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { FunctionComponent } from "react";
+import AlertContainer from "../components/AlertContainer";
 import CamContainer from "../components/CamContainer";
-import Hallway1Container from "../components/Hallway1Container";
+import CamDisableContainer from "../components/CamDisableContainer";
+import Navbar from "../components/Navbar";
 import "../styles/Dashboard.css";
+
 const Dashboard: FunctionComponent = () => {
-  const navigate = useNavigate();
-
-  const onLogoSloganContainerClick = useCallback(() => {
-    navigate("/dashboard");
-  }, [navigate]);
-
-  const onNotificationIconClick = useCallback(() => {
-    navigate("/notifications");
-  }, [navigate]);
-
   return (
-    <div className="dashboard">
-      <div className="nav">
-        <div className="topnav">
-          <div className="logoslogan" onClick={onLogoSloganContainerClick}>
-            <img className="logotext-icon" alt="" src="/logotext.svg" />
-            <b className="smart-homes-smarter">Smart homes, smarter</b>
+    <div className="dashboard2">
+      <Navbar settingsText="" />
+      <div className="contentwrapper1">
+        <AlertContainer
+          dateTime="/vector3.svg"
+          dateTimeText="Fire Alert"
+          timeText="Just now "
+          propBackgroundColor="#c33e22"
+          propWidth="1.02rem"
+          propAlignSelf="unset"
+          propDisplay="none"
+        />
+        <div className="camscontainer">
+          <div className="titlecontainer1">
+            <img className="pause-icon1" alt="" src="/pause1.svg" />
+            <div className="titre2">Dashboard</div>
           </div>
-          <div className="icons">
-            <img
-              className="notification-icon"
-              alt=""
-              src="/notification.svg"
-              onClick={onNotificationIconClick}
-            />
-            <img className="user-icon" alt="" src="/user.svg" />
-          </div>
-        </div>
-        <div className="breadcrumbs">
-          <div className="home">Dashboard</div>
-          <img className="caret-icon" alt="" src="/caret.svg" />
-          <div className="notifications">Notifications</div>
-        </div>
-      </div>
-      <div className="alert-card">
-        <div className="input">
-          <div className="intrusion-alert-parent">
-            <div className="intrusion-alert">Intrusion Alert</div>
-            <div className="intrusion-alert-someone">
-              Intrusion alert. Someone was located in the living room.
+          <div className="gridcontainer">
+            <div className="cams">
+              <CamContainer
+                roomName="Living Room"
+                roomImageId="/livingroom@2x.png"
+              />
+              <CamContainer
+                roomName="Bedroom"
+                roomImageId="/bedroom@2x.png"
+                propHeight="16.06rem"
+              />
+              <CamDisableContainer
+                roomId="/start.svg"
+                roomName="Hallway 1"
+                roomDimensions="/pen1.svg"
+              />
+              <CamContainer
+                roomName="Bathroom"
+                roomImageId="/livingroom1@2x.png"
+                propHeight="12.94rem"
+              />
+              <CamContainer
+                roomName="Living Room"
+                roomImageId="/bedroom@2x.png"
+                propHeight="16.06rem"
+              />
             </div>
           </div>
-          <img className="vector-icon" alt="" src="/vector.svg" />
-        </div>
-      </div>
-      <div className="camscontainer">
-        <div className="titre">Dashboard</div>
-        <div className="cams">
-          <CamContainer
-            roomName="Living Room"
-            roomImageUrl="/livingroom@2x.png"
-            propHeight="16.06rem"
-          />
-          <CamContainer
-            roomName="Bedroom"
-            roomImageUrl="/bedroom@2x.png"
-            propHeight="16.06rem"
-          />
-          <Hallway1Container />
-          <CamContainer
-            roomName="Bathroom"
-            roomImageUrl="/livingroom@2x.png"
-            propHeight="12.94rem"
-          />
         </div>
       </div>
     </div>

@@ -2,11 +2,11 @@ package store
 
 import (
 	"context"
-	"crypto/rand"
 
 	"github.com/Karitham/iDIoT/api/store/models"
 	"github.com/SherClockHolmes/webpush-go"
-	"github.com/oklog/ulid"
+	"github.com/gocql/gocql"
+	"github.com/scylladb/gocqlx/v2/qb"
 )
 
 type KeyPair struct {
@@ -15,7 +15,7 @@ type KeyPair struct {
 	PrivateKey string `db:"private_key"`
 }
 
-func (s *Store) RotateKeyPair(ctx context.Context) (KeyPair, error) {
+func (s *Store) RotateWebpushKey(ctx context.Context) (KeyPair, error) {
 	pk, pubk, err := webpush.GenerateVAPIDKeys()
 	if err != nil {
 		return KeyPair{}, err
@@ -24,7 +24,7 @@ func (s *Store) RotateKeyPair(ctx context.Context) (KeyPair, error) {
 	key := KeyPair{
 		PublicKey:  pubk,
 		PrivateKey: pk,
-		ID:         ulid.MustNew(ulid.Now(), rand.Reader).String(),
+		ID:         "webpush",
 	}
 
 	err = s.conn.Query(models.Keys.Insert()).BindStruct(key).WithContext(ctx).ExecRelease()
@@ -35,9 +35,17 @@ func (s *Store) RotateKeyPair(ctx context.Context) (KeyPair, error) {
 	return key, nil
 }
 
-func (s *Store) GetKeypair(ctx context.Context) (KeyPair, error) {
+func (s *Store) GetWebpushKey(ctx context.Context) (KeyPair, error) {
 	var key KeyPair
-	if err := s.conn.Query(models.Keys.Select()).WithContext(ctx).Get(&key); err != nil {
+	err := s.conn.Query(models.Keys.Select()).WithContext(ctx).BindMap(qb.M{
+		"id": "webpush",
+	}).Get(&key)
+	if err == gocql.ErrNotFound {
+		// create it if it doesn't exist
+		return s.RotateWebpushKey(ctx)
+	}
+
+	if err != nil {
 		return KeyPair{}, err
 	}
 

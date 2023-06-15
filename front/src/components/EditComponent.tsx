@@ -7,7 +7,7 @@ type EditComponentType = {
 };
 
 const EditComponent: FunctionComponent<EditComponentType> = memo(
-  ({ onClose }) => {
+  ({ }) => {
     return (
       <div className="edit-component">
         <div className="nameclosecontainer1">

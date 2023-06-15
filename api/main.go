@@ -107,6 +107,6 @@ func HTTPD(c *cli.Context) error {
 
 func errorH(w http.ResponseWriter, r *http.Request, err error) {
 	slog.Error("errorHandler", "error", err)
-	rsp := httpd.WError(r.Context(), 400, api.Error{Message: err.Error()})
+	rsp := httpd.WError(w, r, 400, err.Error())
 	render.Render(w, r, rsp)
 }

@@ -16,14 +16,11 @@ require (
 	github.com/urfave/cli/v2 v2.25.6
 	golang.org/x/crypto v0.9.0
 	golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1
+	github.com/SherClockHolmes/webpush-go v1.2.0
 )
 
 require (
-	github.com/SherClockHolmes/webpush-go v1.2.0 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
-)
-
-require (
 	github.com/ajg/form v1.5.1 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/go-json-experiment/json v0.0.0-20230324203220-04923b7a9528

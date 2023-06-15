@@ -113,7 +113,7 @@ func DBKeys() *cli.Command {
 					s := store.New(context.Background(), c.StringSlice("cass")...)
 					defer s.Close()
 
-					k, err := s.RotateKeyPair(c.Context)
+					k, err := s.RotateWebpushKey(c.Context)
 					if err != nil {
 						return err
 					}
@@ -129,7 +129,7 @@ func DBKeys() *cli.Command {
 					s := store.New(context.Background(), c.StringSlice("cass")...)
 					defer s.Close()
 
-					k, err := s.GetKeypair(c.Context)
+					k, err := s.GetWebpushKey(c.Context)
 					if err != nil {
 						return err
 					}

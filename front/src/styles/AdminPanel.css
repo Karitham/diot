@@ -1,9 +1,9 @@
-.logotext-icon2 {
+.logotext-icon {
   position: relative;
   width: 2.64rem;
   height: 1.55rem;
 }
-.smart-homes-smarter2 {
+.smart-homes-smarter {
   align-self: stretch;
   position: relative;
   display: flex;
@@ -11,7 +11,7 @@
   width: 5.06rem;
   flex-shrink: 0;
 }
-.logoslogan2 {
+.logoslogan {
   align-self: stretch;
   display: flex;
   flex-direction: row;
@@ -19,150 +19,139 @@
   justify-content: flex-start;
   gap: var(--gap-6xs-5);
 }
-.logoslogan2,
-.notification-icon2 {
+.notification-icon {
   cursor: pointer;
 }
-.notification-icon2,
-.user-icon2 {
+.notification-icon,
+.user-icon {
   position: relative;
   width: 1.25rem;
   height: 1.25rem;
 }
-.icons2,
-.topnav2 {
+.icons,
+.topnav {
   display: flex;
   flex-direction: row;
 }
-.icons2 {
+.icons {
   height: 1.63rem;
   align-items: center;
   justify-content: flex-start;
   gap: var(--gap-xs);
 }
-.topnav2 {
+.topnav {
   align-self: stretch;
   align-items: flex-end;
   justify-content: space-between;
-}
-.dashboard3 {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 3.56rem;
-  flex-shrink: 0;
   cursor: pointer;
 }
-.caret-icon4 {
+.dashboard {
+  position: relative;
+  color: var(--text-text1);
+  cursor: pointer;
+}
+.caret-icon {
   position: relative;
   width: 0.27rem;
   height: 0.5rem;
 }
-.notifications4 {
+.notifications {
   position: relative;
   cursor: pointer;
 }
-.crumb12 {
+.crumb1 {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
   gap: var(--gap-9xs);
 }
-.edit2 {
+.edit {
   position: relative;
 }
-.crumb22 {
+.crumb2 {
   display: none;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-9xs);
+}
+.breadcrumbs,
+.nav {
+  display: flex;
+  justify-content: flex-start;
+}
+.breadcrumbs {
   flex-direction: row;
   align-items: center;
   gap: var(--gap-9xs);
   color: var(--text-text2);
-}
-.breadcrumbs2,
-.crumb22,
-.nav2 {
-  justify-content: flex-start;
-}
-.breadcrumbs2 {
-  display: none;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--gap-9xs);
-  color: var(--text-text1);
   font-family: var(--label);
 }
-.nav2 {
+.nav {
   align-self: stretch;
-  display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--gap-xs);
+  font-size: var(--breadcrumb-size);
+  color: var(--colors-primary);
 }
-.pause-icon1 {
-  position: relative;
-  width: 1.75rem;
-  height: 1.75rem;
-}
-.titre2 {
+.titre {
   position: relative;
   font-weight: 500;
   text-shadow: var(--sm);
 }
-.cams,
-.gridcontainer,
-.titlecontainer1 {
-  display: flex;
-  justify-content: flex-start;
-}
-.titlecontainer1 {
+.titlecontainer {
   flex-direction: row;
   align-items: center;
-  gap: var(--gap-xs);
+  justify-content: flex-start;
 }
-.cams,
-.gridcontainer {
-  align-items: flex-start;
-  gap: var(--gap-5xl);
-}
-.cams {
-  flex: 1;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-.gridcontainer {
-  flex-direction: row;
-}
-.camscontainer,
-.gridcontainer {
+.container,
+.logout,
+.new-user,
+.titlecontainer {
   align-self: stretch;
-}
-.camscontainer,
-.contentwrapper1,
-.dashboard2 {
   display: flex;
+}
+.container {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: var(--gap-17xl);
-}
-.contentwrapper1 {
-  align-self: stretch;
-  flex: 1;
-  padding: 0 var(--padding-251xl);
+  gap: var(--gap-5xl);
   font-size: var(--title-size);
   color: var(--text-text0);
 }
-.dashboard2 {
+.logout,
+.new-user {
+  border-radius: var(--br-5xs);
+  background-color: var(--colors-accent);
+  box-shadow: var(--sm);
+  overflow: hidden;
+  flex-shrink: 0;
+  flex-direction: row;
+  padding: var(--padding-xs) var(--padding-13xl);
+  align-items: center;
+  justify-content: center;
+  mix-blend-mode: normal;
+  cursor: pointer;
+}
+.logout {
+  background-color: var(--colors-red);
+}
+.admin-panel {
   position: relative;
   background-color: var(--text-textneg);
   width: 100%;
-  height: 57.88rem;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   padding: var(--padding-5xl);
   box-sizing: border-box;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-17xl);
   text-align: left;
-  font-size: var(--breadcrumb-size);
-  color: var(--colors-primary);
+  font-size: var(--label-size);
+  color: var(--text-textneg);
   font-family: var(--title);
 }

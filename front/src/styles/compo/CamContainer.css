@@ -1,32 +1,32 @@
-.pause-icon1 {
+.pause-icon3 {
   width: 0.75rem;
   height: 0.75rem;
 }
-.living-room8,
-.pause-icon1 {
+.living-room2,
+.pause-icon3 {
   position: relative;
 }
-.text {
+.text5 {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
   gap: var(--gap-5xs);
 }
-.pen-icon2 {
+.pen-icon5 {
   position: relative;
   width: 0.75rem;
   height: 0.75rem;
   cursor: pointer;
 }
 .icons4,
-.label {
+.label5 {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
 }
-.label {
+.label5 {
   align-self: stretch;
   align-items: center;
   justify-content: space-between;
@@ -52,5 +52,4 @@
   font-size: var(--label-size);
   color: var(--text-text0);
   font-family: var(--label);
-  aspect-ratio: 16/9;
 }

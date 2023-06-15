@@ -18,7 +18,7 @@ func (s Service) AuthMiddleware(next http.Handler) http.Handler {
 		if headerValue == "" {
 			s, err := r.Cookie(AuthCookieName)
 			if err != nil {
-				WError(r.Context(), 401, api.Error{Message: "Unauthorized"})
+				WError(w, r, 401, "Unauthorized")
 				return
 			}
 			headerValue = s.Value
@@ -26,13 +26,13 @@ func (s Service) AuthMiddleware(next http.Handler) http.Handler {
 
 		sessID, err := session.Parse([]byte(headerValue))
 		if err != nil {
-			WError(r.Context(), 401, api.Error{Message: "Unauthorized"})
+			WError(w, r, 401, "Unauthorized")
 			return
 		}
 
 		sess, err := s.store.GetSession(r.Context(), sessID)
 		if err != nil {
-			WError(r.Context(), 401, api.Error{Message: "Unauthorized"})
+			WError(w, r, 401, "Unauthorized")
 			return
 		}
 
@@ -56,7 +56,7 @@ func (s Service) PermissionsMiddleware(next http.Handler) http.Handler {
 
 		err := s.Permissions.Can(session.FromString(perms...)...)
 		if err != nil {
-			WError(r.Context(), 403, api.Error{Message: err.Error()})
+			WError(w, r, 403, err.Error())
 			return
 		}
 
@@ -71,26 +71,26 @@ const AuthCookieName = "idiot_session_id"
 func (s Service) AuthLogin(w http.ResponseWriter, r *http.Request) *api.Response {
 	email := r.URL.Query().Get("email")
 	if email == "" {
-		return WError(r.Context(), 400, api.Error{Message: "email is required"})
+		return WError(w, r, 400, "email is required")
 	}
 
 	password := r.URL.Query().Get("password")
 	if password == "" {
-		return WError(r.Context(), 400, api.Error{Message: "password is required"})
+		return WError(w, r, 400, "password is required")
 	}
 
 	u, err := s.store.GetUserByEmail(r.Context(), email)
 	if err != nil {
-		return WError(r.Context(), 500, api.Error{Message: err.Error()})
+		return WError(w, r, 500, err.Error())
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password)); err != nil {
-		return WError(r.Context(), 401, api.Error{Message: "Unauthorized"})
+		return WError(w, r, 401, "Unauthorized")
 	}
 
 	id, err := s.store.NewSession(r.Context(), session.Permissions{})
 	if err != nil {
-		return WError(r.Context(), 500, api.Error{Message: err.Error()})
+		return WError(w, r, 500, err.Error())
 	}
 
 	http.SetCookie(w, &http.Cookie{
@@ -113,7 +113,7 @@ func (s Service) AuthLogin(w http.ResponseWriter, r *http.Request) *api.Response
 func (s Service) AuthLogout(w http.ResponseWriter, r *http.Request) *api.Response {
 	err := s.store.DeleteSession(r.Context(), session.FromContext(r.Context()).ID)
 	if err != nil {
-		return WError(r.Context(), 500, api.Error{Message: err.Error()})
+		return WError(w, r, 500, err.Error())
 	}
 
 	http.SetCookie(w, &http.Cookie{

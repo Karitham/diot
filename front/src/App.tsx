@@ -1,70 +1,63 @@
-import {
-  Routes,
-  Route,
-  useNavigationType,
-  useLocation,
-} from "react-router-dom";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import Dashboard1 from "./pages/Dashboard1";
-import Notifications from "./pages/Notifications";
-import { useEffect } from "react";
+import { Routes, Route, useNavigationType, useLocation } from 'react-router-dom'
+import Login from './pages/Login'
+import Dashboard from './pages/Dashboard'
+import AdminPanel from './pages/AdminPanel'
+import Notifications from './pages/Notifications'
+import { useEffect } from 'react'
 
 function App() {
-  const action = useNavigationType();
-  const location = useLocation();
-  const pathname = location.pathname;
+  const action = useNavigationType()
+  const location = useLocation()
+  const pathname = location.pathname
 
   useEffect(() => {
-    if (action !== "POP") {
-      window.scrollTo(0, 0);
+    if (action !== 'POP') {
+      window.scrollTo(0, 0)
     }
-  }, [action, pathname]);
+  }, [action, pathname])
 
   useEffect(() => {
-    let title = "";
-    let metaDescription = "";
+    let title = ''
+    let metaDescription = ''
 
     switch (pathname) {
-      case "/":
-        title = "";
-        metaDescription = "";
-        break;
-      case "/dashboard1":
-        title = "";
-        metaDescription = "";
-        break;
-      case "/dashboard":
-        title = "";
-        metaDescription = "";
-        break;
-      case "/notifications":
-        title = "";
-        metaDescription = "";
-        break;
+      case '/':
+        title = ''
+        metaDescription = ''
+        break
+      case '/dashboard':
+        title = ''
+        metaDescription = ''
+        break
+      case '/adminpanel':
+        title = ''
+        metaDescription = ''
+        break
+      case '/notifications':
+        title = ''
+        metaDescription = ''
+        break
     }
 
     if (title) {
-      document.title = title;
+      document.title = title
     }
 
     if (metaDescription) {
-      const metaDescriptionTag: HTMLMetaElement | null = document.querySelector(
-        'head > meta[name="description"]'
-      );
+      const metaDescriptionTag: HTMLMetaElement | null = document.querySelector('head > meta[name="description"]')
       if (metaDescriptionTag) {
-        metaDescriptionTag.content = metaDescription;
+        metaDescriptionTag.content = metaDescription
       }
     }
-  }, [pathname]);
+  }, [pathname])
 
   return (
     <Routes>
       <Route path="/" element={<Login />} />
-      <Route path="/dashboard1" element={<Dashboard />} />
-      <Route path="/dashboard" element={<Dashboard1 />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/adminpanel" element={<AdminPanel />} />
       <Route path="/notifications" element={<Notifications />} />
     </Routes>
-  );
+  )
 }
-export default App;
+export default App
