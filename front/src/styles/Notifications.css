@@ -170,3 +170,9 @@
   color: var(--colors-primary);
   font-family: var(--title);
 }
+
+.grow-container{
+  flex-grow: 1;
+  max-width: 260px;
+  width: 100%;
+}

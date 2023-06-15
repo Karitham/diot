@@ -1,7 +1,11 @@
-import { FunctionComponent} from "react";
-import AlertContainer from "../components/AlertContainer";
-import "../styles/Notifications.css";
-import Navbar from "../components/Navbar";
+import { FunctionComponent } from 'react'
+import AlertContainer from '../components/AlertContainer'
+import '../styles/Notifications.css'
+import Navbar from '../components/Navbar'
+
+const alert = { dateTime: '/vector2.svg', dateTimeText: 'May 5th', timeText: '04:54' }
+
+const alerts = [alert, alert, alert]
 
 const Notifications: FunctionComponent = () => {
   return (
@@ -12,211 +16,21 @@ const Notifications: FunctionComponent = () => {
           <div className="titre1">Notification History</div>
           <div className="alerts-parent">
             <div className="alerts">
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
-
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
-              <AlertContainer
-                dateTime="/vector2.svg"
-                dateTimeText="May 5th"
-                timeText="04:54"
-                propBackgroundColor="#415d4a"
-                propWidth="0.98rem"
-                propAlignSelf="stretch"
-                propDisplay="inline-block"
-              />
+              {alerts.map(a => (
+                <div className="grow-container">
+                  <AlertContainer
+                    dateTime={a.dateTime}
+                    dateTimeText={a.dateTimeText}
+                    timeText={a.timeText}
+                    propBackgroundColor="#415D4A"></AlertContainer>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Notifications;
+export default Notifications
