@@ -72,10 +72,16 @@ func (s *Store) RegisterWebpush(ctx context.Context, userID ulid.ULID, endpoint,
 		return err
 	}
 
-	return s.conn.Query(models.WebpushSubscriptions.Insert()).BindStruct(models.WebpushSubscriptionsStruct{
+	// add to the list of subscriptions
+	err = s.conn.Query(models.WebpushSubscriptions.UpdateBuilder().Add("subscription").ToCql()).WithContext(ctx).BindStruct(models.WebpushSubscriptionsStruct{
 		UserId:       userID.String(),
 		Subscription: [][]byte{buf.Bytes()},
-	}).WithContext(ctx).ExecRelease()
+	}).ExecRelease()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 type UserWebpushSubscriptions struct {
@@ -91,17 +97,17 @@ type WebpushSubscription struct {
 	} `db:"keys"`
 }
 
-func (s *Store) GetWebpushSubscriptions(ctx context.Context, userID string) (UserWebpushSubscriptions, error) {
+func (s *Store) GetWebpushSubscriptions(ctx context.Context, userID ulid.ULID) (UserWebpushSubscriptions, error) {
 	var subs []models.WebpushSubscriptionsStruct
 	err := s.conn.Query(models.WebpushSubscriptions.Select()).WithContext(ctx).BindMap(qb.M{
-		"user_id": userID,
+		"user_id": userID.String(),
 	}).SelectRelease(&subs)
 	if err != nil {
 		return UserWebpushSubscriptions{}, err
 	}
 
 	out := UserWebpushSubscriptions{
-		UserID: ulid.MustParse(userID),
+		UserID: userID,
 	}
 	for _, sub := range subs {
 		for _, s := range sub.Subscription {

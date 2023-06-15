@@ -40,6 +40,31 @@ func (s *Store) GetSession(ctx context.Context, sessionID session.ID) (session.S
 	}, err
 }
 
+// ListSessions returns all sessions
+func (s *Store) ListSessions(ctx context.Context) ([]session.Session, error) {
+	var ss []models.SessionsStruct
+
+	err := s.conn.Query(models.Sessions.SelectAll()).
+		WithContext(ctx).
+		SelectRelease(&ss)
+
+	sessions := make([]session.Session, 0, len(ss))
+	for _, s := range ss {
+		sID, err := session.Parse([]byte(s.Id))
+		if err != nil {
+			return nil, err
+		}
+
+		sessions = append(sessions, session.Session{
+			ID:          sID,
+			UserID:      ulid.MustParse(s.UserId),
+			Permissions: session.FromString(s.Permissions...),
+		})
+	}
+
+	return sessions, err
+}
+
 // DeleteSession deletes a session
 func (s *Store) DeleteSession(ctx context.Context, sessionID session.ID) error {
 	return s.conn.Query(models.Sessions.Delete()).
