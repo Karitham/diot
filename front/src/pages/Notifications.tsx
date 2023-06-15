@@ -1,7 +1,7 @@
 import { FunctionComponent} from "react";
 import AlertContainer from "../components/AlertContainer";
 import "../styles/Notifications.css";
-import Navbar from "../components/navbar";
+import Navbar from "../components/Navbar";
 
 const Notifications: FunctionComponent = () => {
   return (

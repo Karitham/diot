@@ -2,7 +2,7 @@ import { FunctionComponent } from "react";
 import AlertContainer from "../components/AlertContainer";
 import CamContainer from "../components/CamContainer";
 import CamDisableContainer from "../components/CamDisableContainer";
-import Navbar from "../components/navbar";
+import Navbar from "../components/Navbar";
 import "../styles/Dashboard.css";
 
 const Dashboard: FunctionComponent = () => {
@@ -38,7 +38,7 @@ const Dashboard: FunctionComponent = () => {
               <CamDisableContainer
                 roomId="/start.svg"
                 roomName="Hallway 1"
-                roomDimensions="/pen5.svg"
+                roomDimensions="/pen1.svg"
               />
               <CamContainer
                 roomName="Bathroom"

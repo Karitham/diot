@@ -5,7 +5,7 @@ type UserAccountType = {
   onClose?: () => void;
 };
 
-const UserAccount: FunctionComponent<UserAccountType> = memo(({ onClose }) => {
+const UserAccount: FunctionComponent<UserAccountType> = memo(({ }) => {
   return (
     <div className="user-account">
       <div className="alert">

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import AdminPanelContainer from "../components/AdminPanelContainer";
 import AdminPanelDeviceContainer from "../components/AdminPanelDeviceContainer";
 import "../styles/AdminPanel.css";
-import Navbar from "../components/navbar";
+import Navbar from "../components/Navbar";
 
 const AdminPanel: FunctionComponent = () => {
   const [isUserAccountOpen, setUserAccountOpen] = useState(false);
