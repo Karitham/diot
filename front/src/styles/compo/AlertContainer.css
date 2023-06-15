@@ -1,0 +1,63 @@
+.vector-icon19 {
+  position: relative;
+  width: 0.98rem;
+  height: 1.25rem;
+}
+.sneak3,
+.type {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sneak3 {
+  align-self: stretch;
+  flex: 1;
+  overflow: hidden;
+  flex-direction: row;
+}
+.type {
+  border-radius: var(--br-5xs);
+  background-color: var(--colors-accent);
+  width: 4.5rem;
+  height: 4.5rem;
+  flex-direction: column;
+}
+.may-5th {
+  position: relative;
+}
+.properties1 {
+  align-self: stretch;
+  border-radius: var(--br-5xs);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-9xs);
+  font-size: var(--font-size-3xs);
+  color: var(--text-text1);
+  font-family: var(--label);
+}
+.alert1,
+.content,
+.properties1 {
+  display: flex;
+  justify-content: flex-start;
+}
+.content {
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-5xs);
+}
+.alert1 {
+  align-self: stretch;
+  border-radius: var(--br-xs);
+  background-color: var(--bg-bg1);
+  box-shadow: var(--sm);
+  flex-direction: row;
+  padding: var(--padding-5xs);
+  align-items: center;
+  gap: var(--gap-xs);
+  text-align: left;
+  font-size: var(--label-size);
+  color: var(--text-text0);
+  font-family: var(--title);
+}
