@@ -20,4 +20,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Exécute la commande par défaut pour lancer l'application
-CMD [ "python", "main.py" ]
+CMD [ "python", "-u", "main.py" ]

@@ -1,12 +1,9 @@
-from Data.dataSchema import DataSchema
-from Redis.redisPublisher import RedisPublisher
 import datetime
+from AI.motherDetector import MotherDetection
 
-dataSchema = DataSchema()
-redisPublisher = RedisPublisher()
-
-class FireDetection:
+class FireDetection(MotherDetection):
     def __init__(self, id_iot, temperature):
+        super().__init__()
         self.id_iot = id_iot
         self.temperature = temperature
         self.alertTemperature1 = 30
@@ -21,12 +18,12 @@ class FireDetection:
             timestamp = datetime.datetime.now()
             formatted_timestamp = timestamp.strftime("%Y-%m-%d %H:%M:%S")
             try:
-                json_data = dataSchema.fire_schema(self.id_iot, self.temperature, formatted_timestamp, criticity)
+                json_data = MotherDetection.dataSchema.fire_schema(self.id_iot, self.temperature, formatted_timestamp, criticity)
             except Exception as e:
                 print("Erreur lors de l'appel de la fonction fire_schema dans la classe DataSchema", str(e))
             
             try:
-                redisPublisher.publish_alert(json_data)
+                MotherDetection.redisPublisher.publish_alert(json_data)
             except Exception as e:
                 print("Erreur lors de l'appel de la fonction publish_alert dans la classe RedisPublisher", str(e))
                 
@@ -35,12 +32,12 @@ class FireDetection:
             timestamp = datetime.datetime.now()
             formatted_timestamp = timestamp.strftime("%Y-%m-%d %H:%M:%S")
             try:
-                json_data = dataSchema.fire_schema(self.id_iot, self.temperature, formatted_timestamp, criticity)
+                json_data = MotherDetection.dataSchema.fire_schema(self.id_iot, self.temperature, formatted_timestamp, criticity)
             except Exception as e:
                 print("Erreur lors de l'appel de la fonction fire_schema dans la classe DataSchema", str(e))
             
             try:
-                redisPublisher.publish_alert(json_data)
+                MotherDetection.redisPublisher.publish_alert(json_data)
             except Exception as e:
                 print("Erreur lors de l'appel de la fonction publish_alert dans la classe RedisPublisher", str(e))
                 
@@ -49,12 +46,12 @@ class FireDetection:
             timestamp = datetime.datetime.now()
             formatted_timestamp = timestamp.strftime("%Y-%m-%d %H:%M:%S")
             try:
-                json_data = dataSchema.fire_schema(self.id_iot, self.temperature, formatted_timestamp, criticity)
+                json_data = MotherDetection.dataSchema.fire_schema(self.id_iot, self.temperature, formatted_timestamp, criticity)
             except Exception as e:
                 print("Erreur lors de l'appel de la fonction fire_schema dans la classe DataSchema", str(e))
             
             try:
-                redisPublisher.publish_alert(json_data)
+                MotherDetection.redisPublisher.publish_alert(json_data)
             except Exception as e:
                 print("Erreur lors de l'appel de la fonction publish_alert dans la classe RedisPublisher", str(e))
                 
@@ -63,12 +60,12 @@ class FireDetection:
             timestamp = datetime.datetime.now()
             formatted_timestamp = timestamp.strftime("%Y-%m-%d %H:%M:%S")
             try:
-                json_data = dataSchema.fire_schema(self.id_iot, self.temperature, formatted_timestamp, criticity)
+                json_data = MotherDetection.dataSchema.fire_schema(self.id_iot, self.temperature, formatted_timestamp, criticity)
             except Exception as e:
                 print("Erreur lors de l'appel de la fonction fire_schema dans la classe DataSchema", str(e))
             
             try:
-                redisPublisher.publish_alert(json_data)
+                MotherDetection.redisPublisher.publish_alert(json_data)
             except Exception as e:
                 print("Erreur lors de l'appel de la fonction publish_alert dans la classe RedisPublisher", str(e))
                 
@@ -77,12 +74,12 @@ class FireDetection:
             timestamp = datetime.datetime.now()
             formatted_timestamp = timestamp.strftime("%Y-%m-%d %H:%M:%S")
             try:
-                json_data = dataSchema.fire_schema(self.id_iot, self.temperature, formatted_timestamp, criticity)
+                json_data = MotherDetection.dataSchema.fire_schema(self.id_iot, self.temperature, formatted_timestamp, criticity)
             except Exception as e:
                 print("Erreur lors de l'appel de la fonction fire_schema dans la classe DataSchema", str(e))
             
             try:
-                redisPublisher.publish_alert(json_data)
+                MotherDetection.redisPublisher.publish_alert(json_data)
             except Exception as e:
                 print("Erreur lors de l'appel de la fonction publish_alert dans la classe RedisPublisher", str(e))
         

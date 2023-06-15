@@ -11,7 +11,7 @@ class RedisPublisher:
     def connection(self):
         try:
             r = redis.Redis(host=self.redis_ip, port=self.redis_port)
-            print(f"Connection to Redis at {self.redis_ip} and port {self.redis_port} for listening")
+            print(f"Connection to Redis at {self.redis_ip} and port {self.redis_port} for publishing")
             return r
         except redis.ConnectionError as e:
             print("Erreur de connexion à Redis :", str(e))
