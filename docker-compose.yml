@@ -4,11 +4,6 @@ name: idiot
 volumes:
   scylla-data-0:
   redis-data:
-  redis-password:
-
-secrets:
-  redis_password:
-    file: ./password.env
 
 services:
   scylla-0:
@@ -34,15 +29,16 @@ services:
       - "7667:7667"
     environment:
       CASS_ADDR: "scylla-0"
+      REDIS_PASS: ${REDIS_PASS:?REDIS_PASS not set}
       REDIS_ADDR: "redis"
       PORT: 7667
     depends_on:
       scylla-0: 
         condition: service_healthy
 
-  my_ai_api:
+  ai-api:
     image: ghcr.io/karitham/idiot/ai-api
-    container_name: my_ai_api
+    container_name: ai-api
     restart: always
     ports:
       - "5000:5000"
@@ -50,10 +46,8 @@ services:
       - redis
     environment:
       REDIS_ADDR: "redis"
+      REDIS_PASS: ${REDIS_PASS:?REDIS_PASS not set}
       PORT: 6379
-      REDIS_PASS_FILE: "/run/secrets/redis_password"
-    secrets:
-      - redis_password
 
   redis:
     image: redis:7.0.11-alpine
@@ -63,6 +57,3 @@ services:
       - "6379:6379"
     volumes:
       - redis-data:/data
-      - redis-password:/run/secrets/redis_password
-    environment:
-      REDIS_PASSWORD_FILE: /run/secrets/redis_password

@@ -17,6 +17,7 @@
             nodejs
             docker
             earthly
+            redis
           ];
         };
       });
