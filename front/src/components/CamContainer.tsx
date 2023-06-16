@@ -34,7 +34,7 @@ const CamContainer: FunctionComponent<CamContainerType> = memo(
         <div className="cam">
           <div className="label5">
             <div className="text5">
-              <img className="pause-icon3" alt="" src="/pause2.svg" />
+              <img className="pause-icon3" alt="" src="/pause1.svg" />
               <div className="living-room2">{roomName}</div>
             </div>
             <div className="icons4">
