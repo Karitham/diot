@@ -16,8 +16,5 @@ COPY . /app
 # Installe les dépendances du projet
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Installe les dépendances du projet
-RUN pip install --no-cache-dir -r requirements.txt
-
 # Exécute la commande par défaut pour lancer l'application
 CMD [ "python", "-u", "main.py" ]
