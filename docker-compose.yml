@@ -46,6 +46,7 @@ services:
       - redis
     environment:
       REDIS_ADDR: "redis"
+      REDIS_USER: ${REDIS_USER:?REDIS_USER not set}
       REDIS_PASS: ${REDIS_PASS:?REDIS_PASS not set}
       PORT: 6379
 

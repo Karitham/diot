@@ -4,14 +4,16 @@ import os
 class RedisPublisher:
     def __init__(self):
         self.redis_ip = os.environ.get('REDIS_ADDR')
-        self.redis_port = os.environ.get('PORT') 
-        self.key = "alert"
+        self.redis_port = os.environ.get('PORT')
+        self.redis_user = os.environ.get('REDIS_USER')
+        self.redis_password = os.environ.get('REDIS_PASS') 
+        self.key = "iot:alert"
         self.redis_client = self.connection()
     
     def connection(self):
         try:
-            r = redis.Redis(host=self.redis_ip, port=self.redis_port)
-            print(f"Connection to Redis at {self.redis_ip} and port {self.redis_port} for publishing")
+            r = redis.Redis(host=self.redis_ip, port=self.redis_port, username=self.redis_user, password=self.redis_password)
+            print(f"Connection to Redis at {self.redis_ip} and port {self.redis_port} for publishing with user {self.redis_user}")
             return r
         except redis.ConnectionError as e:
             print("Erreur de connexion à Redis :", str(e))
