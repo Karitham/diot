@@ -128,10 +128,16 @@
 .cams {
   flex: 1;
   flex-direction: row;
-  flex-wrap: wrap;
+  width: 100%;
+
 }
 .gridcontainer {
+  display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  margin: auto;
+
 }
 .camscontainer,
 .gridcontainer {
@@ -164,7 +170,7 @@
   overflow-y: auto;
   padding: var(--padding-5xl);
   box-sizing: border-box;
-  text-align: left;
+  text-align: center;
   font-size: var(--breadcrumb-size);
   color: var(--colors-primary);
   font-family: var(--title);
@@ -182,3 +188,15 @@
     margin: auto;
   }
 }*/
+
+.grow-container{
+  flex-grow: 1;
+  width: 100%;
+}
+
+.camsclick{
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+
+}

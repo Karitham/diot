@@ -37,7 +37,7 @@
 }
 .button1 {
   border-radius: var(--br-5xs);
-  background-color: var(--colors-accent);
+  background-color: var(--colors-button);
   box-shadow: var(--sm);
   overflow: hidden;
   padding: var(--padding-xs) var(--padding-13xl);

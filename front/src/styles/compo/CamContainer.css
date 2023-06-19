@@ -37,9 +37,9 @@
   border-radius: var(--br-5xs);
   max-width: 100%;
   overflow: hidden;
-  height: 16.06rem;
   flex-shrink: 0;
   object-fit: cover;
+  aspect-ratio: 16/9;
 }
 .cam {
   align-self: stretch;

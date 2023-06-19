@@ -1,7 +1,6 @@
 import { FunctionComponent, memo, useState, useMemo, useCallback } from "react";
 import EditComponent from "./EditComponent";
 import PortalPopup from "./PortalPopup";
-import CSS, { Property } from "csstype";
 import "../styles/compo/CamContainer.css";
 
 type CamContainerType = {
@@ -9,17 +8,17 @@ type CamContainerType = {
   roomImageId?: string;
 
   /** Style props */
-  propHeight?: Property.Height;
+  borderTop?: string;
 };
 
 const CamContainer: FunctionComponent<CamContainerType> = memo(
-  ({ roomName, roomImageId, propHeight }) => {
+  ({ roomName, roomImageId, borderTop }) => {
     const [isEditComponentOpen, setEditComponentOpen] = useState(false);
-    const livingroomIconStyle: CSS.Properties = useMemo(() => {
+    const livingroomIconStyle = useMemo(() => {
       return {
-        height: propHeight,
+        borderTop,
       };
-    }, [propHeight]);
+    }, [borderTop]);
 
     const openEditComponent = useCallback(() => {
       setEditComponentOpen(true);

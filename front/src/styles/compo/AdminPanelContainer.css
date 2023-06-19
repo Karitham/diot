@@ -343,4 +343,8 @@
   font-size: var(--font-size-base);
   color: var(--colors-accent);
   font-family: var(--title);
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  display: flex;
 }
