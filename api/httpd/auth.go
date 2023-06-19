@@ -7,6 +7,7 @@ import (
 
 	"github.com/Karitham/iDIoT/api/httpd/api"
 	"github.com/Karitham/iDIoT/api/session"
+	"github.com/go-chi/render"
 	"github.com/oklog/ulid"
 	"golang.org/x/crypto/bcrypt"
 	"golang.org/x/net/publicsuffix"
@@ -71,22 +72,25 @@ const AuthCookieName = "idiot_session_id"
 // Login
 // (POST /auth/login)
 func (s Service) AuthLogin(w http.ResponseWriter, r *http.Request) *api.Response {
-	email := r.URL.Query().Get("email")
-	if email == "" {
+	body := api.AuthLoginJSONRequestBody{}
+	if err := render.DecodeJSON(r.Body, &body); err != nil {
+		return WError(w, r, 400, err.Error())
+	}
+
+	if body.Email == "" {
 		return WError(w, r, 400, "email is required")
 	}
 
-	password := r.URL.Query().Get("password")
-	if password == "" {
+	if body.Password == "" {
 		return WError(w, r, 400, "password is required")
 	}
 
-	u, err := s.store.GetUserByEmail(r.Context(), email)
+	u, err := s.store.GetUserByEmail(r.Context(), body.Email)
 	if err != nil {
 		return WError(w, r, 500, err.Error())
 	}
 
-	if err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password)); err != nil {
+	if err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(body.Password)); err != nil {
 		return WError(w, r, 401, "Unauthorized")
 	}
 

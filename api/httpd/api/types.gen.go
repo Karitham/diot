@@ -144,11 +144,25 @@ func (t *SensorDataKind) FromValue(value string) error {
 	return fmt.Errorf("unknown enum value: %v", value)
 }
 
+// AuthLoginJSONBody defines parameters for AuthLogin.
+type AuthLoginJSONBody struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 // RegisterWebpushJSONBody defines parameters for RegisterWebpush.
 type RegisterWebpushJSONBody WebpushRegistration
 
 // CreateUserJSONBody defines parameters for CreateUser.
 type CreateUserJSONBody UserCreate
+
+// AuthLoginJSONRequestBody defines body for AuthLogin for application/json ContentType.
+type AuthLoginJSONRequestBody AuthLoginJSONBody
+
+// Bind implements render.Binder.
+func (AuthLoginJSONRequestBody) Bind(*http.Request) error {
+	return nil
+}
 
 // RegisterWebpushJSONRequestBody defines body for RegisterWebpush for application/json ContentType.
 type RegisterWebpushJSONRequestBody RegisterWebpushJSONBody

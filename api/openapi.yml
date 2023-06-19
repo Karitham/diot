@@ -18,21 +18,23 @@ paths:
         - auth
       summary: Login
       operationId: authLogin
-      queryParams:
-        - name: email
-          in: query
-          description: email
-          required: true
-          schema:
-            type: string
-            example: abc@efg.xyz
-        - name: password
-          in: query
-          description: password
-          required: true
-          schema:
-            type: string
-            example: DHBUD@&#W(IJOQDJCNE@DQFX$#D)
+      requestBody:
+        description: Login
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  example: abc@efg.xyz
+                password:
+                  type: string
+                  example: DHBUD@&#W(IJOQDJCNE@DQFX$#D)
       responses:
         "200":
           description: ok

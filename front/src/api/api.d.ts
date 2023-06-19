@@ -31,6 +31,18 @@ export interface paths {
     /** Delete a user by id */
     delete: operations["deleteUserById"];
   };
+  "/sensors": {
+    /** Get all sensors */
+    get: operations["getSensors"];
+  };
+  "/sensors/live": {
+    /**
+     * Get live sensor data 
+     * @description This endpoint returns live data from the sensors.
+     * It is a websocket endpoint, so you need to use a websocket client to connect to it.
+     */
+    get: operations["getSensorsLive"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -73,6 +85,36 @@ export interface components {
         auth: string;
       };
     };
+    SensorInfoCamera: {
+      feed_uri: string;
+    };
+    SensorInfoHumidity: {
+      /** @example 23.4 */
+      humidity: number;
+    };
+    SensorInfoTemperature: {
+      /** @example 23.4 */
+      temperature: number;
+    };
+    SensorInfo: {
+      kind: "SensorInfo";
+    } & Omit<components["schemas"]["SensorData"], "kind"> & {
+      /**
+       * @description A human readable label for the sensor 
+       * @example living room cam 1
+       */
+      label: string;
+    };
+    SensorData: {
+      /**
+       * @description The kind of sensor 
+       * @enum {string}
+       */
+      kind: "camera" | "humidity" | "temperature";
+      /** @description The sensor data */
+      data: components["schemas"]["SensorInfoHumidity"] | components["schemas"]["SensorInfoTemperature"] | components["schemas"]["SensorInfoCamera"];
+      id: string;
+    };
   };
   responses: never;
   parameters: never;
@@ -87,6 +129,17 @@ export interface operations {
 
   /** Login */
   authLogin: {
+    /** @description Login */
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @example abc@efg.xyz */
+          email: string;
+          /** @example DHBUD@&#W(IJOQDJCNE@DQFX$#D) */
+          password: string;
+        };
+      };
+    };
     responses: {
       /** @description ok */
       200: {
@@ -94,6 +147,11 @@ export interface operations {
           "application/json": {
             /** @example sess_dwquijlbndwqbyuidhkwqdyuibqwd89d30y12dh22389d:dh189gd2d1ghod921 */
             token: string;
+            /**
+             * Format: date-time 
+             * @example 2021-01-01T00:00:00Z
+             */
+            expire_at: string;
           };
         };
       };
@@ -230,6 +288,44 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["User"];
+        };
+      };
+      /** @description unexpected error */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /** Get all sensors */
+  getSensors: {
+    responses: {
+      /** @description ok */
+      200: {
+        content: {
+          "application/json": (components["schemas"]["SensorInfo"])[];
+        };
+      };
+      /** @description unexpected error */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /**
+   * Get live sensor data 
+   * @description This endpoint returns live data from the sensors.
+   * It is a websocket endpoint, so you need to use a websocket client to connect to it.
+   */
+  getSensorsLive: {
+    responses: {
+      /** @description ok */
+      200: {
+        content: {
+          "application/json": (components["schemas"]["SensorData"])[];
         };
       };
       /** @description unexpected error */

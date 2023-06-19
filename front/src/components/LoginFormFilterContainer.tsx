@@ -11,11 +11,9 @@ const LoginFormFilterContainer: FunctionComponent = () => {
 
   const onButtonContainerClick = useCallback(async () => {
     const resp = await client.post('/auth/login', {
-      params: {
-        query: {
-          email: email,
-          password: password
-        }
+      body: {
+        email: email,
+        password: password
       }
     })
 

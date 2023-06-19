@@ -347,8 +347,12 @@ Operations about auth
 > Code samples
 
 ```javascript
-
+const inputBody = '{
+  "email": "abc@efg.xyz",
+  "password": "DHBUD@&#W(IJOQDJCNE@DQFX$#D)"
+}';
 const headers = {
+  'Content-Type':'application/json',
   'Accept':'application/json',
   'Authorization':'Bearer {access-token}'
 };
@@ -356,7 +360,7 @@ const headers = {
 fetch('/v1/auth/login',
 {
   method: 'POST',
-
+  body: inputBody,
   headers: headers
 })
 .then(function(res) {
@@ -370,6 +374,7 @@ fetch('/v1/auth/login',
 ```shell
 # You can also use wget
 curl -X POST /v1/auth/login \
+  -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -378,6 +383,23 @@ curl -X POST /v1/auth/login \
 `POST /auth/login`
 
 *Login*
+
+> Body parameter
+
+```json
+{
+  "email": "abc@efg.xyz",
+  "password": "DHBUD@&#W(IJOQDJCNE@DQFX$#D)"
+}
+```
+
+<h3 id="authlogin-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object|true|Login|
+|» email|body|string|true|none|
+|» password|body|string|true|none|
 
 > Example responses
 

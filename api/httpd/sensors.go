@@ -93,6 +93,4 @@ func (s *Service) GetSensorsLive(w http.ResponseWriter, r *http.Request) *api.Re
 			return nil
 		}
 	}
-
-	return nil
 }

@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import createClient from 'openapi-fetch'
 import { paths } from './api'
 
