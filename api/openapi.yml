@@ -1,4 +1,4 @@
-openapi: '3.1.0'
+openapi: "3.1.0"
 servers:
   - url: /v1
 info:
@@ -34,7 +34,7 @@ paths:
             type: string
             example: DHBUD@&#W(IJOQDJCNE@DQFX$#D)
       responses:
-        '200':
+        "200":
           description: ok
           content:
             application/json:
@@ -50,7 +50,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
   /auth/logout:
     post:
       x-go-middlewares: [auth]
@@ -61,15 +61,15 @@ paths:
       summary: Logout
       operationId: authLogout
       responses:
-        '200':
+        "200":
           description: ok
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-  
+                $ref: "#/components/schemas/Error"
+
   /notifications/webpush:
     x-go-middlewares: [auth]
     get:
@@ -80,18 +80,18 @@ paths:
       summary: Send a webpush notification key
       operationId: getWebpushKey
       responses:
-        '200':
+        "200":
           description: ok
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WebpushKey'
+                $ref: "#/components/schemas/WebpushKey"
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
     post:
       security:
         - bearerAuth: []
@@ -100,22 +100,21 @@ paths:
       summary: Send a webpush notification registration payload
       operationId: registerWebpush
       responses:
-        '200':
+        "200":
           description: ok
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       requestBody:
         description: Create a new user
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/WebpushRegistration'
-
+              $ref: "#/components/schemas/WebpushRegistration"
 
   /users:
     x-go-middlewares: [auth]
@@ -127,25 +126,25 @@ paths:
       summary: Create a user
       operationId: createUser
       responses:
-        '200':
+        "200":
           description: ok
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: "#/components/schemas/User"
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       requestBody:
         description: Create a new user
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserCreate'
+              $ref: "#/components/schemas/UserCreate"
     get:
       security:
         - bearerAuth: [users:read]
@@ -154,20 +153,20 @@ paths:
       summary: Get all users
       operationId: getUsers
       responses:
-        '200':
+        "200":
           description: ok
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
+                  $ref: "#/components/schemas/User"
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 
   /users/{id}:
     x-go-middlewares: [auth]
@@ -185,22 +184,22 @@ paths:
           required: true
           schema:
             type: string
-            x-go-type: 
+            x-go-type:
               type: ULID
               import: github.com/oklog/ulid
       responses:
-        '200':
+        "200":
           description: ok
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: "#/components/schemas/User"
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
     delete:
       tags:
         - user
@@ -215,29 +214,81 @@ paths:
           required: true
           schema:
             type: string
-            x-go-type: 
+            x-go-type:
               type: ULID
               import: github.com/oklog/ulid
       responses:
-        '200':
+        "200":
           description: ok
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: "#/components/schemas/User"
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
+  /sensors:
+    x-go-middlewares: [auth]
+    get:
+      tags:
+        - sensor
+      security:
+        - bearerAuth: [perm:sensors:read]
+      summary: Get all sensors
+      operationId: getSensors
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SensorInfo"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /sensors/live:
+    get: 
+      tags:
+        - sensor
+      security:
+        - bearerAuth: [perm:sensors:read]
+      summary: Get live sensor data
+      description: |
+        This endpoint returns live data from the sensors.
+        It is a websocket endpoint, so you need to use a websocket client to connect to it.
+      operationId: getSensorsLive
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SensorData"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    
 components:
   schemas:
     User:
       properties:
         id:
           type: string
-          x-go-type: 
+          x-go-type:
             type: ULID
             import: github.com/oklog/ulid
         name:
@@ -303,23 +354,84 @@ components:
       required:
         - endpoint
         - keys
-        
+
+    SensorInfoCamera:
+      type: object
+      properties:
+        feed_uri:
+          type: string
+      required:
+        - feed_uri
+
+    SensorInfoHumidity:
+      type: object
+      properties:
+        humidity:
+          type: number
+          example: 23.4
+      required:
+        - humidity
+
+    SensorInfoTemperature:
+      type: object
+      properties:
+        temperature:
+          type: number
+          example: 23.4
+      required:
+        - temperature
+
+    SensorInfo:
+      allOf:
+        - $ref: "#/components/schemas/SensorData"
+        - required:
+            - label
+          properties:
+            label:
+              type: string
+              example: living room cam 1
+              description: A human readable label for the sensor
+
+    SensorData:
+      required:
+        - id
+        - kind
+        - data
+      discriminator:
+        propertyName: kind
+      properties:
+        kind:
+          type: string
+          enum: [camera, humidity, temperature]
+          description: The kind of sensor
+        data:
+          description: The sensor data
+          oneOf:
+            - $ref: "#/components/schemas/SensorInfoHumidity"
+            - $ref: "#/components/schemas/SensorInfoTemperature"
+            - $ref: "#/components/schemas/SensorInfoCamera"
+        id:
+          type: string
+          x-go-type:
+            type: ULID
+            import: github.com/oklog/ulid
+
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
     cookieAuth:
-        type: apiKey
-        in: cookie
-        name: idiot_session_id
+      type: apiKey
+      in: cookie
+      name: idiot_session_id
 security:
   # grep -oP 'Permission\s*=\s*"(.*)"' api/session/perms.go | awk '{print "- " $3}' | uniq
   - bearerAuth:
-    - "perm"
-    - "perm:users:create"
-    - "perm:users:read"
-    - "perm:users:delete"
-    - "perm:sensors:read"
-    - "perm:sensors:update"
-    - "perm:sensors:delete"
-    - "perm:sensors:state:update"
+      - "perm"
+      - "perm:users:create"
+      - "perm:users:read"
+      - "perm:users:delete"
+      - "perm:sensors:read"
+      - "perm:sensors:update"
+      - "perm:sensors:delete"
+      - "perm:sensors:state:update"

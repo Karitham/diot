@@ -402,11 +402,11 @@ Status Code **200**
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|» token|string|false|none|none|
+|» token|string|true|none|none|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth ( Scopes: users:create users:read users:delete sensors:read sensors:update sensors:delete sensors:state:update )
+bearerAuth ( Scopes: perm perm:users:create perm:users:read perm:users:delete perm:sensors:read perm:sensors:update perm:sensors:delete perm:sensors:state:update )
 </aside>
 
 ## authLogout
@@ -469,6 +469,393 @@ curl -X POST /v1/auth/logout \
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
 bearerAuth
+</aside>
+
+<h1 id="idiot-backend-api-notification">notification</h1>
+
+## getWebpushKey
+
+<a id="opIdgetWebpushKey"></a>
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'application/json',
+  'Authorization':'Bearer {access-token}'
+};
+
+fetch('/v1/notifications/webpush',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```shell
+# You can also use wget
+curl -X GET /v1/notifications/webpush \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+`GET /notifications/webpush`
+
+*Send a webpush notification key*
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "key": "string"
+}
+```
+
+<h3 id="getwebpushkey-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|ok|[WebpushKey](#schemawebpushkey)|
+|default|Default|unexpected error|[Error](#schemaerror)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## registerWebpush
+
+<a id="opIdregisterWebpush"></a>
+
+> Code samples
+
+```javascript
+const inputBody = '{
+  "endpoint": "string",
+  "keys": {
+    "p256dh": "string",
+    "auth": "string"
+  }
+}';
+const headers = {
+  'Content-Type':'application/json',
+  'Accept':'application/json',
+  'Authorization':'Bearer {access-token}'
+};
+
+fetch('/v1/notifications/webpush',
+{
+  method: 'POST',
+  body: inputBody,
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```shell
+# You can also use wget
+curl -X POST /v1/notifications/webpush \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+`POST /notifications/webpush`
+
+*Send a webpush notification registration payload*
+
+> Body parameter
+
+```json
+{
+  "endpoint": "string",
+  "keys": {
+    "p256dh": "string",
+    "auth": "string"
+  }
+}
+```
+
+<h3 id="registerwebpush-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[WebpushRegistration](#schemawebpushregistration)|true|Create a new user|
+
+> Example responses
+
+> default Response
+
+```json
+{
+  "message": "string",
+  "request_id": "string"
+}
+```
+
+<h3 id="registerwebpush-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|ok|None|
+|default|Default|unexpected error|[Error](#schemaerror)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+<h1 id="idiot-backend-api-sensor">sensor</h1>
+
+## getSensors
+
+<a id="opIdgetSensors"></a>
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'application/json',
+  'Authorization':'Bearer {access-token}'
+};
+
+fetch('/v1/sensors',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```shell
+# You can also use wget
+curl -X GET /v1/sensors \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+`GET /sensors`
+
+*Get all sensors*
+
+> Example responses
+
+> 200 Response
+
+```json
+[
+  null
+]
+```
+
+<h3 id="getsensors-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|ok|Inline|
+|default|Default|unexpected error|[Error](#schemaerror)|
+
+<h3 id="getsensors-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[allOf]|false|none|none|
+
+*allOf - discriminator: kind*
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|object|false|none|none|
+|»» kind|string|true|none|The kind of sensor|
+|»» data|any|true|none|The sensor data|
+
+*oneOf*
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|»»» *anonymous*|[SensorInfoHumidity](#schemasensorinfohumidity)|false|none|none|
+|»»»» humidity|number|true|none|none|
+
+*xor*
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|»»» *anonymous*|[SensorInfoTemperature](#schemasensorinfotemperature)|false|none|none|
+|»»»» temperature|number|true|none|none|
+
+*xor*
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|»»» *anonymous*|[SensorInfoCamera](#schemasensorinfocamera)|false|none|none|
+|»»»» feed_uri|string|true|none|none|
+
+*continued*
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|»» id|string|true|none|none|
+
+*and*
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|object|false|none|none|
+|»» label|string|true|none|A human readable label for the sensor|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|kind|camera|
+|kind|humidity|
+|kind|temperature|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth ( Scopes: perm:sensors:read )
+</aside>
+
+## getSensorsLive
+
+<a id="opIdgetSensorsLive"></a>
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'application/json',
+  'Authorization':'Bearer {access-token}'
+};
+
+fetch('/v1/sensors/live',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```shell
+# You can also use wget
+curl -X GET /v1/sensors/live \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+`GET /sensors/live`
+
+*Get live sensor data*
+
+This endpoint returns live data from the sensors.
+It is a websocket endpoint, so you need to use a websocket client to connect to it.
+
+> Example responses
+
+> 200 Response
+
+```json
+[
+  {
+    "kind": "camera",
+    "data": {
+      "humidity": 23.4
+    },
+    "id": "string"
+  }
+]
+```
+
+<h3 id="getsensorslive-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|ok|Inline|
+|default|Default|unexpected error|[Error](#schemaerror)|
+
+<h3 id="getsensorslive-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[SensorData](#schemasensordata)]|false|none|none|
+|» kind|string|true|none|The kind of sensor|
+|» data|any|true|none|The sensor data|
+
+*oneOf*
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|»» *anonymous*|[SensorInfoHumidity](#schemasensorinfohumidity)|false|none|none|
+|»»» humidity|number|true|none|none|
+
+*xor*
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|»» *anonymous*|[SensorInfoTemperature](#schemasensorinfotemperature)|false|none|none|
+|»»» temperature|number|true|none|none|
+
+*xor*
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|»» *anonymous*|[SensorInfoCamera](#schemasensorinfocamera)|false|none|none|
+|»»» feed_uri|string|true|none|none|
+
+*continued*
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» id|string|true|none|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|kind|camera|
+|kind|humidity|
+|kind|temperature|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth ( Scopes: perm:sensors:read )
 </aside>
 
 # Schemas
@@ -542,4 +929,195 @@ bearerAuth
 |---|---|---|---|---|
 |message|string|true|none|Error message|
 |request_id|string|false|none|Request ID|
+
+<h2 id="tocS_WebpushKey">WebpushKey</h2>
+<!-- backwards compatibility -->
+<a id="schemawebpushkey"></a>
+<a id="schema_WebpushKey"></a>
+<a id="tocSwebpushkey"></a>
+<a id="tocswebpushkey"></a>
+
+```json
+{
+  "key": "string"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|key|string|true|none|Webpush key|
+
+<h2 id="tocS_WebpushRegistration">WebpushRegistration</h2>
+<!-- backwards compatibility -->
+<a id="schemawebpushregistration"></a>
+<a id="schema_WebpushRegistration"></a>
+<a id="tocSwebpushregistration"></a>
+<a id="tocswebpushregistration"></a>
+
+```json
+{
+  "endpoint": "string",
+  "keys": {
+    "p256dh": "string",
+    "auth": "string"
+  }
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|endpoint|string|true|none|Webpush endpoint|
+|keys|object|true|none|Webpush keys|
+|» p256dh|string|true|none|Webpush p256dh key|
+|» auth|string|true|none|Webpush auth key|
+
+<h2 id="tocS_SensorInfoCamera">SensorInfoCamera</h2>
+<!-- backwards compatibility -->
+<a id="schemasensorinfocamera"></a>
+<a id="schema_SensorInfoCamera"></a>
+<a id="tocSsensorinfocamera"></a>
+<a id="tocssensorinfocamera"></a>
+
+```json
+{
+  "feed_uri": "string"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|feed_uri|string|true|none|none|
+
+<h2 id="tocS_SensorInfoHumidity">SensorInfoHumidity</h2>
+<!-- backwards compatibility -->
+<a id="schemasensorinfohumidity"></a>
+<a id="schema_SensorInfoHumidity"></a>
+<a id="tocSsensorinfohumidity"></a>
+<a id="tocssensorinfohumidity"></a>
+
+```json
+{
+  "humidity": 23.4
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|humidity|number|true|none|none|
+
+<h2 id="tocS_SensorInfoTemperature">SensorInfoTemperature</h2>
+<!-- backwards compatibility -->
+<a id="schemasensorinfotemperature"></a>
+<a id="schema_SensorInfoTemperature"></a>
+<a id="tocSsensorinfotemperature"></a>
+<a id="tocssensorinfotemperature"></a>
+
+```json
+{
+  "temperature": 23.4
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|temperature|number|true|none|none|
+
+<h2 id="tocS_SensorInfo">SensorInfo</h2>
+<!-- backwards compatibility -->
+<a id="schemasensorinfo"></a>
+<a id="schema_SensorInfo"></a>
+<a id="tocSsensorinfo"></a>
+<a id="tocssensorinfo"></a>
+
+```json
+null
+
+```
+
+### Properties
+
+allOf - discriminator: SensorData.kind
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[SensorData](#schemasensordata)|false|none|none|
+
+and
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|object|false|none|none|
+|» label|string|true|none|A human readable label for the sensor|
+
+<h2 id="tocS_SensorData">SensorData</h2>
+<!-- backwards compatibility -->
+<a id="schemasensordata"></a>
+<a id="schema_SensorData"></a>
+<a id="tocSsensordata"></a>
+<a id="tocssensordata"></a>
+
+```json
+{
+  "kind": "camera",
+  "data": {
+    "humidity": 23.4
+  },
+  "id": "string"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|kind|string|true|none|The kind of sensor|
+|data|any|true|none|The sensor data|
+
+oneOf
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|[SensorInfoHumidity](#schemasensorinfohumidity)|false|none|none|
+
+xor
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|[SensorInfoTemperature](#schemasensorinfotemperature)|false|none|none|
+
+xor
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|[SensorInfoCamera](#schemasensorinfocamera)|false|none|none|
+
+continued
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|id|string|true|none|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|kind|camera|
+|kind|humidity|
+|kind|temperature|
 
