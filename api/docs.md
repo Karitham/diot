@@ -30,8 +30,8 @@ Base URLs:
 
 - HTTP Authentication, scheme: bearer 
 
-* API Key (cookieAuth)
-    - Parameter Name: **idiot_session_id**, in: cookie. 
+* API Key (apiKey)
+    - Parameter Name: **api-key**, in: query. 
 
 <h1 id="idiot-backend-api-user">user</h1>
 

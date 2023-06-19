@@ -55,7 +55,6 @@ func (s *Service) GetSensors(w http.ResponseWriter, r *http.Request) *api.Respon
 func (s *Service) GetSensorsLive(w http.ResponseWriter, r *http.Request) *api.Response {
 	c, err := websocket.Accept(w, r, &websocket.AcceptOptions{
 		InsecureSkipVerify: true,
-		OriginPatterns:     []string{"*"},
 	})
 	if err != nil {
 		return WError(w, r, 400, err.Error())
