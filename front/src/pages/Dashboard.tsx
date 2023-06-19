@@ -3,6 +3,8 @@ import AlertContainer from '../components/AlertContainer'
 import CamContainer, { CamContainerType } from '../components/CamContainer'
 import Navbar from '../components/Navbar'
 import '../styles/Dashboard.css'
+import { subscribePush } from '../api/sw'
+import { ws } from '../api/ws'
 
 const alert = {
   dateTime: '/vector3.svg',
@@ -23,6 +25,13 @@ const cams: CamContainerType[] = [
 ]
 
 const Dashboard: FunctionComponent = () => {
+  window.addEventListener('load', () => {
+    // TODO(@chp567): Make sure we're logged in
+    subscribePush()
+    // ws is just a mock for now
+    ws()
+  })
+
   return (
     <div className="dashboard2">
       <Navbar settingsText="" />

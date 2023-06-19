@@ -260,6 +260,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   /sensors/live:
+    x-go-middlewares: [auth]
     get: 
       tags:
         - sensor

@@ -4,16 +4,11 @@ import Dashboard from './pages/Dashboard'
 import AdminPanel from './pages/AdminPanel'
 import Notifications from './pages/Notifications'
 import { useEffect } from 'react'
-import { subscribePush } from './api/sw'
 
 function App() {
   const action = useNavigationType()
   const location = useLocation()
   const pathname = location.pathname
-
-  window.addEventListener('load', () => {
-    subscribePush()
-  })
 
   useEffect(() => {
     if (action !== 'POP') {

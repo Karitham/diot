@@ -184,6 +184,9 @@ func (siw *ServerInterfaceWrapper) GetSensorsLive(w http.ResponseWriter, r *http
 		}
 	})
 
+	// Operation specific middleware
+	handler = siw.Middlewares.Auth(handler).ServeHTTP
+
 	handler(w, r.WithContext(ctx))
 }
 

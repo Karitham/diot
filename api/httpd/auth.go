@@ -9,6 +9,7 @@ import (
 	"github.com/Karitham/iDIoT/api/session"
 	"github.com/oklog/ulid"
 	"golang.org/x/crypto/bcrypt"
+	"golang.org/x/net/publicsuffix"
 )
 
 func (s Service) AuthMiddleware(next http.Handler) http.Handler {
@@ -100,6 +101,8 @@ func (s Service) AuthLogin(w http.ResponseWriter, r *http.Request) *api.Response
 		Name:     AuthCookieName,
 		MaxAge:   int(expire.Seconds()),
 		Value:    id.String(),
+		Domain:   tldFromHost(r),
+		Path:     "/",
 		SameSite: http.SameSiteLaxMode,
 		HttpOnly: true,
 	})
@@ -124,8 +127,16 @@ func (s Service) AuthLogout(w http.ResponseWriter, r *http.Request) *api.Respons
 	http.SetCookie(w, &http.Cookie{
 		Name:     AuthCookieName,
 		MaxAge:   -1,
+		Path:     "/",
 		SameSite: http.SameSiteLaxMode,
+		Domain:   tldFromHost(r),
 		HttpOnly: true,
 	})
 	return nil
+}
+
+// tldFromHost allows us to use the same cookie across subdomains
+func tldFromHost(r *http.Request) string {
+	h, _ := publicsuffix.EffectiveTLDPlusOne(r.Host)
+	return h
 }

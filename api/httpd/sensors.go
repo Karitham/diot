@@ -61,10 +61,10 @@ func (s *Service) GetSensorsLive(w http.ResponseWriter, r *http.Request) *api.Re
 		return WError(w, r, 400, err.Error())
 	}
 
-	ticker := time.NewTicker(1 * time.Second)
+	ticker := time.NewTicker(5 * time.Second)
 	defer ticker.Stop()
 
-	for range ticker.C {
+	for {
 		err := wsjson.Write(r.Context(), c, api.SensorData{
 			ID:   ulid.MustNew(ulid.Now(), rand.Reader),
 			Kind: api.SensorDataKindCamera,
@@ -85,6 +85,12 @@ func (s *Service) GetSensorsLive(w http.ResponseWriter, r *http.Request) *api.Re
 		})
 		if err != nil {
 			return WError(w, r, 400, err.Error())
+		}
+
+		select {
+		case <-ticker.C:
+		case <-r.Context().Done():
+			return nil
 		}
 	}
 

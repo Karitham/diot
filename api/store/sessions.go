@@ -14,7 +14,6 @@ func (s *Store) NewSession(ctx context.Context, userID ulid.ULID, permissions se
 	sid := session.New()
 	err := s.conn.Query(
 		models.Sessions.InsertBuilder().
-			Columns(models.Sessions.Metadata().Columns...).
 			TTL(TTL).
 			ToCql(),
 	).
