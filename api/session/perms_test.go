@@ -45,6 +45,12 @@ func TestPermissions_Has(t *testing.T) {
 			require: []Permission{PermSensorRead},
 			want:    false,
 		},
+		{
+			name:    "admin",
+			userHas: Permissions{PermRoot},
+			require: []Permission{PermSensorRead, PermUserCreate},
+			want:    true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -52,5 +58,19 @@ func TestPermissions_Has(t *testing.T) {
 				t.Errorf("Permissions.Has() = %v, want %v", got, tt.want)
 			}
 		})
+	}
+}
+
+func TestPermissions_Can(t *testing.T) {
+	if err := (Permissions{PermUserCreate}).Can(PermUserCreate); err != nil {
+		t.Errorf("Permissions.Can() = %v, want nil", err)
+	}
+
+	if err := (Permissions{PermSensorRead}).Can(PermSensorRead); err != nil {
+		t.Errorf("Permissions.Can() = %v, want nil", err)
+	}
+
+	if err := (Permissions{PermRoot}).Can(PermSensorRead); err != nil {
+		t.Errorf("Permissions.Can() = %v, want nil", err)
 	}
 }

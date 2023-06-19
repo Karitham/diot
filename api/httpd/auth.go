@@ -19,7 +19,7 @@ func (s Service) AuthMiddleware(next http.Handler) http.Handler {
 		if headerValue == "" {
 			s, err := r.Cookie(AuthCookieName)
 			if err != nil {
-				WError(w, r, 401, "Unauthorized")
+				WError(w, r, 401, "Unauthorized, no token")
 				return
 			}
 			headerValue = s.Value
@@ -27,13 +27,13 @@ func (s Service) AuthMiddleware(next http.Handler) http.Handler {
 
 		sessID, err := session.Parse([]byte(headerValue))
 		if err != nil {
-			WError(w, r, 401, "Unauthorized")
+			WError(w, r, 401, "Unauthorized, invalid token")
 			return
 		}
 
 		sess, err := s.store.GetSession(r.Context(), sessID)
 		if err != nil {
-			WError(w, r, 401, "Unauthorized")
+			WError(w, r, 401, "Unauthorized, session not found")
 			return
 		}
 
@@ -89,23 +89,27 @@ func (s Service) AuthLogin(w http.ResponseWriter, r *http.Request) *api.Response
 		return WError(w, r, 401, "Unauthorized")
 	}
 
-	id, err := s.store.NewSession(r.Context(), ulid.MustParse(u.ID), session.Permissions{})
+	expire := time.Hour * 24
+
+	id, err := s.store.NewSession(r.Context(), ulid.MustParse(u.ID), u.Permissions, expire)
 	if err != nil {
 		return WError(w, r, 500, err.Error())
 	}
 
 	http.SetCookie(w, &http.Cookie{
 		Name:     AuthCookieName,
-		MaxAge:   int(time.Second * 60 * 60 * 24),
+		MaxAge:   int(expire.Seconds()),
 		Value:    id.String(),
 		SameSite: http.SameSiteLaxMode,
 		HttpOnly: true,
 	})
 
 	return api.AuthLoginJSON200Response(struct {
-		Token string `json:"token"`
+		ExpireAt time.Time "json:\"expire_at\""
+		Token    string    "json:\"token\""
 	}{
-		Token: id.String(),
+		Token:    id.String(),
+		ExpireAt: time.Now().Add(expire),
 	})
 }
 

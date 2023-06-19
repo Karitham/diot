@@ -385,7 +385,8 @@ curl -X POST /v1/auth/login \
 
 ```json
 {
-  "token": "sess_dwquijlbndwqbyuidhkwqdyuibqwd89d30y12dh22389d:dh189gd2d1ghod921"
+  "token": "sess_dwquijlbndwqbyuidhkwqdyuibqwd89d30y12dh22389d:dh189gd2d1ghod921",
+  "expire_at": "2021-01-01T00:00:00Z"
 }
 ```
 
@@ -403,6 +404,7 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |» token|string|true|none|none|
+|» expire_at|string(date-time)|true|none|none|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:

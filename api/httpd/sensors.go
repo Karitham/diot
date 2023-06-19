@@ -53,12 +53,13 @@ func (s *Service) GetSensors(w http.ResponseWriter, r *http.Request) *api.Respon
 // It's all streamed through a websocket
 // (GET /sensors/live)
 func (s *Service) GetSensorsLive(w http.ResponseWriter, r *http.Request) *api.Response {
-	c, err := websocket.Accept(w, r, nil)
+	c, err := websocket.Accept(w, r, &websocket.AcceptOptions{
+		InsecureSkipVerify: true,
+		OriginPatterns:     []string{"*"},
+	})
 	if err != nil {
 		return WError(w, r, 400, err.Error())
 	}
-
-	defer c.Close(websocket.StatusInternalError, "the sky is falling")
 
 	ticker := time.NewTicker(1 * time.Second)
 	defer ticker.Stop()

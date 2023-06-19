@@ -41,10 +41,15 @@ paths:
               schema:
                 required:
                   - token
+                  - expire_at
                 properties:
                   token:
                     type: string
                     example: sess_dwquijlbndwqbyuidhkwqdyuibqwd89d30y12dh22389d:dh189gd2d1ghod921
+                  expire_at:
+                    type: string
+                    format: date-time
+                    example: "2021-01-01T00:00:00Z"
         default:
           description: unexpected error
           content:

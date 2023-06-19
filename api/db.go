@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 	"text/tabwriter"
+	"time"
 
 	"github.com/Karitham/iDIoT/api/session"
 	"github.com/Karitham/iDIoT/api/store"
@@ -174,7 +175,7 @@ func DBSessions() *cli.Command {
 						return err
 					}
 
-					sess, err := s.NewSession(c.Context, uid, u.Permissions)
+					sess, err := s.NewSession(c.Context, uid, u.Permissions, time.Hour) // short lived for testing
 					if err != nil {
 						return err
 					}

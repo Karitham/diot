@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/Karitham/iDIoT/api/httpd/api"
 	"github.com/Karitham/iDIoT/api/session"
@@ -22,7 +23,7 @@ type Store interface {
 	GetUserByEmail(ctx context.Context, email string) (store.User, error)
 	DeleteUser(ctx context.Context, id ulid.ULID) error
 
-	NewSession(ctx context.Context, userID ulid.ULID, sess session.Permissions) (session.ID, error)
+	NewSession(ctx context.Context, userID ulid.ULID, sess session.Permissions, TTL time.Duration) (session.ID, error)
 	GetSession(ctx context.Context, id session.ID) (session.Session, error)
 	DeleteSession(ctx context.Context, id session.ID) error
 
