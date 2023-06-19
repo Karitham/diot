@@ -30,7 +30,7 @@ services:
     environment:
       CASS_ADDR: "scylla-0"
       REDIS_PASS: ${REDIS_PASS:?REDIS_PASS not set}
-      REDIS_ADDR: "redis"
+      REDIS_ADDR: ${REDIS_ADDR:-redis}
       PORT: 7667
     depends_on:
       scylla-0: 
@@ -45,7 +45,7 @@ services:
     depends_on:
       - redis
     environment:
-      REDIS_ADDR: "redis"
+      REDIS_ADDR: ${REDIS_ADDR:-redis}
       REDIS_USER: ${REDIS_USER:?REDIS_USER not set}
       REDIS_PASS: ${REDIS_PASS:?REDIS_PASS not set}
       PORT: 6379
