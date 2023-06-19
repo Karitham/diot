@@ -3,14 +3,6 @@
   width: 2.64rem;
   height: 1.55rem;
 }
-.smart-homes-smarter {
-  align-self: stretch;
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  width: 5.06rem;
-  flex-shrink: 0;
-}
 .logoslogan {
   align-self: stretch;
   display: flex;
@@ -36,7 +28,7 @@
 .icons {
   height: 1.63rem;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: right;
   gap: var(--gap-xs);
 }
 .topnav {
@@ -114,36 +106,15 @@
   display: flex;
 }
 .container {
-  display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
   gap: var(--gap-5xl);
   font-size: var(--title-size);
   color: var(--text-text0);
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  margin: auto;
-  max-width: 1000px;
-  
 }
-
+.logout,
 .new-user {
-  background-color: var(--colors-button);
-  border-radius: var(--br-5xs);
-  box-shadow: var(--sm);
-  overflow: hidden;
-  flex-shrink: 0;
-  flex-direction: row;
-  padding: var(--padding-xs) var(--padding-13xl);
-  align-items: center;
-  justify-content: center;
-  mix-blend-mode: normal;
-  cursor: pointer;
-}
-
-.logout {
   border-radius: var(--br-5xs);
   background-color: var(--colors-accent);
   box-shadow: var(--sm);
@@ -171,7 +142,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   gap: var(--gap-17xl);
-  text-align: center;
+  text-align: left;
   font-size: var(--label-size);
   color: var(--text-textneg);
   font-family: var(--title);
