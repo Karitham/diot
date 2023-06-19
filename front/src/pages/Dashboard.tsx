@@ -1,7 +1,6 @@
 import { FunctionComponent } from 'react'
 import AlertContainer from '../components/AlertContainer'
-import CamContainer from '../components/CamContainer'
-import CamDisableContainer from '../components/CamDisableContainer'
+import CamContainer, { CamContainerType } from '../components/CamContainer'
 import Navbar from '../components/Navbar'
 import '../styles/Dashboard.css'
 
@@ -9,62 +8,38 @@ const alert = {
   dateTime: '/vector3.svg',
   dateTimeText: 'Fire Alert',
   timeText: 'Just now ',
-  propBackgroundColor: '#c33e22',
-  propWidth: '1.02rem',
-  propAlignSelf: 'unset',
-  propDisplay: 'none'
+  propBackgroundColor: '#c33e22'
 }
 
-const camClick = { roomName: 'Living Room', roomImageId: '/livingroom@2x.png', borderTop: '10px solid #C33E22' }
-const cam = { roomName: 'Living Room', roomImageId: '/livingroom@2x.png' }
-const camDisable = { roomId: '/start.svg', roomName: 'Hallway 1', roomDimensions: '/pen1.svg' }
+const camClick = { roomName: 'Living Room', roomImageId: '/livingroom.png', borderTop: '10px solid #C33E22' }
 
 const alerts = [alert]
-const camsClick = [camClick]
-const cams = [cam, cam, cam, cam, cam]
-const camsDisable = [camDisable, camDisable, camDisable, camDisable, camDisable]
+const cams: CamContainerType[] = [
+  { camName: 'Living Room', camURL: '/livingroom.png' },
+  { camName: 'The week Room', camURL: '/livingroom.png' },
+  { camName: 'DSAHJKDASD Room', camURL: '/livingroom.png', disabled: true },
+  { camName: 'DSAGKYDHYEDHQBLIDUHQWDU*OIQLNDQWIDULN Room', camURL: '/livingroom.png', alert: true },
+  { camName: 'The backroom', camURL: '/livingroom.png', disabled: true }
+]
 
 const Dashboard: FunctionComponent = () => {
   return (
     <div className="dashboard2">
       <Navbar settingsText="" />
-        
+
       <div className="contentwrapper1">
         {alerts.map(a => (
-          <AlertContainer
-            dateTime={a.dateTime}
-            dateTimeText={a.dateTimeText}
-            timeText={a.timeText}
-            propBackgroundColor={a.propBackgroundColor}
-            propWidth={a.propWidth}
-            propAlignSelf={a.propAlignSelf}
-            propDisplay={a.propDisplay}
-          />
+          <AlertContainer dateTime={a.dateTime} dateTimeText={a.dateTimeText} timeText={a.timeText} alert />
         ))}
         <div className="camscontainer">
           <div className="titlecontainer1">
             <img className="pause-icon1" alt="" src="/pause1.svg" />
             <div className="titre2">Dashboard</div>
           </div>
-          {camsClick.map(c => (
-          <div className="camsclick">
-            <CamContainer 
-              roomName={c.roomName}
-              roomImageId={c.roomImageId}
-              borderTop={c.borderTop}
-              />
-          </div>
-          ))}
-          <div className="gridcontainer">
+          <div className="cam-grid-container">
+            <CamContainer {...camClick} alert fullwidth />
             {cams.map(c => (
-              <div className="cams grow-container">
-                <CamContainer roomName={c.roomName} roomImageId={c.roomImageId} />
-              </div>
-            ))}
-            {camsDisable.map(c => (
-              <div className="cams grow-container">
-                <CamDisableContainer roomId={c.roomId} roomName={c.roomName} roomDimensions={c.roomDimensions} />
-              </div>
+              <CamContainer {...c} />
             ))}
           </div>
         </div>

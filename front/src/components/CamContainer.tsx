@@ -1,69 +1,65 @@
-import { FunctionComponent, memo, useState, useMemo, useCallback } from "react";
-import EditComponent from "./EditComponent";
-import PortalPopup from "./PortalPopup";
-import "../styles/compo/CamContainer.css";
+import { useCallback, useState } from 'react'
+import '../styles/compo/CamContainer.css'
+import EditComponent from './EditComponent'
+import PortalPopup from './PortalPopup'
 
-type CamContainerType = {
-  roomName?: string;
-  roomImageId?: string;
+export type CamContainerType = {
+  camName?: string
+  camURL?: string
 
-  /** Style props */
-  borderTop?: string;
-};
+  alert?: boolean
+  disabled?: boolean
+  fullwidth?: boolean
+}
 
-const CamContainer: FunctionComponent<CamContainerType> = memo(
-  ({ roomName, roomImageId, borderTop }) => {
-    const [isEditComponentOpen, setEditComponentOpen] = useState(false);
-    const livingroomIconStyle = useMemo(() => {
-      return {
-        borderTop,
-      };
-    }, [borderTop]);
+const CamContainer = (props: CamContainerType) => {
+  const [isEditComponentOpen, setEditComponentOpen] = useState(false)
 
-    const openEditComponent = useCallback(() => {
-      setEditComponentOpen(true);
-    }, []);
+  const openEditComponent = useCallback(() => {
+    setEditComponentOpen(true)
+  }, [])
 
-    const closeEditComponent = useCallback(() => {
-      setEditComponentOpen(false);
-    }, []);
+  const closeEditComponent = useCallback(() => {
+    setEditComponentOpen(false)
+  }, [])
 
-    return (
-      <>
-        <div className="cam">
-          <div className="label5">
-            <div className="text5">
-              <img className="pause-icon3" alt="" src="/pause1.svg" />
-              <div className="living-room2">{roomName}</div>
-            </div>
-            <div className="icons4">
-              <img
-                className="pen-icon5"
-                alt=""
-                src="/pen3.svg"
-                onClick={openEditComponent}
-              />
-            </div>
+  const Cam = () =>
+    props.disabled ? (
+      <div className="video disabled">
+        <div className="disabled-text">Disabled</div>
+      </div>
+    ) : (
+      <img
+        className="video"
+        alt=""
+        src={props.camURL}
+        style={{
+          borderTop: props.alert ? '10px solid var(--colors-red)' : 'none'
+        }}
+      />
+    )
+
+  return (
+    <>
+      <div className={`cam-container ${props.fullwidth ? 'full-width' : null}`}>
+        <div className="label">
+          <div className="label-text">
+            <img className="label-text-icon" alt="" src="/pause1.svg" />
+            <div className="label-title">{props.camName}</div>
           </div>
-          <img
-            className="livingroom-icon"
-            alt=""
-            src={roomImageId}
-            style={livingroomIconStyle}
-          />
+          <div className="label-icons">
+            <img className="label-icon" alt="" src="/pen3.svg" onClick={openEditComponent} />
+          </div>
         </div>
-        {isEditComponentOpen && (
-          <PortalPopup
-            overlayColor="rgba(113, 113, 113, 0.3)"
-            placement="Centered"
-            onOutsideClick={closeEditComponent}
-          >
-            <EditComponent onClose={closeEditComponent} />
-          </PortalPopup>
-        )}
-      </>
-    );
-  }
-);
+        <Cam />
+      </div>
+      {isEditComponentOpen && (
+        <PortalPopup overlayColor="rgba(113, 113, 113, 0.3)" placement="Centered" onOutsideClick={closeEditComponent}>
+          <EditComponent onClose={closeEditComponent} />
+        </PortalPopup>
+      )}
+    </>
+  )
+}
 
-export default CamContainer;
+export default CamContainer

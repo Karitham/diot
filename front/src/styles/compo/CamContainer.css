@@ -1,55 +1,68 @@
-.pause-icon3 {
-  width: 0.75rem;
-  height: 0.75rem;
-}
-.living-room2,
-.pause-icon3 {
-  position: relative;
-}
-.text5 {
+.label-title {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
+  overflow: hidden;
+  text-overflow: ellipsis;
   gap: var(--gap-5xs);
 }
-.pen-icon5 {
+
+.label-icon {
   position: relative;
   width: 0.75rem;
   height: 0.75rem;
   cursor: pointer;
 }
-.icons4,
-.label5 {
+
+.icons,
+.label-text {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  white-space: nowrap;
+  font-size: var(--label-size);
+  color: var(--text-text0);
+  font-family: var(--label);
 }
-.label5 {
+
+.label-text {
+  flex: 1;
+  gap: var(--gap-xs);
+}
+
+.label {
+  display: flex;
   align-self: stretch;
   align-items: center;
   justify-content: space-between;
 }
-.livingroom-icon {
-  align-self: stretch;
-  position: relative;
+
+.video {
   border-radius: var(--br-5xs);
-  max-width: 100%;
-  overflow: hidden;
-  flex-shrink: 0;
-  object-fit: cover;
   aspect-ratio: 16/9;
+  object-fit: cover;
 }
-.cam {
+
+.cam-container {
   align-self: stretch;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: var(--gap-xs);
-  text-align: left;
+  width: 100%;
+  gap: var(--gap-base);
   font-size: var(--label-size);
   color: var(--text-text0);
   font-family: var(--label);
+}
+
+.disabled {
+  background-color: var(--bg-bg2);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
