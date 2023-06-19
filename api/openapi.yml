@@ -428,10 +428,10 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
-    cookieAuth:
+    apiKey:
       type: apiKey
-      in: cookie
-      name: idiot_session_id
+      in: query
+      name: api-key
 security:
   # grep -oP 'Permission\s*=\s*"(.*)"' api/session/perms.go | awk '{print "- " $3}' | uniq
   - bearerAuth:

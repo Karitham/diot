@@ -18,13 +18,10 @@ func (s Service) AuthMiddleware(next http.Handler) http.Handler {
 		// check both cookie and header
 		headerValue := r.Header.Get("Authorization")
 		headerValue = strings.TrimPrefix(headerValue, "Bearer ")
+
+		// api-key query param
 		if headerValue == "" {
-			s, err := r.Cookie(AuthCookieName)
-			if err != nil {
-				WError(w, r, 401, "Unauthorized, no token")
-				return
-			}
-			headerValue = s.Value
+			headerValue = r.URL.Query().Get("api-key")
 		}
 
 		sessID, err := session.Parse([]byte(headerValue))
@@ -101,16 +98,6 @@ func (s Service) AuthLogin(w http.ResponseWriter, r *http.Request) *api.Response
 		return WError(w, r, 500, err.Error())
 	}
 
-	http.SetCookie(w, &http.Cookie{
-		Name:     AuthCookieName,
-		MaxAge:   int(expire.Seconds()),
-		Value:    id.String(),
-		Domain:   tldFromHost(r),
-		Path:     "/",
-		SameSite: http.SameSiteLaxMode,
-		HttpOnly: true,
-	})
-
 	return api.AuthLoginJSON200Response(struct {
 		ExpireAt time.Time "json:\"expire_at\""
 		Token    string    "json:\"token\""
@@ -128,14 +115,6 @@ func (s Service) AuthLogout(w http.ResponseWriter, r *http.Request) *api.Respons
 		return WError(w, r, 500, err.Error())
 	}
 
-	http.SetCookie(w, &http.Cookie{
-		Name:     AuthCookieName,
-		MaxAge:   -1,
-		Path:     "/",
-		SameSite: http.SameSiteLaxMode,
-		Domain:   tldFromHost(r),
-		HttpOnly: true,
-	})
 	return nil
 }
 
