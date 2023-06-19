@@ -42,6 +42,11 @@
   justify-content: space-between;
 }
 
+.disabled .label-title,
+.disabled .label-icons {
+  color: var(--text-text2);
+}
+
 .video {
   border-radius: var(--br-5xs);
   aspect-ratio: 16/9;
@@ -59,10 +64,16 @@
   font-family: var(--label);
 }
 
-.disabled {
+.disabled .video {
   background-color: var(--bg-bg2);
-
+  height: 100%;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
+}
+
+.disabled .video .disabled-icon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--text-text2);
 }

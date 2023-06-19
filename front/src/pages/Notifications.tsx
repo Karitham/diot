@@ -18,11 +18,7 @@ const Notifications: FunctionComponent = () => {
             <div className="alerts">
               {alerts.map(a => (
                 <div className="grow-container">
-                  <AlertContainer
-                    dateTime={a.dateTime}
-                    dateTimeText={a.dateTimeText}
-                    timeText={a.timeText}
-                    propBackgroundColor="#415D4A"></AlertContainer>
+                  <AlertContainer dateTime={a.dateTime} dateTimeText={a.dateTimeText} timeText={a.timeText} />
                 </div>
               ))}
             </div>

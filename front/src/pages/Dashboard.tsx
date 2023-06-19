@@ -11,7 +11,7 @@ const alert = {
   propBackgroundColor: '#c33e22'
 }
 
-const camClick = { roomName: 'Living Room', roomImageId: '/livingroom.png', borderTop: '10px solid #C33E22' }
+const camClick = { camName: 'Living Room', camURL: '/livingroom.png' }
 
 const alerts = [alert]
 const cams: CamContainerType[] = [
