@@ -6,7 +6,9 @@ package api
 import (
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/go-chi/render"
 	"github.com/oklog/ulid"
@@ -16,6 +18,17 @@ const (
 	BearerAuthScopes = "bearerAuth.Scopes"
 )
 
+// Defines values for SensorDataKind.
+var (
+	UnknownSensorDataKind = SensorDataKind{}
+
+	SensorDataKindCamera = SensorDataKind{"camera"}
+
+	SensorDataKindHumidity = SensorDataKind{"humidity"}
+
+	SensorDataKindTemperature = SensorDataKind{"temperature"}
+)
+
 // Error defines model for Error.
 type Error struct {
 	// Error message
@@ -23,6 +36,40 @@ type Error struct {
 
 	// Request ID
 	RequestID *string `json:"request_id,omitempty"`
+}
+
+// SensorData defines model for SensorData.
+type SensorData struct {
+	// The sensor data
+	Data interface{} `json:"data"`
+	ID   ulid.ULID   `json:"id"`
+
+	// The kind of sensor
+	Kind SensorDataKind `json:"kind"`
+}
+
+// SensorInfo defines model for SensorInfo.
+type SensorInfo struct {
+	// Embedded struct due to allOf(#/components/schemas/SensorData)
+	SensorData `yaml:",inline"`
+	// Embedded fields due to inline allOf schema
+	// A human readable label for the sensor
+	Label string `json:"label"`
+}
+
+// SensorInfoCamera defines model for SensorInfoCamera.
+type SensorInfoCamera struct {
+	FeedURI string `json:"feed_uri"`
+}
+
+// SensorInfoHumidity defines model for SensorInfoHumidity.
+type SensorInfoHumidity struct {
+	Humidity float32 `json:"humidity"`
+}
+
+// SensorInfoTemperature defines model for SensorInfoTemperature.
+type SensorInfoTemperature struct {
+	Temperature float32 `json:"temperature"`
 }
 
 // User defines model for User.
@@ -58,6 +105,43 @@ type WebpushRegistration struct {
 		// Webpush p256dh key
 		P256dh string `json:"p256dh"`
 	} `json:"keys"`
+}
+
+// The kind of sensor
+type SensorDataKind struct {
+	value string
+}
+
+func (t *SensorDataKind) ToValue() string {
+	return t.value
+}
+func (t SensorDataKind) MarshalJSON() ([]byte, error) {
+	return json.Marshal(t.value)
+}
+func (t *SensorDataKind) UnmarshalJSON(data []byte) error {
+	var value string
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	return t.FromValue(value)
+}
+func (t *SensorDataKind) FromValue(value string) error {
+	switch value {
+
+	case SensorDataKindCamera.value:
+		t.value = value
+		return nil
+
+	case SensorDataKindHumidity.value:
+		t.value = value
+		return nil
+
+	case SensorDataKindTemperature.value:
+		t.value = value
+		return nil
+
+	}
+	return fmt.Errorf("unknown enum value: %v", value)
 }
 
 // RegisterWebpushJSONBody defines parameters for RegisterWebpush.
@@ -126,7 +210,8 @@ func (resp *Response) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 // AuthLoginJSON200Response is a constructor method for a AuthLogin response.
 // A *Response is returned with the configured status code and content type from the spec.
 func AuthLoginJSON200Response(body struct {
-	Token string `json:"token"`
+	ExpireAt time.Time `json:"expire_at"`
+	Token    string    `json:"token"`
 }) *Response {
 	return &Response{
 		body:        body,
@@ -178,6 +263,46 @@ func GetWebpushKeyJSONDefaultResponse(body Error) *Response {
 // RegisterWebpushJSONDefaultResponse is a constructor method for a RegisterWebpush response.
 // A *Response is returned with the configured status code and content type from the spec.
 func RegisterWebpushJSONDefaultResponse(body Error) *Response {
+	return &Response{
+		body:        body,
+		Code:        200,
+		contentType: "application/json",
+	}
+}
+
+// GetSensorsJSON200Response is a constructor method for a GetSensors response.
+// A *Response is returned with the configured status code and content type from the spec.
+func GetSensorsJSON200Response(body []SensorInfo) *Response {
+	return &Response{
+		body:        body,
+		Code:        200,
+		contentType: "application/json",
+	}
+}
+
+// GetSensorsJSONDefaultResponse is a constructor method for a GetSensors response.
+// A *Response is returned with the configured status code and content type from the spec.
+func GetSensorsJSONDefaultResponse(body Error) *Response {
+	return &Response{
+		body:        body,
+		Code:        200,
+		contentType: "application/json",
+	}
+}
+
+// GetSensorsLiveJSON200Response is a constructor method for a GetSensorsLive response.
+// A *Response is returned with the configured status code and content type from the spec.
+func GetSensorsLiveJSON200Response(body []SensorData) *Response {
+	return &Response{
+		body:        body,
+		Code:        200,
+		contentType: "application/json",
+	}
+}
+
+// GetSensorsLiveJSONDefaultResponse is a constructor method for a GetSensorsLive response.
+// A *Response is returned with the configured status code and content type from the spec.
+func GetSensorsLiveJSONDefaultResponse(body Error) *Response {
 	return &Response{
 		body:        body,
 		Code:        200,

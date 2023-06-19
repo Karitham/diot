@@ -4,8 +4,8 @@ import EditComponent from './EditComponent'
 import PortalPopup from './PortalPopup'
 
 export type CamContainerType = {
-  camName?: string
-  camURL?: string
+  camName: string
+  camURL: string
 
   alert?: boolean
   disabled?: boolean
@@ -26,7 +26,9 @@ const CamContainer = (props: CamContainerType) => {
   const Cam = () =>
     props.disabled ? (
       <div className="video disabled">
-        <div className="disabled-text">Disabled</div>
+        <div className="disabled-text">
+          <img className="disabled-icon" alt="" src="/start.svg" />
+        </div>
       </div>
     ) : (
       <img
@@ -41,7 +43,7 @@ const CamContainer = (props: CamContainerType) => {
 
   return (
     <>
-      <div className={`cam-container ${props.fullwidth ? 'full-width' : null}`}>
+      <div className={`cam-container ${props.fullwidth ? 'full-width' : ''} ${props.disabled ? 'disabled' : ''}`}>
         <div className="label">
           <div className="label-text">
             <img className="label-text-icon" alt="" src="/pause1.svg" />

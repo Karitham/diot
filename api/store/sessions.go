@@ -2,6 +2,7 @@ package store
 
 import (
 	"context"
+	"time"
 
 	"github.com/Karitham/iDIoT/api/session"
 	"github.com/Karitham/iDIoT/api/store/models"
@@ -9,15 +10,22 @@ import (
 )
 
 // NewSession creates a new session
-func (s *Store) NewSession(ctx context.Context, userID ulid.ULID, permissions session.Permissions) (session.ID, error) {
+func (s *Store) NewSession(ctx context.Context, userID ulid.ULID, permissions session.Permissions, TTL time.Duration) (session.ID, error) {
 	sid := session.New()
-	err := s.conn.Query(models.Sessions.Insert()).
+	err := s.conn.Query(
+		models.Sessions.InsertBuilder().
+			Columns(models.Sessions.Metadata().Columns...).
+			TTL(TTL).
+			ToCql(),
+	).
 		WithContext(ctx).
-		BindStruct(models.SessionsStruct{
-			Id:          sid.String(),
-			UserId:      userID.String(),
-			Permissions: permissions.Strings(),
-		}).
+		BindStruct(
+			models.SessionsStruct{
+				Id:          sid.String(),
+				UserId:      userID.String(),
+				Permissions: permissions.Strings(),
+			},
+		).
 		ExecRelease()
 	return sid, err
 }
@@ -26,16 +34,15 @@ func (s *Store) NewSession(ctx context.Context, userID ulid.ULID, permissions se
 func (s *Store) GetSession(ctx context.Context, sessionID session.ID) (session.Session, error) {
 	var ss models.SessionsStruct
 
-	err := s.conn.Query(models.Sessions.Select()).
-		BindStruct(models.SessionsStruct{
-			Id: sessionID.String(),
-		}).
+	err := s.conn.Query(models.Sessions.SelectAll()).
+		BindStruct(models.SessionsStruct{Id: sessionID.String()}).
 		WithContext(ctx).
 		GetRelease(&ss)
 
+	uID, _ := ulid.Parse(ss.UserId)
 	return session.Session{
 		ID:          sessionID,
-		UserID:      ulid.MustParse(ss.UserId),
+		UserID:      uID,
 		Permissions: session.FromString(ss.Permissions...),
 	}, err
 }
@@ -55,9 +62,11 @@ func (s *Store) ListSessions(ctx context.Context) ([]session.Session, error) {
 			return nil, err
 		}
 
+		uID, _ := ulid.Parse(s.UserId)
+
 		sessions = append(sessions, session.Session{
 			ID:          sID,
-			UserID:      ulid.MustParse(s.UserId),
+			UserID:      uID,
 			Permissions: session.FromString(s.Permissions...),
 		})
 	}

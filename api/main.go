@@ -54,6 +54,13 @@ func main() {
 			Value:   "",
 			Hidden:  true,
 		},
+		&cli.StringFlag{
+			Name:    "redis-user",
+			Usage:   "Redis user",
+			EnvVars: []string{"REDIS_USER"},
+			Value:   "default",
+			Hidden:  true,
+		},
 	}
 	app.Action = HTTPD
 	if err := app.Run(os.Args); err != nil {

@@ -32,11 +32,13 @@ const (
 type Permissions []Permission
 
 // has checks if the list of permissions contains the given permission
-func (p Permissions) has(permission ...Permission) int {
+func (p Permissions) has(wantPerms ...Permission) int {
 outer:
-	for i, perm := range p {
-		for _, p := range permission {
-			if !strings.HasPrefix(string(p), string(perm)) {
+	// check that all required permissions are in the list.
+	// the match is prefix based, so "perm:users" will match "perm:users:create"
+	for i, wantPerm := range wantPerms {
+		for _, ownPerm := range p {
+			if strings.HasPrefix(string(wantPerm), string(ownPerm)) {
 				continue outer
 			}
 		}
@@ -48,7 +50,7 @@ outer:
 }
 
 func (p Permissions) Has(permission ...Permission) bool {
-	return p.has(permission...) != -1
+	return p.has(permission...) == -1
 }
 
 func (p Permissions) Can(permission ...Permission) error {

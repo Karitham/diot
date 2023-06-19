@@ -28,6 +28,12 @@ type ServerInterface interface {
 	// Send a webpush notification registration payload
 	// (POST /notifications/webpush)
 	RegisterWebpush(w http.ResponseWriter, r *http.Request) *Response
+	// Get all sensors
+	// (GET /sensors)
+	GetSensors(w http.ResponseWriter, r *http.Request) *Response
+	// Get live sensor data
+	// (GET /sensors/live)
+	GetSensorsLive(w http.ResponseWriter, r *http.Request) *Response
 	// Get all users
 	// (GET /users)
 	GetUsers(w http.ResponseWriter, r *http.Request) *Response
@@ -134,6 +140,49 @@ func (siw *ServerInterfaceWrapper) RegisterWebpush(w http.ResponseWriter, r *htt
 
 	// Operation specific middleware
 	handler = siw.Middlewares.Auth(handler).ServeHTTP
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetSensors operation middleware
+func (siw *ServerInterfaceWrapper) GetSensors(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, BearerAuthScopes, []string{"perm:sensors:read"})
+
+	var handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		resp := siw.Handler.GetSensors(w, r)
+		if resp != nil {
+			if resp.body != nil {
+				render.Render(w, r, resp)
+			} else {
+				w.WriteHeader(resp.Code)
+			}
+		}
+	})
+
+	// Operation specific middleware
+	handler = siw.Middlewares.Auth(handler).ServeHTTP
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetSensorsLive operation middleware
+func (siw *ServerInterfaceWrapper) GetSensorsLive(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, BearerAuthScopes, []string{"perm:sensors:read"})
+
+	var handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		resp := siw.Handler.GetSensorsLive(w, r)
+		if resp != nil {
+			if resp.body != nil {
+				render.Render(w, r, resp)
+			} else {
+				w.WriteHeader(resp.Code)
+			}
+		}
+	})
 
 	handler(w, r.WithContext(ctx))
 }
@@ -378,6 +427,8 @@ func Handler(si ServerInterface, opts ...ServerOption) http.Handler {
 		r.Post("/auth/logout", wrapper.AuthLogout)
 		r.Get("/notifications/webpush", wrapper.GetWebpushKey)
 		r.Post("/notifications/webpush", wrapper.RegisterWebpush)
+		r.Get("/sensors", wrapper.GetSensors)
+		r.Get("/sensors/live", wrapper.GetSensorsLive)
 		r.Get("/users", wrapper.GetUsers)
 		r.Post("/users", wrapper.CreateUser)
 		r.Delete("/users/{id}", wrapper.DeleteUserByID)

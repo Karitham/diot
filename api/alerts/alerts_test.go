@@ -19,7 +19,11 @@ func TestAlertSubFan(t *testing.T) {
 		t.Skip("skipping test; $REDIS_ADDR not set")
 	}
 
-	s, err := NewStore([]string{os.Getenv("REDIS_ADDR")}, os.Getenv("REDIS_PASS"))
+	s, err := NewStore(
+		[]string{os.Getenv("REDIS_ADDR")},
+		os.Getenv("REDIS_USER"),
+		os.Getenv("REDIS_PASS"),
+	)
 	if err != nil {
 		t.Fatal(err)
 	}
