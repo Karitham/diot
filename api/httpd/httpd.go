@@ -14,7 +14,9 @@ import (
 	"golang.org/x/exp/slog"
 )
 
-var log = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{})).With("pkg", "httpd")
+var log = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
+	Level: slog.LevelDebug,
+})).With("pkg", "httpd")
 
 type Store interface {
 	CreateUser(ctx context.Context, user store.User) error
@@ -41,8 +43,15 @@ type Service struct {
 	store Store
 }
 
-func WError(w http.ResponseWriter, r *http.Request, code int, m string) *api.Response {
-	log.WarnCtx(r.Context(), "api returned an error", "message", m, "code", code)
+func WError(w http.ResponseWriter, r *http.Request, err error, code int, m string) *api.Response {
+	vars := []any{
+		slog.String("message", m),
+		slog.Int("code", code),
+	}
+	if err != nil {
+		vars = append(vars, slog.Any("error", err))
+	}
+	log.WarnCtx(r.Context(), "api returned an error", vars...)
 	render.Status(r, code)
 	render.JSON(w, r, api.Error{Message: m})
 	return nil

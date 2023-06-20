@@ -17,18 +17,18 @@ func (s Service) CreateUser(w http.ResponseWriter, r *http.Request) *api.Respons
 	var u api.CreateUserJSONRequestBody
 	err := json.UnmarshalFull(r.Body, &u)
 	if err != nil {
-		return WError(w, r, 400, "Bad request")
+		return WError(w, r, err, 400, "Bad request")
 	}
 
 	// check if email exists
 	_, err = s.store.GetUserByEmail(r.Context(), u.Email)
 	if err == nil {
-		return WError(w, r, 400, "Email already exists")
+		return WError(w, r, err, 400, "Email already exists")
 	}
 
 	p, err := bcrypt.GenerateFromPassword([]byte(u.Password), 12)
 	if err != nil {
-		return WError(w, r, 400, "Bad request")
+		return WError(w, r, err, 400, "Bad request")
 	}
 
 	// hash password
@@ -41,7 +41,7 @@ func (s Service) CreateUser(w http.ResponseWriter, r *http.Request) *api.Respons
 
 	err = s.store.CreateUser(r.Context(), su)
 	if err != nil {
-		return WError(w, r, 500, err.Error())
+		return WError(w, r, err, 500, err.Error())
 	}
 
 	return api.CreateUserJSON200Response(api.User{
@@ -55,7 +55,7 @@ func (s Service) CreateUser(w http.ResponseWriter, r *http.Request) *api.Respons
 func (us Service) GetUserByID(w http.ResponseWriter, r *http.Request, id ulid.ULID) *api.Response {
 	u, err := us.store.GetUser(r.Context(), id)
 	if err != nil {
-		return WError(w, r, 404, err.Error())
+		return WError(w, r, err, 404, err.Error())
 	}
 
 	return api.GetUserByIDJSON200Response(api.User{
@@ -69,7 +69,7 @@ func (us Service) GetUserByID(w http.ResponseWriter, r *http.Request, id ulid.UL
 func (us Service) GetUsers(w http.ResponseWriter, r *http.Request) *api.Response {
 	u, err := us.store.GetUsers(r.Context())
 	if err != nil {
-		return WError(w, r, 404, err.Error())
+		return WError(w, r, err, 404, err.Error())
 	}
 
 	// convert []store.User to []api.User
@@ -89,7 +89,7 @@ func (us Service) GetUsers(w http.ResponseWriter, r *http.Request) *api.Response
 func (us Service) DeleteUserByID(w http.ResponseWriter, r *http.Request, id ulid.ULID) *api.Response {
 	err := us.store.DeleteUser(r.Context(), id)
 	if err != nil {
-		return WError(w, r, 404, err.Error())
+		return WError(w, r, err, 404, err.Error())
 	}
 
 	return nil

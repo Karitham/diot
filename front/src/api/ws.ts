@@ -9,7 +9,7 @@ export const ws = () => {
   }
 
   w.onmessage = message => {
-    console.log(message)
+    console.log(message.data)
   }
 
   w.onclose = () => {
