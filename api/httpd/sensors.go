@@ -57,7 +57,7 @@ func (s *Service) GetSensorsLive(w http.ResponseWriter, r *http.Request) *api.Re
 		InsecureSkipVerify: true,
 	})
 	if err != nil {
-		return WError(w, r, 400, err.Error())
+		return WError(w, r, err, 400, err.Error())
 	}
 
 	ticker := time.NewTicker(5 * time.Second)
@@ -72,7 +72,7 @@ func (s *Service) GetSensorsLive(w http.ResponseWriter, r *http.Request) *api.Re
 			},
 		})
 		if err != nil {
-			return WError(w, r, 400, err.Error())
+			return WError(w, r, err, 400, err.Error())
 		}
 
 		err = wsjson.Write(r.Context(), c, api.SensorData{
@@ -83,7 +83,7 @@ func (s *Service) GetSensorsLive(w http.ResponseWriter, r *http.Request) *api.Re
 			},
 		})
 		if err != nil {
-			return WError(w, r, 400, err.Error())
+			return WError(w, r, err, 400, err.Error())
 		}
 
 		select {
