@@ -1,39 +1,43 @@
-# iDIoT Project
+# iDIoT
 
-# Système de Surveillance Domotique avec IoT
-## Spécifications fonctionnelles
-### L'utilisateur final  
-C'est le propriétaire de la maison, l'occupant ou toute personne autorisée à accéder à la plateforme de surveillance. Il doit
-être en mesure de :  
-Créer, modifier, supprimer, éditer son compte  
-Visualiser en temps réel ou en différé le flux vidéo de chaque caméra  
-Activer/désactiver la surveillance  
-Recevoir des alertes en cas d'incidents (intrusion, incendie, etc.)  
-Consulter l'historique des incidents et alertes  
-Configurer des règles d'alertes spécifiques (par exemple, des alertes lors d'une détection de mouvement à un moment
-précis de la journée)  
-### L'installateur
-Il est un technicien chargé de l'installation et de la maintenance du système. Il doit être en mesure de :  
-Créer, modifier, supprimer, éditer son compte  
-Ajouter, configurer et tester de nouveaux dispositifs IoT (caméras, détecteurs de mouvements, etc.)  
-Effectuer des diagnostics et résoudre des problèmes techniques  
-### Spécifications d'architecture  
-L'architecture du système doit intégrer :  
-Une plateforme web/app pour l'utilisateur final pour visualiser et contrôler le système  
-Une base de données pour stocker les comptes utilisateurs, les historiques d'alertes, les configurations du système,
-etc.  
-Un système de communication sécurisé entre la plateforme et les dispositifs IoT  
-Un serveur de traitement des flux vidéo pour la détection de mouvements, l'analyse d'image, etc.  
-Un système de notification pour envoyer des alertes par email, SMS ou notifications push  
-### Spécifications techniques  
-Les dispositifs IoT doivent être capables de se connecter à un réseau Wi-Fi ou de communiquer via des technologies
-sans fil spécifiques à la maison intelligente comme Zigbee ou Z-Wave.  
-La plateforme web/app doit être responsive et fonctionner sur tous les principaux navigateurs et systèmes
-d'exploitation mobiles.  
-Les communications entre les dispositifs IoT, le serveur et la plateforme doivent être chiffrées pour garantir la sécurité
-et la confidentialité.  
-La détection de mouvements doit être basée sur l'IA pour réduire les fausses alertes.  
-Le système doit être capable de fonctionner même en cas de coupure de courant ou de panne d'Internet (via une
-batterie de secours et un stockage local des alertes).  
-Les dispositifs IoT doivent être compatibles avec d'autres appareils et systèmes domotiques.  
-La solution doit respecter les normes et réglementations en matière de confidentialité et de protection des données.  
+iDIoT is the i of the iPhone (or the iBlitzcrank), but with IoT and Domotics.
+
+## Usage
+
+We host versions for your own use on our server, and have a [demo hosted version](https://web.idiot.0xf.fr).
+
+To use it yourself, you will need to have installed:
+
+- Docker Compose
+- NodeJS
+
+You would also need some microcontrollers with sensors to actually gather data from, but we are planning on having a demo for this that doesn't require microcontrollers.
+
+The default values are not production safe, do not hesitate to contact us if you want to deploy a production set-up and we would be happy to assist.
+
+All of the infrastructure can be simply started with `docker compose up -d` from the root of the repo
+
+To get the frontend running, you will need to edit the `API_URL` on the frontend side to point to your deployment.
+
+On windows, you will have to manually go edit the [`client.ts`](./front/src/api/client.ts) file, and on unix you can use this script.
+
+```sh
+# We replace the demo api with a local one.
+sed -i "s~'https://api.idiot.0xf.fr/v1'~'http://localhost:7667/v1'~" ./front/src/api/client.ts
+```
+
+Once that's done, you just have to create yourself a user;
+
+```sh
+docker exec api ./main db user add --admin --name $MY_NAME --email $MY_EMAIL --password $MY_PASSWORD
+```
+
+Now, all the infrastructure should be ready to welcome you, and you only have to run the frontend.
+
+```sh
+cd front; npm i; npm run dev
+```
+
+The frontend should then be available at `http://localhost:5173` and you can login with your credentials
+
+<!-- TODO(@Karitham): Prod setup -->
