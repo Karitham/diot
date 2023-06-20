@@ -8,7 +8,7 @@
 }
 .login6 {
   font-family: var(--title);
-  color: var(--text-text1);
+  color: black;
 }
 .logging-in-will4 {
   align-self: stretch;
@@ -129,7 +129,7 @@
 }
 .button4 {
   border-radius: var(--br-5xs);
-  background-color: var(--colors-accent);
+  background-color: var(--colors-button);
   box-shadow: var(--sm);
   overflow: hidden;
   padding: var(--padding-xs) var(--padding-13xl);
@@ -171,7 +171,7 @@
   align-items: center;
 }
 .button5 {
-  background-color: var(--colors-accent);
+  background-color: var(--colors-button);
   padding: var(--padding-xs) var(--padding-13xl);
   justify-content: center;
   mix-blend-mode: normal;
@@ -346,5 +346,4 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  display: flex;
 }
