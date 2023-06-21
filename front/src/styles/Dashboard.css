@@ -1,10 +1,8 @@
 .pause-icon1 {
-  position: relative;
   width: 1.75rem;
   height: 1.75rem;
 }
 .titre2 {
-  position: relative;
   font-weight: 500;
   text-shadow: var(--sm);
 }
@@ -35,6 +33,7 @@
 .camscontainer,
 .gridcontainer {
   align-self: stretch;
+  box-sizing: border-box;
 }
 .camscontainer,
 .contentwrapper1,
@@ -52,42 +51,41 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 1480px;
+  max-width: 1000px;
 }
 
 .dashboard2 {
-  position: relative;
   background-color: var(--text-textneg);
-  width: 100%;
-  overflow-y: auto;
   padding: var(--padding-5xl);
-  box-sizing: border-box;
-  text-align: center;
   font-size: var(--breadcrumb-size);
   color: var(--colors-primary);
   font-family: var(--title);
 }
-/*
-@media (width < 550px) {
-  .contentwrapper1 {
-    display: flex;
-    padding: 0 var(--padding-251xl);
-    font-size: var(--title-size);
-    color: var(--text-text0);
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    margin: auto;
-  }
-}*/
+
+.video {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.cam-container {
+  box-sizing: border-box;
+}
 
 .cam-grid-container {
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: var(--gap-5xl);
+  box-sizing: border-box;
 }
 
 .cam-grid-container .full-width {
   grid-column: 1 / -1;
+}
+
+@media screen and (max-width: 600px) {
+  .cam-grid-container {
+    grid-template-columns: 1fr;
+  }
 }

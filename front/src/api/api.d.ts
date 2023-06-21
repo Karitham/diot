@@ -96,6 +96,10 @@ export interface components {
       /** @example 23.4 */
       temperature: number;
     };
+    SensorInfoIAQ: {
+      /** @example 23.4 */
+      iaq: number;
+    };
     SensorInfo: {
       kind: "SensorInfo";
     } & Omit<components["schemas"]["SensorData"], "kind"> & {
@@ -110,9 +114,9 @@ export interface components {
        * @description The kind of sensor 
        * @enum {string}
        */
-      kind: "camera" | "humidity" | "temperature";
+      kind: "camera" | "humidity" | "temperature" | "iaq";
       /** @description The sensor data */
-      data: components["schemas"]["SensorInfoHumidity"] | components["schemas"]["SensorInfoTemperature"] | components["schemas"]["SensorInfoCamera"];
+      data: components["schemas"]["SensorInfoHumidity"] | components["schemas"]["SensorInfoTemperature"] | components["schemas"]["SensorInfoCamera"] | components["schemas"]["SensorInfoIAQ"];
       id: string;
     };
   };

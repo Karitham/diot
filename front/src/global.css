@@ -6,9 +6,10 @@ body {
   line-height: normal;
   box-sizing: border-box;
   min-height: 100vh;
+  width: 100%;
 }
 
-footer{
+footer {
   background-color: #c33e22;
 }
 
@@ -33,7 +34,7 @@ footer{
   --colors-primary: #2b4162;
   --color-darkslategray-100: #333;
   --colors-secondary: #78a45b;
-  --colors-button: #415D4A;
+  --colors-button: #415d4a;
 
   /* Gaps */
   --gap-5xl: 1.5rem;
