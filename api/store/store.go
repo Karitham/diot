@@ -3,9 +3,9 @@ package store
 // scyllab
 import (
 	"context"
+	"fmt"
 	"os"
 
-	"github.com/Karitham/iDIoT/api/store/models"
 	"github.com/gocql/gocql"
 	"github.com/scylladb/gocqlx/v2"
 	"github.com/scylladb/gocqlx/v2/qb"
@@ -44,36 +44,41 @@ func New(ctx context.Context, clusterAddr ...string) *Store {
 func Migrate(ctx context.Context, conn gocqlx.Session) error {
 	err := conn.ExecStmt(migKeyspace)
 	if err != nil {
-		return err
+		return fmt.Errorf("migKeyspace failed: %w", err)
 	}
 
 	err = conn.ExecStmt(migTable)
 	if err != nil {
-		return err
+		return fmt.Errorf("migTable failed: %w", err)
 	}
 
-	var id int
-	err = conn.Query(`SELECT COUNT(*) FROM idiot.migrations`, nil).WithContext(ctx).GetRelease(&id)
-	if err != nil {
-		return err
+	var lastIndex int
+	err = conn.Query(`SELECT MAX(id) FROM idiot.migrations LIMIT 1`, nil).WithContext(ctx).GetRelease(&lastIndex)
+	if err != nil && err != gocql.ErrNotFound {
+		return fmt.Errorf("migLastIndex failed: %w", err)
 	}
 
-	if id >= len(migrations) {
+	if lastIndex >= (len(migrations) - 1) {
 		log.Debug("database is up to date")
 		return nil
 	}
 
-	log.Info("migrating database", "current", id, "target", len(migrations))
+	log.Info("migrating database", "current", lastIndex, "target", len(migrations))
 
-	for _, m := range migrations {
+	for i, m := range migrations[lastIndex:] {
 		err := conn.ExecStmt(m)
 		if err != nil {
-			return err
+			return fmt.Errorf("mig %d failed: %w", lastIndex+i, err)
 		}
 
-		err = conn.Query(qb.Insert("idiot.migrations").Columns(models.Migrations.Metadata().Columns...).ToCql()).BindMap(qb.M{
+		err = conn.Query("INSERT INTO idiot.migrations (id, content, time) VALUES (?, ?, ?);", []string{
+			"id",
+			"content",
+			"time",
+		}).BindMap(qb.M{
 			"content": m,
 			"time":    gocql.TimeUUID(),
+			"id":      lastIndex + i,
 		}).WithContext(ctx).Exec()
 		if err != nil {
 			return err

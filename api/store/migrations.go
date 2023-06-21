@@ -3,13 +3,13 @@ package store
 const keyspace = "idiot"
 const migKeyspace = `CREATE KEYSPACE IF NOT EXISTS idiot WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };`
 const migTable = `CREATE TABLE IF NOT EXISTS idiot.migrations (
-	content text,
+	id int PRIMARY KEY,
 	time timeuuid,
-	PRIMARY KEY (content, time)
+	content text
 );`
 
 var migrations = []string{
-	`CREATE TABLE IF NOT EXISTS idiot.users (
+	`CREATE TABLE idiot.users (
 		id varchar,
 		email varchar,
 		name varchar,
@@ -18,16 +18,16 @@ var migrations = []string{
 		PRIMARY KEY (id, email)
 	);`,
 
-	`CREATE INDEX IF NOT EXISTS users_email_idx ON idiot.users (email);`,
+	`CREATE INDEX users_email_idx ON idiot.users (email);`,
 
-	`CREATE TABLE IF NOT EXISTS idiot.sessions (id varchar PRIMARY KEY, permissions set<varchar>);`,
+	`CREATE TABLE idiot.sessions (id varchar PRIMARY KEY, permissions set<varchar>);`,
 
-	`CREATE TABLE IF NOT EXISTS idiot.webpush_subscriptions (
+	`CREATE TABLE idiot.webpush_subscriptions (
 		user_id varchar PRIMARY KEY,
 		subscription set<blob>
 	);`,
 
-	`CREATE TABLE IF NOT EXISTS idiot.keys (
+	`CREATE TABLE idiot.keys (
 		id varchar PRIMARY KEY,
 		private_key blob,
 		public_key blob
@@ -35,12 +35,12 @@ var migrations = []string{
 
 	`ALTER TABLE idiot.sessions ADD user_id varchar;`,
 
-	`CREATE TABLE IF NOT EXISTS idiot.devices (
+	`CREATE TABLE idiot.devices (
 		id varchar PRIMARY KEY,
 		name varchar
 	);`,
 
-	`CREATE TABLE IF NOT EXISTS idiot.sensor_readings (
+	`CREATE TABLE idiot.sensor_readings (
 		iot_id varchar,
 		time timestamp,
 		value blob,

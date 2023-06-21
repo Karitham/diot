@@ -25,6 +25,7 @@ func main() {
 	app.Usage = "iDIoT"
 	app.Commands = []*cli.Command{
 		DB(),
+		mockESP32(),
 	}
 	app.Flags = []cli.Flag{
 		&cli.StringSliceFlag{
@@ -86,6 +87,12 @@ func HTTPD(c *cli.Context) error {
 
 	// default db subscriber
 	sub.Subscribe("db", context.Background(), dbstore.ReadingsSubscriber)
+	go func() {
+		err := alertStore.ReadingsSub(context.Background(), sub)
+		if err != nil {
+			log.Error("main", "error", err)
+		}
+	}()
 	// TODO(@Karitham): add alerts subscriber
 
 	httpdApi := httpd.New(dbstore, sub)

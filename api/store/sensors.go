@@ -19,7 +19,7 @@ type SensorReading struct {
 	Battery     *float32  `json:"battery"`
 }
 
-const ReadingTTL = time.Hour * 24 * 30 * 365 // 1 year~
+const ReadingTTL = time.Hour * 24 * 30 * 12 // 1 year~
 
 type SensorInfoWithLastReading struct {
 	IoTID    string
@@ -160,7 +160,7 @@ func (s *Store) CreateSensorReading(ctx context.Context, data SensorReading) err
 		return err
 	}
 
-	s.conn.Query(models.SensorReadings.InsertBuilder().TTL(ReadingTTL).ToCql()).
+	return s.conn.Query(models.SensorReadings.InsertBuilder().TTL(ReadingTTL).ToCql()).
 		BindStruct(models.SensorReadingsStruct{
 			IotId: data.IoTID,
 			Time:  data.Time,
@@ -168,8 +168,6 @@ func (s *Store) CreateSensorReading(ctx context.Context, data SensorReading) err
 		}).
 		WithContext(ctx).
 		ExecRelease()
-
-	return nil
 }
 
 func (s *Store) ReadingsSubscriber(ctx context.Context, data SensorReading) {
