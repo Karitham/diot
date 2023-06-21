@@ -6,11 +6,11 @@ class FloodingDetection(MotherDetection):
         super().__init__()
         self.id_iot = id_iot
         self.humidity = humidity
-        self.alertHumidity1 = 50
-        self.alertHumidity2 = 60
-        self.alertHumidity3 = 70
-        self.alertHumidity4 = 80
-        self.alertHumidity5 = 90
+        self.alertHumidity1 = 60
+        self.alertHumidity2 = 70
+        self.alertHumidity3 = 80
+        self.alertHumidity4 = 90
+        self.alertHumidity5 = 95
         
     def check_flooding(self):
         if self.humidity > self.alertHumidity5:

@@ -6,11 +6,11 @@ class IaqDetection(MotherDetection):
         super().__init__()
         self.id_iot = id_iot
         self.iaq = iaq
-        self.alertIaq1 = 50
-        self.alertIaq2 = 100
-        self.alertIaq3 = 200
-        self.alertIaq4 = 250
-        self.alertIaq5 = 300
+        self.alertIaq1 = 75
+        self.alertIaq2 = 150
+        self.alertIaq3 = 250
+        self.alertIaq4 = 350
+        self.alertIaq5 = 450
         
     def check_iaq(self):
         if self.iaq > self.alertIaq5:

@@ -6,8 +6,8 @@ class FireDetection(MotherDetection):
         super().__init__()
         self.id_iot = id_iot
         self.temperature = temperature
-        self.alertTemperature1 = 30
-        self.alertTemperature2 = 45
+        self.alertTemperature1 = 40
+        self.alertTemperature2 = 50
         self.alertTemperature3 = 60
         self.alertTemperature4 = 70
         self.alertTemperature5 = 80

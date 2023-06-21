@@ -9,9 +9,9 @@ language_clients:
 
 # Topic
 
-- Susbcribe Sensor Data : sensor 
-- Susbcribe Camera Data : camera
-- Publish Alert : alert  
+- Susbcribe Sensor Data : "iot:sensor" 
+- Susbcribe Camera Data : "iot:camera"
+- Publish Alert : "iot:alert"  
 
 
 # Data Format
@@ -26,7 +26,7 @@ language_clients:
   "temperature": "25",
   "humidity": "60",
   "iaq": "50",
-  "motion": "True or False"
+  "battery": "20"
 }
 ```
 
@@ -87,11 +87,11 @@ try:
 except json.JSONDecodeError as e:
     print("Erreur lors de la conversion des données JSON :", str(e))
 try:
-    id_iot = data.get('id')
+    id_iot = data.get('id_iot')
     temperature = data.get('temperature')
     humidity = data.get('humidity')
     iaq = data.get('iaq')
-    motion = data.get('motion')
+    battery = data.get('battery')
 except Exception as e:
     print("Erreur lors de l'extraction des valeurs à partir des données JSON :", str(e))
 ```

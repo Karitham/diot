@@ -16,13 +16,15 @@ class ProcessData:
             print("Erreur lors de la conversion des données JSON :", str(e))
 
         try:
-            id_iot = data.get('id')
+            id_iot = data.get('id_iot')
             temperature = data.get('temperature')
             humidity = data.get('humidity')
             iaq = data.get('iaq')
             battery = data.get('battery')
         except Exception as e:
             print("Erreur lors de l'extraction des valeurs à partir des données JSON :", str(e))
+            
+        print(f"Received from {id_iot}: temperature: {temperature}, humidity: {humidity} and iaq: {iaq}")
             
         fire_detector = FireDetection(id_iot, temperature)
         flooding_detector = FloodingDetection(id_iot, humidity)
