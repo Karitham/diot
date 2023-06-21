@@ -23,10 +23,10 @@ language_clients:
 ```json
 {
   "id_iot": "1234",
-  "temperature": "25",
-  "humidity": "60",
-  "iaq": "50",
-  "battery": "20"
+  "temperature": "25", //en °C
+  "humidity": "60", //en %
+  "iaq": "50", //en KOhms
+  "battery": "20", //en %
 }
 ```
 
@@ -35,19 +35,23 @@ language_clients:
 ```json
 {
   "id_iot": "1234",
-  "frame": ["liste of each frame / second"]
+  "image": "" //en base64
 }
 ```
-- Frame Format : .jpg
 
 ## Output
+
+<aside>
+If we have several problems at the same time, we will send one payload for each problem
+</aside>
 
 ```json
 {
   "id_iot": "1234",
-  "incident field": "value",
+  "type": "value", //fire or flooding or bad air quality or battery low or intrusion
+  "incident field": "value", //no value for intrusion and incident field = temperature or humedity or air quality or battery
   "time" : "2023-06-18 10:20:05",
-  "criticity" : "1 -> 5"
+  "criticity" : "1 -> 5" //no value for intrusion or battery
 }
 ```
 
@@ -55,7 +59,7 @@ language_clients:
 
 ## Subscribe Key
 
-<aside class="warning">
+<aside>
 Before to begin data analisys, we need to subscribe to the specific key to recuperate the data from the different sensors.
 </aside>
 
@@ -73,7 +77,7 @@ except Exception as e:
 
 ## Process Data
 
-<aside class="warning">
+<aside>
 In this step, we will create a variable for each json value depending on the field in order to analyse each data of this one.
 </aside>
 
@@ -98,13 +102,13 @@ except Exception as e:
 
 ## Analyse Data
 
-<aside class="warning">
+<aside>
 To perform this operation, we must called the specific function that will analyse the different data and check if an incident is occurring
 </aside>
 
 ## Publish Key
 
-<aside class="warning">
+<aside>
 In the used function, we will generate a json schema based on the analysed data if we find an incident and after that, we will publish it in the specific key
 </aside>
 
