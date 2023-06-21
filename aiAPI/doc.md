@@ -49,7 +49,7 @@ If we have several problems at the same time, we will send one payload for each 
 {
   "id_iot": "1234",
   "type": "value", //fire or flooding or bad air quality or battery low or intrusion
-  "incident field": "value", //no value for intrusion and incident field = temperature or humedity or air quality or battery
+  "incident field": "value", //no value for intrusion and incident field = temperature or humidity or air quality or battery
   "time" : "2023-06-18 10:20:05",
   "criticity" : "1 -> 5" //no value for intrusion or battery
 }
