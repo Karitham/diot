@@ -4,7 +4,6 @@ go 1.20
 
 require (
 	github.com/SherClockHolmes/webpush-go v1.2.0
-	github.com/bxcodec/faker/v3 v3.8.1
 	github.com/discord-gophers/goapi-gen v0.3.0
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/go-chi/cors v1.2.1

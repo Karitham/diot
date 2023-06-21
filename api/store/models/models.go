@@ -4,10 +4,23 @@ package models
 
 import (
 	"github.com/scylladb/gocqlx/v2/table"
+	"time"
 )
 
 // Table models.
 var (
+	Devices = table.New(table.Metadata{
+		Name: "devices",
+		Columns: []string{
+			"id",
+			"name",
+		},
+		PartKey: []string{
+			"id",
+		},
+		SortKey: []string{},
+	})
+
 	Keys = table.New(table.Metadata{
 		Name: "keys",
 		Columns: []string{
@@ -29,6 +42,21 @@ var (
 		},
 		PartKey: []string{
 			"content",
+		},
+		SortKey: []string{
+			"time",
+		},
+	})
+
+	SensorReadings = table.New(table.Metadata{
+		Name: "sensor_readings",
+		Columns: []string{
+			"iot_id",
+			"time",
+			"value",
+		},
+		PartKey: []string{
+			"iot_id",
 		},
 		SortKey: []string{
 			"time",
@@ -94,6 +122,10 @@ var (
 	})
 )
 
+type DevicesStruct struct {
+	Id   string
+	Name string
+}
 type KeysStruct struct {
 	Id         string
 	PrivateKey []byte
@@ -102,6 +134,11 @@ type KeysStruct struct {
 type MigrationsStruct struct {
 	Content string
 	Time    [16]byte
+}
+type SensorReadingsStruct struct {
+	IotId string
+	Time  time.Time
+	Value []byte
 }
 type SessionsStruct struct {
 	Id          string

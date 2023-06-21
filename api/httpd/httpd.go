@@ -31,16 +31,24 @@ type Store interface {
 
 	GetWebpushKey(ctx context.Context) (store.KeyPair, error)
 	RegisterWebpush(ctx context.Context, userID ulid.ULID, endpoint, auth, p256dh string) error
+
+	GetSensors(ctx context.Context) ([]store.SensorInfoWithLastReading, error)
 }
 
-func New(store Store) *Service {
+type ReadingSubscriber interface {
+	Subscribe(k string, ctx context.Context, sub func(ctx context.Context, message store.SensorReading))
+}
+
+func New(store Store, readings ReadingSubscriber) *Service {
 	return &Service{
-		store: store,
+		store:    store,
+		readings: readings,
 	}
 }
 
 type Service struct {
-	store Store
+	store    Store
+	readings ReadingSubscriber
 }
 
 func WError(w http.ResponseWriter, r *http.Request, err error, code int, m string) *api.Response {

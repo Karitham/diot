@@ -347,9 +347,9 @@ func DBUsersList() *cli.Command {
 		}
 
 		tw := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-		tw.Write([]byte("ID\tName\tEmail\n"))
+		tw.Write([]byte("ID\tName\tEmail\tPermissions\n"))
 		for _, u := range users {
-			tw.Write([]byte(u.ID + "\t" + u.Name + "\t" + u.Email + "\n"))
+			tw.Write([]byte(u.ID + "\t" + u.Name + "\t" + u.Email + "\t" + strings.Join(u.Permissions.Strings(), ",") + "\n"))
 		}
 
 		return tw.Flush()

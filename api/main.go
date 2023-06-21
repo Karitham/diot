@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/Karitham/iDIoT/api/alerts"
 	"github.com/Karitham/iDIoT/api/httpd"
 	"github.com/Karitham/iDIoT/api/httpd/api"
 	"github.com/Karitham/iDIoT/api/store"
@@ -72,10 +73,22 @@ func HTTPD(c *cli.Context) error {
 	port := c.Int("port")
 	cassIPs := c.StringSlice("cass")
 
-	store := store.New(context.Background(), cassIPs...)
-	defer store.Close()
+	dbstore := store.New(context.Background(), cassIPs...)
+	defer dbstore.Close()
 
-	httpdApi := httpd.New(store)
+	alertStore, err := alerts.NewStore(c.StringSlice("redis-addr"), c.String("redis-user"), c.String("redis-pass"))
+	if err != nil {
+		return err
+	}
+
+	defer alertStore.Close()
+	sub := alerts.NewFan[store.SensorReading]()
+
+	// default db subscriber
+	sub.Subscribe("db", context.Background(), dbstore.ReadingsSubscriber)
+	// TODO(@Karitham): add alerts subscriber
+
+	httpdApi := httpd.New(dbstore, sub)
 
 	ch := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},

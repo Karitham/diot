@@ -11,20 +11,25 @@ import (
 
 type SubFanHandle[T any] struct {
 	subMu   sync.Mutex
-	subs    map[string]func(ctx context.Context, message T)
+	subs    map[string]subscriber[T]
 	wg      conc.WaitGroup
 	ctx     context.Context
 	onEvent func(message rueidis.PubSubMessage)
+}
+
+type subscriber[T any] struct {
+	ctx context.Context
+	sub func(ctx context.Context, message T)
 }
 
 func (sh *SubFanHandle[T]) OnEvent(message rueidis.PubSubMessage) {
 	sh.onEvent(message)
 }
 
-func (sh *SubFanHandle[T]) Subscribe(k string, sub func(ctx context.Context, message T)) {
+func (sh *SubFanHandle[T]) Subscribe(k string, ctx context.Context, sub func(ctx context.Context, message T)) {
 	sh.subMu.Lock()
 	defer sh.subMu.Unlock()
-	sh.subs[k] = sub
+	sh.subs[k] = subscriber[T]{ctx: ctx, sub: sub}
 }
 
 func (sh *SubFanHandle[T]) Unsubscribe(k string) {
@@ -33,21 +38,25 @@ func (sh *SubFanHandle[T]) Unsubscribe(k string) {
 	delete(sh.subs, k)
 }
 
-// SubFan allows to fan out messages to all registered callbacks
-func SubFan[T any](ctx context.Context) *SubFanHandle[T] {
+// NewFan allows to fan out messages to all registered callbacks
+func NewFan[T any]() *SubFanHandle[T] {
 	sh := &SubFanHandle[T]{
 		subMu: sync.Mutex{},
-		subs:  make(map[string]func(ctx context.Context, message T)),
-		ctx:   ctx,
+		subs:  make(map[string]subscriber[T]),
 	}
 
 	sh.onEvent = func(message rueidis.PubSubMessage) {
 		var msg T
 		json.Unmarshal([]byte(message.Message), &msg)
 		sh.subMu.Lock()
-		for _, sub := range sh.subs {
+		for k, sub := range sh.subs {
+			if sub.ctx.Err() != nil {
+				delete(sh.subs, k)
+				continue
+			}
+
 			sh.wg.Go(func() {
-				sub(sh.ctx, msg)
+				sub.sub(sub.ctx, msg)
 			})
 		}
 		sh.subMu.Unlock()
@@ -59,9 +68,4 @@ func SubFan[T any](ctx context.Context) *SubFanHandle[T] {
 
 type EventHandler interface {
 	OnEvent(message rueidis.PubSubMessage)
-}
-
-// AlertSub blocks and waits for messages on the alerts channel.
-func (s *Store) AlertSub(ctx context.Context, eh EventHandler) error {
-	return s.client.Receive(ctx, s.client.B().Subscribe().Channel("alerts").Build(), eh.OnEvent)
 }

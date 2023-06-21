@@ -26,6 +26,8 @@ var (
 
 	SensorDataKindHumidity = SensorDataKind{"humidity"}
 
+	SensorDataKindIaq = SensorDataKind{"iaq"}
+
 	SensorDataKindTemperature = SensorDataKind{"temperature"}
 )
 
@@ -42,7 +44,7 @@ type Error struct {
 type SensorData struct {
 	// The sensor data
 	Data interface{} `json:"data"`
-	ID   ulid.ULID   `json:"id"`
+	ID   string      `json:"id"`
 
 	// The kind of sensor
 	Kind SensorDataKind `json:"kind"`
@@ -65,6 +67,11 @@ type SensorInfoCamera struct {
 // SensorInfoHumidity defines model for SensorInfoHumidity.
 type SensorInfoHumidity struct {
 	Humidity float32 `json:"humidity"`
+}
+
+// SensorInfoIAQ defines model for SensorInfoIAQ.
+type SensorInfoIAQ struct {
+	Iaq float32 `json:"iaq"`
 }
 
 // SensorInfoTemperature defines model for SensorInfoTemperature.
@@ -133,6 +140,10 @@ func (t *SensorDataKind) FromValue(value string) error {
 		return nil
 
 	case SensorDataKindHumidity.value:
+		t.value = value
+		return nil
+
+	case SensorDataKindIaq.value:
 		t.value = value
 		return nil
 

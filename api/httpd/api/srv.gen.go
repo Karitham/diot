@@ -194,7 +194,7 @@ func (siw *ServerInterfaceWrapper) GetSensorsLive(w http.ResponseWriter, r *http
 func (siw *ServerInterfaceWrapper) GetUsers(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	ctx = context.WithValue(ctx, BearerAuthScopes, []string{"users:read"})
+	ctx = context.WithValue(ctx, BearerAuthScopes, []string{"perm:users:read"})
 
 	var handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		resp := siw.Handler.GetUsers(w, r)
@@ -217,7 +217,7 @@ func (siw *ServerInterfaceWrapper) GetUsers(w http.ResponseWriter, r *http.Reque
 func (siw *ServerInterfaceWrapper) CreateUser(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	ctx = context.WithValue(ctx, BearerAuthScopes, []string{"users:create"})
+	ctx = context.WithValue(ctx, BearerAuthScopes, []string{"perm:users:create"})
 
 	var handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		resp := siw.Handler.CreateUser(w, r)

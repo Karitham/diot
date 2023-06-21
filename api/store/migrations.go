@@ -34,4 +34,16 @@ var migrations = []string{
 	);`,
 
 	`ALTER TABLE idiot.sessions ADD user_id varchar;`,
+
+	`CREATE TABLE IF NOT EXISTS idiot.devices (
+		id varchar PRIMARY KEY,
+		name varchar
+	);`,
+
+	`CREATE TABLE IF NOT EXISTS idiot.sensor_readings (
+		iot_id varchar,
+		time timestamp,
+		value blob,
+		PRIMARY KEY (iot_id, time)
+	) WITH CLUSTERING ORDER BY (time DESC);`,
 }

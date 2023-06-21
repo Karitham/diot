@@ -127,7 +127,7 @@ paths:
     x-go-middlewares: [auth]
     post:
       security:
-        - bearerAuth: [users:create]
+        - bearerAuth: [perm:users:create]
       tags:
         - user
       summary: Create a user
@@ -154,7 +154,7 @@ paths:
               $ref: "#/components/schemas/UserCreate"
     get:
       security:
-        - bearerAuth: [users:read]
+        - bearerAuth: [perm:users:read]
       tags:
         - user
       summary: Get all users
@@ -289,7 +289,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-    
 components:
   schemas:
     User:
@@ -388,6 +387,15 @@ components:
           example: 23.4
       required:
         - temperature
+      
+    SensorInfoIAQ:
+      type: object
+      properties:
+        iaq:
+          type: number
+          example: 23.4
+      required:
+        - iaq
 
     SensorInfo:
       allOf:
@@ -410,7 +418,7 @@ components:
       properties:
         kind:
           type: string
-          enum: [camera, humidity, temperature]
+          enum: [camera, humidity, temperature, iaq]
           description: The kind of sensor
         data:
           description: The sensor data
@@ -418,11 +426,10 @@ components:
             - $ref: "#/components/schemas/SensorInfoHumidity"
             - $ref: "#/components/schemas/SensorInfoTemperature"
             - $ref: "#/components/schemas/SensorInfoCamera"
+            - $ref: "#/components/schemas/SensorInfoIAQ"
         id:
           type: string
-          x-go-type:
-            type: ULID
-            import: github.com/oklog/ulid
+
 
   securitySchemes:
     bearerAuth:

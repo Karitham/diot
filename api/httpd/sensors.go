@@ -1,52 +1,72 @@
 package httpd
 
 import (
-	"crypto/rand"
+	"context"
 	"net/http"
-	"time"
+	"strconv"
 
 	badrand "math/rand"
 
 	"github.com/Karitham/iDIoT/api/httpd/api"
-	"github.com/bxcodec/faker/v3"
-	"github.com/oklog/ulid"
+	"github.com/Karitham/iDIoT/api/store"
 	"nhooyr.io/websocket"
 	"nhooyr.io/websocket/wsjson"
 )
 
 func (s *Service) GetSensors(w http.ResponseWriter, r *http.Request) *api.Response {
-	return api.GetSensorsJSON200Response([]api.SensorInfo{
-		{
-			Label: faker.Sentence(),
-			SensorData: api.SensorData{
-				ID:   ulid.MustNew(ulid.Now(), rand.Reader),
-				Kind: api.SensorDataKindHumidity,
-				Data: api.SensorInfoHumidity{
-					Humidity: badrand.Float32() * 100,
-				},
+	readings, err := s.store.GetSensors(r.Context())
+	if err != nil {
+		return WError(w, r, err, 500, err.Error())
+	}
+
+	out := make([]api.SensorInfo, 0, len(readings))
+	for _, reading := range readings {
+		for _, info := range reading.Readings {
+			for _, data := range sensorToData(info) {
+				out = append(out, api.SensorInfo{
+					Label:      reading.Name,
+					SensorData: data,
+				})
+			}
+		}
+	}
+
+	return api.GetSensorsJSON200Response(out)
+}
+
+func sensorToData(reading store.SensorReading) []api.SensorData {
+	out := []api.SensorData{}
+	if reading.Humidity != nil {
+		out = append(out, api.SensorData{
+			ID:   reading.IoTID,
+			Kind: api.SensorDataKindHumidity,
+			Data: api.SensorInfoHumidity{
+				Humidity: *reading.Humidity,
 			},
-		},
-		{
-			Label: faker.Sentence(),
-			SensorData: api.SensorData{
-				ID:   ulid.MustNew(ulid.Now(), rand.Reader),
-				Kind: api.SensorDataKindTemperature,
-				Data: api.SensorInfoTemperature{
-					Temperature: badrand.Float32() * 100,
-				},
+		})
+	}
+
+	if reading.Temperature != nil {
+		out = append(out, api.SensorData{
+			ID:   reading.IoTID,
+			Kind: api.SensorDataKindTemperature,
+			Data: api.SensorInfoTemperature{
+				Temperature: *reading.Temperature,
 			},
-		},
-		{
-			Label: faker.Sentence(),
-			SensorData: api.SensorData{
-				ID:   ulid.MustNew(ulid.Now(), rand.Reader),
-				Kind: api.SensorDataKindCamera,
-				Data: api.SensorInfoCamera{
-					FeedURI: faker.URL(),
-				},
+		})
+	}
+
+	if reading.Iaq != nil {
+		out = append(out, api.SensorData{
+			ID:   reading.IoTID,
+			Kind: api.SensorDataKindIaq,
+			Data: api.SensorInfoIAQ{
+				Iaq: *reading.Iaq,
 			},
-		},
-	})
+		})
+	}
+
+	return out
 }
 
 // GetSensorsLive returns the live data for all of the available sensors when it's available
@@ -59,37 +79,18 @@ func (s *Service) GetSensorsLive(w http.ResponseWriter, r *http.Request) *api.Re
 	if err != nil {
 		return WError(w, r, err, 400, err.Error())
 	}
+	randomID := badrand.Int63()
 
-	ticker := time.NewTicker(5 * time.Second)
-	defer ticker.Stop()
-
-	for {
-		err := wsjson.Write(r.Context(), c, api.SensorData{
-			ID:   ulid.MustNew(ulid.Now(), rand.Reader),
-			Kind: api.SensorDataKindCamera,
-			Data: api.SensorInfoHumidity{
-				Humidity: badrand.Float32() * 100,
-			},
-		})
-		if err != nil {
-			return WError(w, r, err, 400, err.Error())
+	s.readings.Subscribe(strconv.FormatInt(randomID, 10), r.Context(), func(ctx context.Context, message store.SensorReading) {
+		for _, data := range sensorToData(message) {
+			err := wsjson.Write(ctx, c, data)
+			if err != nil {
+				log.DebugCtx(ctx, "error writing to websocket: %v", err)
+				return
+			}
 		}
+	})
 
-		err = wsjson.Write(r.Context(), c, api.SensorData{
-			ID:   ulid.MustNew(ulid.Now(), rand.Reader),
-			Kind: api.SensorDataKindTemperature,
-			Data: api.SensorInfoHumidity{
-				Humidity: badrand.Float32() * 100,
-			},
-		})
-		if err != nil {
-			return WError(w, r, err, 400, err.Error())
-		}
-
-		select {
-		case <-ticker.C:
-		case <-r.Context().Done():
-			return nil
-		}
-	}
+	<-r.Context().Done()
+	return nil
 }

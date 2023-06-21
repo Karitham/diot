@@ -40,8 +40,8 @@ func TestAlertSubFan(t *testing.T) {
 	expectCount := sendCount * subCount
 	// send 6 messages
 
-	fn := func(name string) (string, func(ctx context.Context, message msg)) {
-		return name, func(_ context.Context, message msg) {
+	fn := func(name string) (string, context.Context, func(ctx context.Context, message msg)) {
+		return name, context.Background(), func(_ context.Context, message msg) {
 			t.Logf("received message: {msg: %+v, hash: %+x} from %s", message.Msg, message.Hash, name)
 
 			decode, err := base64.StdEncoding.DecodeString(message.Msg)
@@ -58,7 +58,7 @@ func TestAlertSubFan(t *testing.T) {
 		}
 	}
 
-	subFan := SubFan[msg](context.Background())
+	subFan := NewFan[msg]()
 	for i := 0; i < subCount; i++ {
 		subFan.Subscribe(fn(fmt.Sprintf("subscriber %d", i)))
 	}
