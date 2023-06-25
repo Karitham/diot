@@ -314,18 +314,6 @@
   gap: var(--gap-base);
   font-family: var(--label);
 }
-.button6 {
-  border-radius: var(--br-5xs);
-  box-shadow: var(--sm);
-  border: 1px solid var(--colors-red);
-  overflow: hidden;
-  display: flex;
-  flex-direction: row;
-  padding: var(--padding-xs) var(--padding-13xl);
-  align-items: center;
-  justify-content: center;
-  mix-blend-mode: normal;
-}
 .accounts,
 .users {
   display: flex;

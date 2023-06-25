@@ -7,6 +7,13 @@ import AdminPanelDeviceContainer from "../components/AdminPanelDeviceContainer";
 import "../styles/AdminPanel.css";
 import Navbar from "../components/Navbar";
 
+const device1 = { src: '/clap.svg', name: 'Living Room Cam 1'}
+const device2 = { src: '/spinner.svg', name: 'Living Room Cam 2'}
+const device3 = { src: '/checkbi.svg', name: 'Bedroom Fire Captor'}
+const device4 = { src: '/skull.svg', name: 'Bedroom Cam'}
+
+const devices = [device1, device2, device3, device4]
+
 const AdminPanel: FunctionComponent = () => {
   const [isUserAccountOpen, setUserAccountOpen] = useState(false);
   const navigate = useNavigate();
@@ -32,7 +39,18 @@ const AdminPanel: FunctionComponent = () => {
             <div className="titre">Settings</div>
           </div>
           <AdminPanelContainer />
-          <AdminPanelDeviceContainer />
+          
+                <div className="devices">
+                <div className="devices1">Devices</div>
+                <div className="accounts1">
+                  <div className="device-list">
+                  {devices.map(d => (
+          <AdminPanelDeviceContainer src={d.src} name={d.name} />
+          ))}
+          </div>
+      </div>
+    </div>
+          
         </div>
         <div className="new-user" onClick={openUserAccount}>
           <b className="edit">New user</b>
