@@ -69,5 +69,5 @@ func TestPublish(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	t.Log(resp.StatusCode)
+	t.Log(resp.Status)
 }

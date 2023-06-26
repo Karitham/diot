@@ -2,6 +2,7 @@ package ioutils
 
 import (
 	"bufio"
+	"bytes"
 	"io"
 )
 
@@ -14,12 +15,12 @@ type ChannelReader struct {
 func NewChannelReader(c <-chan io.Reader) *ChannelReader {
 	return &ChannelReader{
 		readerChan: c,
-		reader:     bufio.NewReader(nil),
+		reader:     bufio.NewReader(&bytes.Buffer{}),
 	}
 }
 
 func (c *ChannelReader) Read(p []byte) (n int, err error) {
-	if c.reader.Buffered() == 0 {
+	if _, err := c.reader.Peek(1); err == io.EOF {
 		reader, ok := <-c.readerChan
 		if !ok {
 			return 0, io.EOF

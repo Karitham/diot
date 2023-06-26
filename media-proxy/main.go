@@ -22,8 +22,7 @@ func init() {
 
 var logLevel = &slog.LevelVar{}
 var log = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
-	Level:     logLevel,
-	AddSource: true,
+	Level: logLevel,
 }))
 
 func main() {
