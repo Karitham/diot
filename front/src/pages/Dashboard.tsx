@@ -12,10 +12,11 @@ const alert = {
   timeText: 'Just now ',
   propBackgroundColor: '#c33e22'
 }
+const alerts = [alert]
 
 const camClick = { camName: 'Living Room', camURL: '/livingroom.png' }
 
-const alerts = [alert]
+
 const cams: CamContainerType[] = [
   { camName: 'Living Room', camURL: '/livingroom.png' },
   { camName: 'The week Room', camURL: '/livingroom.png' },
