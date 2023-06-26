@@ -18,4 +18,6 @@ COPY --from=builder /app/media-proxy /usr/local/bin/media-proxy
 
 ENV PORT 8089
 
+ENV DATA_DIR /data
+
 ENTRYPOINT ["/usr/local/bin/media-proxy"]

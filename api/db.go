@@ -188,7 +188,7 @@ func DBSessions() *cli.Command {
 					}
 					defer rs.Close()
 
-					sess, err := rs.NewSession(c.Context, uid, u.Permissions, time.Hour) // short lived for testing
+					sess, err := rs.NewSession(c.Context, uid, u.Permissions, time.Hour*24)
 					if err != nil {
 						return err
 					}

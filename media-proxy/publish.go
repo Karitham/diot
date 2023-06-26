@@ -5,8 +5,6 @@ import (
 	"mime"
 	"mime/multipart"
 	"net/http"
-	"os"
-	"path/filepath"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -24,15 +22,7 @@ func PostFramesHandler(validBasicAuth func(user, pass string) error, pubQ *PubQ)
 			return
 		}
 
-		pubQ.mu.Lock()
-		tmpDir, err := os.MkdirTemp(os.TempDir(), "mediaproxy-*-"+chi.URLParam(r, "channel"))
-		if err != nil {
-			w.WriteHeader(500)
-			return
-		}
-		pubQ.files[chi.URLParam(r, "channel")] = os.DirFS(tmpDir)
-		pubQ.mu.Unlock()
-
+		channel := chi.URLParam(r, "channel")
 		mt, mu, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 		if err != nil {
 			w.WriteHeader(500)
@@ -46,15 +36,17 @@ func PostFramesHandler(validBasicAuth func(user, pass string) error, pubQ *PubQ)
 
 		mr := multipart.NewReader(r.Body, mu["boundary"])
 		for mpart, err := mr.NextPart(); err == nil; mpart, err = mr.NextPart() {
-			log.Debug("received frame", "channel", chi.URLParam(r, "channel"), "user", user, "filename", mpart.FileName())
-			tf, err := os.Create(filepath.Join(tmpDir, time.Now().Format(time.RFC3339Nano)+".jpg"))
+			buf, err := io.ReadAll(mpart)
 			if err != nil {
 				w.WriteHeader(500)
 				return
 			}
 
-			defer tf.Close()
-			io.Copy(tf, mpart)
+			err = pubQ.PublishFile(r.Context(), channel, buf, time.Hour)
+			if err != nil {
+				w.WriteHeader(500)
+				return
+			}
 		}
 
 		w.WriteHeader(200)

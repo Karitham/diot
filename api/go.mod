@@ -5,7 +5,6 @@ go 1.20
 require (
 	github.com/SherClockHolmes/webpush-go v1.2.0
 	github.com/discord-gophers/goapi-gen v0.3.0
-	github.com/fxamacker/cbor/v2 v2.4.0
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/go-chi/render v1.0.2
 	github.com/gocql/gocql v1.5.2
@@ -22,12 +21,8 @@ require (
 )
 
 require (
-	github.com/klauspost/compress v1.10.3 // indirect
-	github.com/x448/float16 v0.8.4 // indirect
-)
-
-require (
 	github.com/ajg/form v1.5.1 // indirect
+	github.com/klauspost/compress v1.10.3 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/go-json-experiment/json v0.0.0-20230324203220-04923b7a9528
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect

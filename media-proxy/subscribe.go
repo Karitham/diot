@@ -1,16 +1,15 @@
 package main
 
 import (
-	"bufio"
 	"bytes"
 	"context"
 	"fmt"
 	"io"
-	"io/fs"
 	"net/http"
 	"os/exec"
 
 	"github.com/Karitham/iDIoT/api/session"
+	"github.com/Karitham/iDIoT/media-server/ioutils"
 	"github.com/go-chi/chi/v5"
 	"github.com/nareix/joy4/av"
 	"github.com/nareix/joy4/av/avutil"
@@ -37,19 +36,19 @@ func SubscribeVideoHandler(
 		flusher := w.(http.Flusher)
 		flusher.Flush()
 
-		chann, ok := pq.files[channel]
-		if !ok {
-			log.Error("channel not found", "channel", channel)
+		chann, err := pq.GetFilesFromChannel(r.Context(), channel)
+		if err != nil {
+			log.Error("getting files from channel", "error", err)
 			return
 		}
 
-		f, err := jpegFramesToFLV(chann)
+		f, err := jpegFramesToFLV(r.Context(), chann)
 		if err != nil {
 			log.Error("streaming error", "error", err)
 			return
 		}
 
-		muxer := flv.NewMuxerWriteFlusher(writeFlusher{httpflusher: flusher, Writer: w})
+		muxer := flv.NewMuxerWriteFlusher(ioutils.WriteFlusher{HTTPFlusher: flusher, Writer: w})
 		err = avutil.CopyFile(muxer, f)
 		if err != nil {
 			log.Error("streaming error", "error", err)
@@ -57,82 +56,42 @@ func SubscribeVideoHandler(
 	}
 }
 
-func jpegFramesToFLV(dir fs.FS) (av.Demuxer, error) {
-	matches, err := fs.Glob(dir, "*.jpg")
-	if err != nil {
-		return nil, err
-	}
-
-	log.Info("found files", "len", len(matches))
-	multiFileReader := &jpegToMJPEGReader{files: matches, dir: dir}
-
+func jpegFramesToFLV(ctx context.Context, c <-chan io.Reader) (av.Demuxer, error) {
 	pr, pw := io.Pipe()
+
 	go func() {
-		ffmpegFromJPGToFLV(context.Background(), multiFileReader, pw)
+		err := ffmpegFromJPGToFLV(ctx, ioutils.NewChannelReader(c), pw)
+		if err != nil {
+			log.Error("streaming error", "error", err)
+		}
 	}()
 
 	return flv.NewDemuxer(pr), nil
 }
 
-type jpegToMJPEGReader struct {
-	files  []string
-	dir    fs.FS
-	offset int
-
-	buf *bufio.Reader
-
-	currentFile fs.File
-}
-
-func (m *jpegToMJPEGReader) Read(p []byte) (n int, err error) {
-	if m.currentFile == nil {
-		m.currentFile, err = m.dir.Open(m.files[m.offset])
-		if err != nil {
-			return 0, err
-		}
-
-		m.buf = bufio.NewReader(m.currentFile)
-	}
-
-	n, err = m.buf.Read(p)
-	if err == io.EOF {
-		m.currentFile.Close()
-		if m.offset == len(m.files)-1 {
-			return n, err
-		}
-
-		m.offset++
-		m.currentFile = nil
-		return n, nil
-	}
-
-	return n, err
-}
-
-func (m *jpegToMJPEGReader) Close() error {
-	if m.currentFile != nil {
-		return m.currentFile.Close()
-	}
-
-	return nil
-}
+const FPS = 60
 
 func ffmpegFromJPGToFLV(ctx context.Context, r io.Reader, w io.Writer) error {
 	cmd := exec.CommandContext(ctx, "ffmpeg",
-		"-f", "mjpeg",
-		"-i", "pipe:0",
-		"-r", "60",
-		"-c:v", "libx264",
-		"-f", "flv",
-		"pipe:1",
+		"-f", "mjpeg", // input format
+		"-i", "pipe:0", // input from stdin
+		"-r", fmt.Sprintf("%d", FPS), // framerate
+		"-an",             // no audio
+		"-c:v", "libx264", // h264
+		"-preset", "ultrafast", // needed for low latency
+		"-pix_fmt", "yuv420p", // needed for html5 video
+		"-g", fmt.Sprintf("%d", FPS), // keyframe every FPS frames
+		"-f", "flv", // output format
+		"pipe:1", // output to stdout
 	)
-	buf := bytes.Buffer{}
+	buf := &bytes.Buffer{}
+
 	cmd.Stdin = r
-	cmd.Stderr = &buf
+	cmd.Stderr = buf
 	cmd.Stdout = w
 
 	err := cmd.Run()
-	if err != nil {
+	if err != nil && ctx.Err() == nil {
 		return fmt.Errorf("ffmpeg error: %w, stderr: %s", err, buf.String())
 	}
 

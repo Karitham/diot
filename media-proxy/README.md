@@ -46,4 +46,4 @@ GET /video/arduino_id HTTP/1.1
 
 ## TODO
 
-- [ ] Add authentication
+- [ ] Authentication for publishing

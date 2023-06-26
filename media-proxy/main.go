@@ -3,15 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
-	"io"
-	"io/fs"
 	"net/http"
 	"os"
-	"sync"
 
 	"github.com/Karitham/iDIoT/api/httpd"
 	"github.com/Karitham/iDIoT/api/redis"
 	"github.com/Karitham/iDIoT/api/session"
+	"github.com/dgraph-io/badger/v4"
 	"github.com/go-chi/chi/v5"
 	"github.com/nareix/joy4/format"
 	"github.com/urfave/cli/v2"
@@ -22,24 +20,11 @@ func init() {
 	format.RegisterAll()
 }
 
-type writeFlusher struct {
-	httpflusher http.Flusher
-	io.Writer
-}
-
-func (wf writeFlusher) Flush() error {
-	wf.httpflusher.Flush()
-	return nil
-}
-
+var logLevel = &slog.LevelVar{}
 var log = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
-	Level: slog.LevelDebug,
+	Level:     logLevel,
+	AddSource: true,
 }))
-
-type PubQ struct {
-	mu    sync.Mutex
-	files map[string]fs.FS
-}
 
 func main() {
 	app := &cli.App{
@@ -73,6 +58,20 @@ func main() {
 				EnvVars: []string{"PORT"},
 				Value:   8089,
 			},
+
+			&cli.StringFlag{
+				Name:    "data-dir",
+				Usage:   "Directory to store data",
+				EnvVars: []string{"DATA_DIR"},
+				Value:   "data",
+			},
+
+			&cli.IntFlag{
+				Name:    "log-level",
+				Usage:   "Log level",
+				EnvVars: []string{"LOG_LEVEL"},
+				Value:   0,
+			},
 		},
 		Action: Main,
 	}
@@ -81,10 +80,14 @@ func main() {
 }
 
 func Main(c *cli.Context) error {
-	pq := &PubQ{
-		files: make(map[string]fs.FS),
-		mu:    sync.Mutex{},
+	logLevel.Set(slog.Level(c.Int("log-level")))
+	opts := badger.DefaultOptions(c.String("data-dir"))
+	opts.Logger = nil
+	b, err := badger.Open(opts)
+	if err != nil {
+		return err
 	}
+	pq := NewPubQ(b)
 
 	rd, err := redis.New(c.StringSlice("redis-addr"), c.String("redis-user"), c.String("redis-pass"))
 	if err != nil {
