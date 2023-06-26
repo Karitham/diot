@@ -6,12 +6,11 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/Karitham/iDIoT/api/alerts"
 	"github.com/Karitham/iDIoT/api/httpd"
 	"github.com/Karitham/iDIoT/api/httpd/api"
+	"github.com/Karitham/iDIoT/api/redis"
 	"github.com/Karitham/iDIoT/api/store"
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/cors"
 	"github.com/go-chi/render"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/exp/slog"
@@ -74,39 +73,30 @@ func HTTPD(c *cli.Context) error {
 	port := c.Int("port")
 	cassIPs := c.StringSlice("cass")
 
-	dbstore := store.New(context.Background(), cassIPs...)
-	defer dbstore.Close()
+	scylla := store.New(context.Background(), cassIPs...)
+	defer scylla.Close()
 
-	alertStore, err := alerts.NewStore(c.StringSlice("redis-addr"), c.String("redis-user"), c.String("redis-pass"))
+	rd, err := redis.New(c.StringSlice("redis-addr"), c.String("redis-user"), c.String("redis-pass"))
 	if err != nil {
 		return err
 	}
 
-	defer alertStore.Close()
-	sub := alerts.NewFan[store.SensorReading]()
+	defer rd.Close()
+	sub := redis.NewFan[store.SensorReading]()
 
 	// default db subscriber
-	sub.Subscribe("db", context.Background(), dbstore.ReadingsSubscriber)
+	sub.Subscribe("db", context.Background(), scylla.ReadingsSubscriber)
 	go func() {
-		err := alertStore.ReadingsSub(context.Background(), sub)
+		err := rd.ReadingsSub(context.Background(), sub)
 		if err != nil {
 			log.Error("main", "error", err)
 		}
 	}()
+
 	// TODO(@Karitham): add alerts subscriber
-
-	httpdApi := httpd.New(dbstore, sub)
-
-	ch := cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowCredentials: true,
-		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
-		MaxAge:           300,
-	})
+	httpdApi := httpd.New(scylla, rd, sub)
 
 	r := chi.NewRouter()
-	r.Use(ch.Handler)
 	r.Use(httpd.Log(slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{})).With("pkg", "httpd")))
 	r.Get("/health", func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusOK)

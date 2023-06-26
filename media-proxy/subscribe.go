@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os/exec"
 
+	"github.com/Karitham/iDIoT/api/session"
 	"github.com/go-chi/chi/v5"
 	"github.com/nareix/joy4/av"
 	"github.com/nareix/joy4/av/avutil"
@@ -17,10 +18,17 @@ import (
 )
 
 func SubscribeVideoHandler(
-	validToken func(token string) bool,
+	auth func(ctx context.Context, token string, has ...session.Permission) bool,
 	pq *PubQ,
 ) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
+		channel := chi.URLParam(r, "channel")
+		key := r.URL.Query().Get("api-key")
+		if !auth(r.Context(), key, session.PermSensorRead.Customize(channel)) {
+			w.WriteHeader(401)
+			return
+		}
+
 		w.Header().Set("Content-Type", "video/x-flv")
 		w.Header().Set("Transfer-Encoding", "chunked")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -29,9 +37,9 @@ func SubscribeVideoHandler(
 		flusher := w.(http.Flusher)
 		flusher.Flush()
 
-		chann, ok := pq.files[chi.URLParam(r, "channel")]
+		chann, ok := pq.files[channel]
 		if !ok {
-			log.Error("channel not found", "channel", chi.URLParam(r, "channel"))
+			log.Error("channel not found", "channel", channel)
 			return
 		}
 

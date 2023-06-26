@@ -1,4 +1,4 @@
-package alerts
+package redis
 
 import (
 	"context"

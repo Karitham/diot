@@ -30,7 +30,7 @@ func (s Service) AuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
-		sess, err := s.store.GetSession(r.Context(), sessID)
+		sess, err := s.sessionStore.GetSession(r.Context(), sessID)
 		if err != nil {
 			WError(w, r, err, 401, "Unauthorized, session not found")
 			return
@@ -93,7 +93,7 @@ func (s Service) AuthLogin(w http.ResponseWriter, r *http.Request) *api.Response
 
 	expire := time.Hour * 24
 
-	id, err := s.store.NewSession(r.Context(), ulid.MustParse(u.ID), u.Permissions, expire)
+	id, err := s.sessionStore.NewSession(r.Context(), ulid.MustParse(u.ID), u.Permissions, expire)
 	if err != nil {
 		return WError(w, r, err, 500, err.Error())
 	}
@@ -110,7 +110,7 @@ func (s Service) AuthLogin(w http.ResponseWriter, r *http.Request) *api.Response
 // Logout
 // (POST /auth/logout)
 func (s Service) AuthLogout(w http.ResponseWriter, r *http.Request) *api.Response {
-	err := s.store.DeleteSession(r.Context(), session.FromContext(r.Context()).ID)
+	err := s.sessionStore.DeleteSession(r.Context(), session.FromContext(r.Context()).ID)
 	if err != nil {
 		return WError(w, r, err, 500, err.Error())
 	}

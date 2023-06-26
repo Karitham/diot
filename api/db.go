@@ -9,6 +9,7 @@ import (
 	"text/tabwriter"
 	"time"
 
+	"github.com/Karitham/iDIoT/api/redis"
 	"github.com/Karitham/iDIoT/api/session"
 	"github.com/Karitham/iDIoT/api/store"
 	"github.com/SherClockHolmes/webpush-go"
@@ -117,10 +118,13 @@ func DBSessions() *cli.Command {
 				Usage:   "List sessions",
 				Aliases: []string{"ls"},
 				Action: func(c *cli.Context) error {
-					s := store.New(c.Context, c.StringSlice("cass")...)
-					defer s.Close()
+					rs, err := redis.New(c.StringSlice("redis-addr"), c.String("redis-user"), c.String("redis-pass"))
+					if err != nil {
+						return err
+					}
+					defer rs.Close()
 
-					sessions, err := s.ListSessions(c.Context)
+					sessions, err := rs.ListSessions(c.Context)
 					if err != nil {
 						return err
 					}
@@ -138,15 +142,18 @@ func DBSessions() *cli.Command {
 				Name:  "revoke",
 				Usage: "Revoke a session",
 				Action: func(c *cli.Context) error {
-					s := store.New(c.Context, c.StringSlice("cass")...)
-					defer s.Close()
+					rs, err := redis.New(c.StringSlice("redis-addr"), c.String("redis-user"), c.String("redis-pass"))
+					if err != nil {
+						return err
+					}
+					defer rs.Close()
 
 					id, err := session.Parse([]byte(c.Args().First()))
 					if err != nil {
 						return err
 					}
 
-					err = s.DeleteSession(c.Context, id)
+					err = rs.DeleteSession(c.Context, id)
 					if err != nil {
 						return err
 					}
@@ -175,7 +182,13 @@ func DBSessions() *cli.Command {
 						return err
 					}
 
-					sess, err := s.NewSession(c.Context, uid, u.Permissions, time.Hour) // short lived for testing
+					rs, err := redis.New(c.StringSlice("redis-addr"), c.String("redis-user"), c.String("redis-pass"))
+					if err != nil {
+						return err
+					}
+					defer rs.Close()
+
+					sess, err := rs.NewSession(c.Context, uid, u.Permissions, time.Hour) // short lived for testing
 					if err != nil {
 						return err
 					}

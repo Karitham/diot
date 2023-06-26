@@ -1,4 +1,4 @@
-package alerts
+package redis
 
 import (
 	"context"
@@ -19,7 +19,7 @@ func TestAlertSubFan(t *testing.T) {
 		t.Skip("skipping test; $REDIS_ADDR not set")
 	}
 
-	s, err := NewStore(
+	s, err := New(
 		[]string{os.Getenv("REDIS_ADDR")},
 		os.Getenv("REDIS_USER"),
 		os.Getenv("REDIS_PASS"),

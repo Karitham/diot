@@ -7,7 +7,7 @@ import (
 
 	badrand "math/rand"
 
-	"github.com/Karitham/iDIoT/api/alerts"
+	"github.com/Karitham/iDIoT/api/redis"
 	"github.com/Karitham/iDIoT/api/store"
 	"github.com/urfave/cli/v2"
 )
@@ -23,7 +23,7 @@ func mockESP32() *cli.Command {
 			},
 		},
 		Action: func(c *cli.Context) error {
-			alertStore, err := alerts.NewStore(c.StringSlice("redis-addr"), c.String("redis-user"), c.String("redis-pass"))
+			alertStore, err := redis.New(c.StringSlice("redis-addr"), c.String("redis-user"), c.String("redis-pass"))
 			if err != nil {
 				return err
 			}
