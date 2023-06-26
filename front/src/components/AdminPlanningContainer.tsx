@@ -1,4 +1,4 @@
-import { FunctionComponent, memo, useCallback, useState} from 'react'
+import { FunctionComponent, memo, useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../styles/compo/AdminPlanningContainer.css'
 //import AdminFormContainer from './AdminFormContainer'
@@ -8,19 +8,37 @@ import '../styles/compo/AdminPlanningContainer.css'
 import MondayComponent from './WeekBar'
 //import SubmitButton from './SubmitButton'
 import AdminDayContainer from './AdminDayContainer'
+import AdminHoursContainer from './AdminHoursContainer'
 
 const AdminPlanningContainer: FunctionComponent = memo(() => {
   const navigate = useNavigate()
 
-  const [selectedDay, setSelectedDay] = useState("");
+  const [startDay, setStartDay] = useState('')
+  const [endDay, setEndDay] = useState('')
 
-  const handleDaySelection = (selectedDay: string) => {
-    setSelectedDay(selectedDay);
+  const handleStartDaySelection = (selectedDay: string) => {
+    setStartDay(selectedDay)
   }
 
-  const onEditContainerClick = useCallback(() => {
-    navigate('/adminpanel')
-  }, [navigate])
+  const handleEndDaySelection = (selectedDay: string) => {
+    setEndDay(selectedDay)
+  }
+
+  const onResetClick = () => {
+    setStartDay('') // Réinitialise la valeur du premier dropdown
+    setEndDay('') // Réinitialise la valeur du deuxième dropdown
+  }
+
+  const [startTime, setStartTime] = useState('')
+  const [endTime, setEndTime] = useState('')
+
+  const handleStartTimeChange = (value: string) => {
+    setStartTime(value)
+  }
+
+  const handleEndTimeChange = (value: string) => {
+    setEndTime(value)
+  }
 
   return (
     <div className="users">
@@ -50,77 +68,39 @@ const AdminPlanningContainer: FunctionComponent = memo(() => {
             <div className="planning-wrappers">
               <div className="planning9s">
                 <div className="input-parents">
-                  
-                  <div className="input6s">
-                    <div className="login3s">Start Day</div>
-                    
-                    <div className="input7s">
-                    <AdminDayContainer
-                      value={selectedDay}
-                      onInput={handleDaySelection}
-                      icon="path/to/icon"
-                    />
-                      <div className="magnifyingglass6s">
-                        <div className="calendars">
-                          <img className="vector-icon4s" alt="" src="/vector2.svg" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="input6s">
-                    <div className="login3s">End Day</div>
-                    <div className="logging-in-will3s">
-                      Logging in will help you access actions such as viewing video feeds. To log in, please enter your
-                      username below.
-                    </div>
-                    <div className="input7s">
-                      <div className="edits">Friday</div>
-                      <div className="magnifyingglass6s">
-                        <div className="calendars">
-                          <img className="vector-icon4s" alt="" src="/vector2.svg" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="button1s">
+                  <AdminDayContainer
+                    name="Start Day"
+                    value={startDay}
+                    onInput={handleStartDaySelection}
+                    icon="/calendar.svg"
+                  />
+                  <AdminDayContainer
+                    name="End Day"
+                    value={endDay}
+                    onInput={handleEndDaySelection}
+                    icon="/calendar.svg"
+                  />
+                  <div className="button1s" onClick={onResetClick}>
                     <img className="vector-icon6s" alt="" src="/vector10.svg" />
                   </div>
                 </div>
                 <div className="selects">
-                  <div className="login3s">Start</div>
-                  <div className="logging-in-will3s">
-                    Logging in will help you access actions such as viewing video feeds. To log in, please enter your
-                    username below.
-                  </div>
-                  <div className="input7s">
-                    <div className="edits">6h30</div>
-                    <div className="magnifyingglass6s">
-                      <div className="clocks">
-                        <img className="vector-icon4s" alt="" src="/vector4.svg" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="selects">
-                  <div className="login3s">End</div>
-                  <div className="logging-in-will3s">
-                    Logging in will help you access actions such as viewing video feeds. To log in, please enter your
-                    username below.
-                  </div>
-                  <div className="input7s">
-                    <div className="edits">19h00</div>
-                    <div className="magnifyingglass6s">
-                      <div className="clocks">
-                        <img className="vector-icon4s" alt="" src="/vector4.svg" />
-                      </div>
-                    </div>
-                  </div>
+                  <AdminHoursContainer
+                    name="Start"
+                    value={startTime}
+                    onInput={handleStartTimeChange}
+                  />
+                  <AdminHoursContainer
+                    name="End"
+                    value={startTime}
+                    onInput={handleStartTimeChange}
+                  />
                 </div>
               </div>
             </div>
-            <div className="new-users" onClick={onEditContainerClick}>
-              <b className="edits">New ruleset</b>
-            </div>
+            {/* <div className="new-users" onClick={onEditContainerClick}>
+  <b className="edits">New ruleset</b>
+</div> */}
           </div>
         </div>
       </div>

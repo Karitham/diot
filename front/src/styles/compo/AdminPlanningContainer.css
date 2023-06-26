@@ -124,6 +124,7 @@
 .input-parents {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 .button1s {
   border-radius: var(--br-5xs);
