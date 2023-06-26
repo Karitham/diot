@@ -6,20 +6,12 @@
   };
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
-      let
-        pkgs = import nixpkgs { inherit system; };
+      let pkgs = import nixpkgs { inherit system; };
 
       in rec {
         devShell = pkgs.mkShell {
           name = "iDIoT";
-          packages = with pkgs; [
-            go_1_20
-            nodejs
-            docker
-            earthly
-            redis
-          ];
+          packages = with pkgs; [ go_1_20 nodejs docker earthly redis ffmpeg_6-full ];
         };
       });
-
 }

@@ -11,7 +11,7 @@ require (
 	github.com/gocql/gocql v1.5.2
 	github.com/google/uuid v1.3.0
 	github.com/oklog/ulid v1.3.1
-	github.com/redis/rueidis v1.0.8
+	github.com/redis/rueidis v1.0.10
 	github.com/scylladb/gocqlx/v2 v2.8.0
 	github.com/sourcegraph/conc v0.3.0
 	github.com/urfave/cli/v2 v2.25.6
