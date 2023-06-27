@@ -1,9 +1,15 @@
 import { FunctionComponent } from 'react'
-import AlertContainer from '../components/AlertContainer'
+import AlertContainer, { AlertContainerProps } from '../components/AlertContainer'
 import '../styles/Notifications.css'
 import Navbar from '../components/Navbar'
 
-const alert = { dateTime: '/vector2.svg', dateTimeText: 'May 5th', timeText: '04:54' }
+const alert: AlertContainerProps = {
+  icon: '/vector2.svg',
+  time: new Date(),
+  sensor: 'Living Room Cam',
+  label: 'Alert',
+  alert: true
+}
 
 const alerts = [alert, alert, alert]
 
@@ -18,7 +24,7 @@ const Notifications: FunctionComponent = () => {
             <div className="alerts">
               {alerts.map(a => (
                 <div className="grow-container">
-                  <AlertContainer dateTime={a.dateTime} dateTimeText={a.dateTimeText} timeText={a.timeText} />
+                  <AlertContainer {...a} />
                 </div>
               ))}
             </div>

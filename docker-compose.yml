@@ -4,6 +4,7 @@ name: idiot
 volumes:
   scylla-data-0:
   redis-data:
+  media-proxy-data:
 
 services:
   scylla-0:
@@ -30,7 +31,7 @@ services:
     environment:
       CASS_ADDR: "scylla-0"
       REDIS_PASS: ${REDIS_PASS:?REDIS_PASS not set}
-      REDIS_ADDR: ${REDIS_ADDR:-redis}
+      REDIS_ADDR: ${REDIS_ADDR:-redis:6379}
       REDIS_USER: ${REDIS_USER:?REDIS_USER not set}
       PORT: 7667
     depends_on:
@@ -53,6 +54,8 @@ services:
     image: ghcr.io/karitham/idiot/media-proxy
     container_name: media-proxy
     restart: always
+    volumes:
+      - media-proxy-data:/data
     ports:
       - "8089:8089"
     environment:

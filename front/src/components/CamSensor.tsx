@@ -1,21 +1,20 @@
-import { FunctionComponent, memo, useCallback, useState } from 'react'
+import { FunctionComponent, useCallback, useState } from 'react'
 import '../styles/compo/CamSensor.css'
 import EditComponent from './EditComponent'
 import PortalPopup from './PortalPopup'
 
-export type CamSensorProps = {
-  sensorName: string
-  temperature: string
-  humidity: string
-  airQuality: string
+export type SensorProps = {
+  id: string
+  label: string
+  temperature?: string
+  humidity?: string
+  iaq?: string
   alert?: boolean
   disabled?: boolean
   fontColor?: string
 }
 
-const CamSensor: FunctionComponent<CamSensorProps> = memo(props => {
-  const { sensorName, temperature, humidity, airQuality, alert, disabled, fontColor } = props
-
+const CamSensor: FunctionComponent<SensorProps> = (props: SensorProps) => {
   const [isEditComponentOpen, setEditComponentOpen] = useState(false)
 
   const openEditComponent = useCallback(() => {
@@ -26,34 +25,42 @@ const CamSensor: FunctionComponent<CamSensorProps> = memo(props => {
     setEditComponentOpen(false)
   }, [])
 
-  const temperatureStyle = alert ? { color: fontColor || 'white' } : { color: fontColor || '#808080' }
-  const cStyle = alert ? { color: fontColor || 'white' } : { color: fontColor || 'black' }
+  const temperatureStyle = props.alert ? { color: props.fontColor || 'white' } : { color: props.fontColor || '#808080' }
+  const cStyle = props.alert ? { color: props.fontColor || 'white' } : { color: props.fontColor || 'black' }
+
+  const WrapInfo = (props: { data?: string; title: string }) => {
+    if (!props.data) {
+      return null
+    }
+
+    return (
+      <div className="c-parent">
+        <div className="c" style={cStyle}>
+          {props.data}
+        </div>
+        <div className="temperature" style={temperatureStyle}>
+          {props.title}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <>
-      <div className={`cam3 ${disabled ? 'disabled' : ''}`}>
+      <div className={`cam3 ${props.disabled ? 'disabled' : ''}`}>
         <div className="label">
           <div className="label-text">
             <img className="label-text-icon" alt="" src="/pause1.svg" />
-            <div className="label-title">{sensorName}</div>
+            <div className="label-title">{props.label}</div>
           </div>
           <div className="label-icons">
             <img className="label-icon" alt="" src="/pen3.svg" onClick={openEditComponent} />
           </div>
         </div>
-        <div className="frame-parent1" style={alert ? { backgroundColor: '#C33E22' } : {}}>
-          <div className="c-parent">
-            <div className="c" style={cStyle}>{temperature}</div>
-            <div className="temperature" style={temperatureStyle}>temperature</div>
-          </div>
-          <div className="c-parent">
-            <div className="c" style={cStyle}>{humidity}</div>
-            <div className="temperature" style={temperatureStyle}>humidity</div>
-          </div>
-          <div className="c-parent">
-            <div className="c" style={cStyle}>{airQuality}</div>
-            <div className="temperature" style={temperatureStyle}>air quality</div>
-          </div>
+        <div className="frame-parent1" style={props.alert ? { backgroundColor: '#C33E22' } : {}}>
+          <WrapInfo data={Number(props.temperature).toFixed(1)} title="temperature" />
+          <WrapInfo data={Number(props.humidity).toFixed(1)} title="humidity" />
+          <WrapInfo data={Number(props.iaq).toFixed(1)} title="air quality" />
         </div>
       </div>
       {isEditComponentOpen && (
@@ -63,6 +70,6 @@ const CamSensor: FunctionComponent<CamSensorProps> = memo(props => {
       )}
     </>
   )
-})
+}
 
 export default CamSensor

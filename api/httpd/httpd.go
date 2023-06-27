@@ -51,6 +51,7 @@ type SessionStore interface {
 
 type ReadingSubscriber interface {
 	Subscribe(k string, ctx context.Context, sub func(ctx context.Context, message redis.SensorReading))
+	Unsubscribe(k string)
 }
 
 type AlertStore interface {

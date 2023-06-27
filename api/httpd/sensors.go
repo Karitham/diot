@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"strconv"
+	"time"
 
 	badrand "math/rand"
 
@@ -79,18 +80,25 @@ func (s *Service) GetSensorsLive(w http.ResponseWriter, r *http.Request) *api.Re
 	if err != nil {
 		return WError(w, r, err, 400, err.Error())
 	}
-	randomID := badrand.Int63()
 
-	s.readings.Subscribe(strconv.FormatInt(randomID, 10), r.Context(), func(ctx context.Context, message redis.SensorReading) {
+	rid := strconv.FormatInt(badrand.Int63(), 10)
+	subctx, cancel := context.WithCancel(r.Context())
+	defer cancel()
+
+	s.readings.Subscribe(rid, subctx, func(ctx context.Context, message redis.SensorReading) {
+		subctx, subcancel := context.WithTimeout(ctx, 15*time.Second)
+		defer subcancel()
 		for _, data := range sensorToData(message) {
-			err := wsjson.Write(ctx, c, data)
+			err := wsjson.Write(subctx, c, data)
 			if err != nil {
-				log.DebugCtx(ctx, "error writing to websocket: %v", err)
+				cancel()
+				log.DebugCtx(ctx, "error writing to websocket", "error", err)
 				return
 			}
 		}
 	})
 
-	<-r.Context().Done()
+	<-subctx.Done()
+	s.readings.Unsubscribe(rid)
 	return nil
 }

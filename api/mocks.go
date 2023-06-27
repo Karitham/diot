@@ -48,7 +48,7 @@ func mockESP32() *cli.Command {
 
 						log.Info("mock", "message", string(jsonData))
 
-						time.Sleep(time.Second)
+						time.Sleep(time.Second * 5)
 					}
 				},
 			},

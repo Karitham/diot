@@ -1,94 +1,46 @@
-import { FunctionComponent } from 'react'
-import AlertContainer from '../components/AlertContainer'
+import { FunctionComponent, useEffect, useState } from 'react'
+import AlertContainer, { AlertContainerProps } from '../components/AlertContainer'
 import CamContainer, { CamContainerType } from '../components/CamContainer'
 import Navbar from '../components/Navbar'
 import '../styles/Dashboard.css'
 import { subscribePush } from '../api/sw'
-import { ws } from '../api/ws'
-import CamSensor from '../components/CamSensor'
-
-const alert = {
-  dateTime: '/vector3.svg',
-  dateTimeText: 'Fire Alert',
-  timeText: 'Just now ',
-  propBackgroundColor: '#c33e22'
-}
-const alerts = [alert]
-
-const camClick = { camName: 'Living Room', camURL: '/livingroom.png' }
-
-const cams: CamContainerType[] = [
-  { camName: 'Living Room', camURL: '/livingroom.png' },
-  { camName: 'The week Room', camURL: '/livingroom.png' },
-  { camName: 'DSAHJKDASD Room', camURL: '/livingroom.png', disabled: true },
-  { camName: 'DSAGKYDHYEDHQBLIDUHQWDU*OIQLNDQWIDULN Room', camURL: '/livingroom.png', alert: true },
-  { camName: 'The backroom', camURL: '/livingroom.png', disabled: true }
-]
+import { Sensor, mapSensorData, ws } from '../api/ws'
+import CamSensor, { SensorProps } from '../components/CamSensor'
+import { client } from '../api/client'
 
 const Dashboard: FunctionComponent = () => {
-  window.addEventListener('load', () => {
+  const [alert, _] = useState<undefined | AlertContainerProps>()
+  const [sensors, setSensors] = useState<Array<Sensor>>([])
+
+  // on WebSocket message, update sensors, force rerender
+  const onData = (data: MessageEvent) => {
+    const sensorData = mapSensorData(sensors, JSON.parse(data.data))
+    setSensors([...sensorData])
+  }
+
+  // onMount
+  useEffect(() => {
+    getSensors().then(setSensors)
+
     // TODO(@chp567): Make sure we're logged in
     subscribePush()
-    // ws is just a mock for now
-    ws()
-  })
 
-  const SensorData1 = {
-    sensorName: 'Capteur 1',
-    temperature: '11°C',
-    humidity: '90%',
-    airQuality: 'Bad',
-    alert: false, // Alerte activée/désactivé
-    disabled: false
-  }
-  const SensorData2 = {
-    sensorName: 'Capteur 1',
-    temperature: '25°C',
-    humidity: '50%',
-    airQuality: 'Good',
-    alert: true, // Alerte activée/désactivé
-    disabled: false
-  }
-
-  const SensorDatas = [SensorData1, SensorData2]
+    ws(onData)
+  }, [])
 
   return (
     <div className="dashboard2">
       <Navbar settingsText="" />
 
       <div className="contentwrapper1">
-        {alerts.map(a => (
-          <AlertContainer dateTime={a.dateTime} dateTimeText={a.dateTimeText} timeText={a.timeText} alert />
-        ))}
+        <Alert alert={alert} />
         <div className="camscontainer">
           <div className="titlecontainer1">
             <img className="pause-icon1" alt="" src="/pause1.svg" />
             <div className="titre2">Dashboard</div>
           </div>
           <div className="cam-grid-container">
-            <CamContainer {...camClick} alert fullwidth />
-            {cams.map(c => (
-              <CamContainer {...c} />
-            ))}
-            {SensorDatas.map(
-              (s: {
-                sensorName: string
-                temperature: string
-                humidity: string
-                airQuality: string
-                alert: boolean | undefined
-                disabled: boolean | undefined
-              }) => (
-                <CamSensor
-                  sensorName={s.sensorName}
-                  temperature={s.temperature}
-                  humidity={s.humidity}
-                  airQuality={s.airQuality}
-                  alert={s.alert}
-                  disabled={s.disabled}
-                />
-              )
-            )}
+            <SensorGrid sensors={sensors} />
           </div>
         </div>
       </div>
@@ -97,3 +49,34 @@ const Dashboard: FunctionComponent = () => {
 }
 
 export default Dashboard
+
+const getSensors = async (): Promise<Sensor[]> => {
+  const resp = await client.get('/sensors', {})
+  if (resp.error) {
+    console.error(resp.error)
+    return []
+  }
+
+  let out = [] as Sensor[]
+  for (const s of resp.data) {
+    out = mapSensorData(out, s)
+  }
+
+  return out
+}
+
+const Alert = (props: { alert?: AlertContainerProps }) => props.alert && <AlertContainer {...props.alert} />
+
+const SensorGrid = (props: { sensors: Sensor[] }) => {
+  if (!props.sensors) {
+    return <div>Loading...</div>
+  }
+
+  return props.sensors.map(s => {
+    if ('url' in s) {
+      return <CamContainer {...(s as CamContainerType)} key={s.id} />
+    } else {
+      return <CamSensor {...(s as SensorProps)} key={s.id} />
+    }
+  })
+}

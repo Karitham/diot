@@ -43,6 +43,10 @@ export interface paths {
      */
     get: operations["getSensorsLive"];
   };
+  "/alerts": {
+    /** Get all alerts */
+    get: operations["getAlerts"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -118,6 +122,14 @@ export interface components {
       /** @description The sensor data */
       data: components["schemas"]["SensorInfoHumidity"] | components["schemas"]["SensorInfoTemperature"] | components["schemas"]["SensorInfoCamera"] | components["schemas"]["SensorInfoIAQ"];
       id: string;
+    };
+    AlertHistoryEntry: {
+      id: string;
+      sensor_id: string;
+      kind: string;
+      value: string;
+      /** Format: date-time */
+      created_at: string;
     };
   };
   responses: never;
@@ -330,6 +342,23 @@ export interface operations {
       200: {
         content: {
           "application/json": (components["schemas"]["SensorData"])[];
+        };
+      };
+      /** @description unexpected error */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /** Get all alerts */
+  getAlerts: {
+    responses: {
+      /** @description ok */
+      200: {
+        content: {
+          "application/json": (components["schemas"]["AlertHistoryEntry"])[];
         };
       };
       /** @description unexpected error */

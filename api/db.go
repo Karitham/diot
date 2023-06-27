@@ -27,8 +27,49 @@ func DB() *cli.Command {
 			DBSessions(),
 			DBWebpush(),
 			DBMigrations(),
+			DBReadings(),
 		},
 	}
+}
+
+func DBReadings() *cli.Command {
+	return &cli.Command{
+		Name:  "readings",
+		Usage: "Readings commands",
+		Subcommands: []*cli.Command{
+			{
+				Name:    "list",
+				Usage:   "List readings",
+				Aliases: []string{"ls"},
+				Action: func(c *cli.Context) error {
+					s := scylla.New(context.Background(), c.StringSlice("cass")...)
+					defer s.Close()
+
+					sensors, err := s.GetSensors(c.Context)
+					if err != nil {
+						return err
+					}
+
+					tw := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
+					tw.Write([]byte("Device ID\tDate\tValue\n"))
+					for _, r := range sensors {
+						fmt.Fprintf(tw, "%s\t%s\t%v\n", r.IoTID, r.Readings[0].Time, r.Readings[0])
+					}
+
+					return tw.Flush()
+				},
+			},
+		},
+	}
+}
+
+func coalesce(args ...string) string {
+	for _, a := range args {
+		if a != "" {
+			return a
+		}
+	}
+	return ""
 }
 
 func DBMigrations() *cli.Command {

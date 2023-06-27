@@ -12,6 +12,7 @@ import (
 	"github.com/Karitham/iDIoT/api/scylla"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
+	"github.com/rs/cors"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/exp/slog"
 )
@@ -93,8 +94,8 @@ func HTTPD(c *cli.Context) error {
 		}
 	}()
 
-	subAlerts := redis.NewFan[redis.AlertEvent]()
 	// default db subscriber
+	subAlerts := redis.NewFan[redis.AlertEvent]()
 	subAlerts.Subscribe("db", context.Background(), scyllaStore.AlertsSubscriber)
 	go func() {
 		err := redisStore.AlertsSub(context.Background(), subAlerts)
@@ -103,10 +104,10 @@ func HTTPD(c *cli.Context) error {
 		}
 	}()
 
-	// TODO(@Karitham): add alerts subscriber
 	httpdApi := httpd.New(scyllaStore, redisStore, subSensor)
 
 	r := chi.NewRouter()
+	r.Use(cors.AllowAll().Handler)
 	r.Use(httpd.Log(slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{})).With("pkg", "httpd")))
 	r.Get("/health", func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusOK)

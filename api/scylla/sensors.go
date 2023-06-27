@@ -2,6 +2,7 @@ package scylla
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/Karitham/iDIoT/api/redis"
@@ -23,18 +24,18 @@ func (s *Store) GetSensors(ctx context.Context) ([]SensorInfoWithLastReading, er
 	readings := []models.SensorReadingsStruct{}
 
 	// query all pairs of iot_id and kind
-	err := s.conn.Query("SELECT DISTINCT iot_id FROM sensor_readings PER PARTITION LIMIT 1", nil).
+	err := s.conn.Query("SELECT * FROM sensor_readings PER PARTITION LIMIT 1", nil).
 		WithContext(ctx).
 		SelectRelease(&readings)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("selecting readings: %w", err)
 	}
 
 	// get all sensors
 	devices := []models.DevicesStruct{}
 	err = s.conn.Query(models.Devices.SelectAll()).WithContext(ctx).SelectRelease(&devices)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("selecting devices: %w", err)
 	}
 
 	// find readings with no sensor and insert them
@@ -57,7 +58,7 @@ func (s *Store) GetSensors(ctx context.Context) ([]SensorInfoWithLastReading, er
 				WithContext(ctx).
 				ExecRelease()
 			if err != nil {
-				return nil, err
+				return nil, fmt.Errorf("inserting device: %w", err)
 			}
 		}
 	}
@@ -79,9 +80,9 @@ func (s *Store) GetSensors(ctx context.Context) ([]SensorInfoWithLastReading, er
 			}
 
 			data := redis.SensorReading{}
-			err = json.Unmarshal(reading.Value, &data)
+			err := json.Unmarshal(reading.Value, &data)
 			if err != nil {
-				return nil, err
+				return nil, fmt.Errorf("unmarshalling reading: %w", err)
 			}
 
 			out[i].Readings = append(out[i].Readings, data)

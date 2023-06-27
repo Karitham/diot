@@ -4,8 +4,9 @@ import EditComponent from './EditComponent'
 import PortalPopup from './PortalPopup'
 
 export type CamContainerType = {
-  camName: string
-  camURL: string
+  id: string
+  label: string
+  url: string
 
   alert?: boolean
   disabled?: boolean
@@ -34,7 +35,7 @@ const CamContainer = (props: CamContainerType) => {
       <img
         className="video"
         alt=""
-        src={props.camURL}
+        src={props.url}
         style={{
           borderTop: props.alert ? '10px solid var(--colors-red)' : 'none'
         }}
@@ -47,7 +48,7 @@ const CamContainer = (props: CamContainerType) => {
         <div className="label">
           <div className="label-text">
             <img className="label-text-icon" alt="" src="/pause1.svg" />
-            <div className="label-title">{props.camName}</div>
+            <div className="label-title">{props.label}</div>
           </div>
           <div className="label-icons">
             <img className="label-icon" alt="" src="/pen3.svg" onClick={openEditComponent} />

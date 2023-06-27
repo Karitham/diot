@@ -1,15 +1,15 @@
-import { memo } from 'react'
 import '../styles/compo/AlertContainer.css'
 
-type AlertContainerType = {
-  dateTime?: string
-  dateTimeText?: string
-  timeText?: string
+export type AlertContainerProps = {
+  icon: string
+  label: string
+  time: Date
+  sensor: string
 
   alert?: boolean
 }
 
-const AlertContainer = memo((props: AlertContainerType) => {
+const AlertContainer = (props: AlertContainerProps) => {
   return (
     <div className="alert1">
       <div
@@ -18,19 +18,19 @@ const AlertContainer = memo((props: AlertContainerType) => {
           backgroundColor: props.alert ? 'var(--colors-red)' : 'var(--colors-button)'
         }}>
         <div className="sneak3">
-          <img className="vector-icon19" alt="" src={props.dateTime} />
+          <img className="vector-icon19" alt="" src={props.icon} />
         </div>
       </div>
       <div className="content">
-        <div className="may-5th">{props.dateTimeText}</div>
+        <div className="may-5th">{props.label}</div>
         <div className="properties1">
-          <div className="may-5th">{props.timeText}</div>
-          <div className="may-5th">12/05/22</div>
-          <div className="may-5th">Living Room</div>
+          <div className="may-5th">{props.time.getTime()}</div>
+          <div className="may-5th">{props.time.getDate()}</div>
+          <div className="may-5th">{props.sensor}</div>
         </div>
       </div>
     </div>
   )
-})
+}
 
 export default AlertContainer

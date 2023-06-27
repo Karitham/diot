@@ -7,9 +7,7 @@ import (
 	"golang.org/x/exp/slog"
 )
 
-var log = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
-	Level: slog.LevelError,
-})).With("pkg", "redis")
+var log = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{})).With("pkg", "redis")
 
 const (
 	iotPrefix = "iot:"

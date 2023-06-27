@@ -23,19 +23,19 @@ type subscriber[T any] struct {
 }
 
 func (sh *SubFanHandle[T]) OnEvent(message rueidis.PubSubMessage) {
-	sh.onEvent(message)
+	go sh.onEvent(message)
 }
 
 func (sh *SubFanHandle[T]) Subscribe(k string, ctx context.Context, sub func(ctx context.Context, message T)) {
 	sh.subMu.Lock()
-	defer sh.subMu.Unlock()
 	sh.subs[k] = subscriber[T]{ctx: ctx, sub: sub}
+	sh.subMu.Unlock()
 }
 
 func (sh *SubFanHandle[T]) Unsubscribe(k string) {
 	sh.subMu.Lock()
-	defer sh.subMu.Unlock()
 	delete(sh.subs, k)
+	sh.subMu.Unlock()
 }
 
 // NewFan allows to fan out messages to all registered callbacks
@@ -48,10 +48,11 @@ func NewFan[T any]() *SubFanHandle[T] {
 	sh.onEvent = func(message rueidis.PubSubMessage) {
 		var msg T
 		json.Unmarshal([]byte(message.Message), &msg)
-		sh.subMu.Lock()
 		for k, sub := range sh.subs {
 			if sub.ctx.Err() != nil {
+				sh.subMu.Lock()
 				delete(sh.subs, k)
+				sh.subMu.Unlock()
 				continue
 			}
 
@@ -59,7 +60,6 @@ func NewFan[T any]() *SubFanHandle[T] {
 				sub.sub(sub.ctx, msg)
 			})
 		}
-		sh.subMu.Unlock()
 		sh.wg.Wait()
 	}
 
