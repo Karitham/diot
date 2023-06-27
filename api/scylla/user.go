@@ -1,10 +1,10 @@
-package store
+package scylla
 
 import (
 	"context"
 
+	"github.com/Karitham/iDIoT/api/scylla/models"
 	"github.com/Karitham/iDIoT/api/session"
-	"github.com/Karitham/iDIoT/api/store/models"
 	"github.com/oklog/ulid"
 	"github.com/scylladb/gocqlx/v2/qb"
 )

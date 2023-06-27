@@ -8,7 +8,7 @@ import (
 	badrand "math/rand"
 
 	"github.com/Karitham/iDIoT/api/httpd/api"
-	"github.com/Karitham/iDIoT/api/store"
+	"github.com/Karitham/iDIoT/api/redis"
 	"nhooyr.io/websocket"
 	"nhooyr.io/websocket/wsjson"
 )
@@ -34,7 +34,7 @@ func (s *Service) GetSensors(w http.ResponseWriter, r *http.Request) *api.Respon
 	return api.GetSensorsJSON200Response(out)
 }
 
-func sensorToData(reading store.SensorReading) []api.SensorData {
+func sensorToData(reading redis.SensorReading) []api.SensorData {
 	out := []api.SensorData{}
 	if reading.Humidity != nil {
 		out = append(out, api.SensorData{
@@ -81,7 +81,7 @@ func (s *Service) GetSensorsLive(w http.ResponseWriter, r *http.Request) *api.Re
 	}
 	randomID := badrand.Int63()
 
-	s.readings.Subscribe(strconv.FormatInt(randomID, 10), r.Context(), func(ctx context.Context, message store.SensorReading) {
+	s.readings.Subscribe(strconv.FormatInt(randomID, 10), r.Context(), func(ctx context.Context, message redis.SensorReading) {
 		for _, data := range sensorToData(message) {
 			err := wsjson.Write(ctx, c, data)
 			if err != nil {

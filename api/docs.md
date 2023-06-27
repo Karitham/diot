@@ -119,7 +119,7 @@ curl -X POST /v1/users \
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth ( Scopes: users:create )
+bearerAuth ( Scopes: perm:users:create )
 </aside>
 
 ## getUsers
@@ -195,7 +195,7 @@ Status Code **200**
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth ( Scopes: users:read )
+bearerAuth ( Scopes: perm:users:read )
 </aside>
 
 ## getUserById
@@ -430,7 +430,7 @@ Status Code **200**
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth ( Scopes: perm perm:users:create perm:users:read perm:users:delete perm:sensors:read perm:sensors:update perm:sensors:delete perm:sensors:state:update )
+bearerAuth ( Scopes: perm perm:users:create perm:users:read perm:users:delete perm:alerts:read perm:sensors:read perm:sensors:update perm:sensors:delete perm:sensors:state:update )
 </aside>
 
 ## authLogout
@@ -741,6 +741,13 @@ Status Code **200**
 |»»» *anonymous*|[SensorInfoCamera](#schemasensorinfocamera)|false|none|none|
 |»»»» feed_uri|string|true|none|none|
 
+*xor*
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|»»» *anonymous*|[SensorInfoIAQ](#schemasensorinfoiaq)|false|none|none|
+|»»»» iaq|number|true|none|none|
+
 *continued*
 
 |Name|Type|Required|Restrictions|Description|
@@ -761,6 +768,7 @@ Status Code **200**
 |kind|camera|
 |kind|humidity|
 |kind|temperature|
+|kind|iaq|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -863,6 +871,13 @@ Status Code **200**
 |»» *anonymous*|[SensorInfoCamera](#schemasensorinfocamera)|false|none|none|
 |»»» feed_uri|string|true|none|none|
 
+*xor*
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|»» *anonymous*|[SensorInfoIAQ](#schemasensorinfoiaq)|false|none|none|
+|»»» iaq|number|true|none|none|
+
 *continued*
 
 |Name|Type|Required|Restrictions|Description|
@@ -876,10 +891,93 @@ Status Code **200**
 |kind|camera|
 |kind|humidity|
 |kind|temperature|
+|kind|iaq|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
 bearerAuth ( Scopes: perm:sensors:read )
+</aside>
+
+<h1 id="idiot-backend-api-alert">alert</h1>
+
+## getAlerts
+
+<a id="opIdgetAlerts"></a>
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'application/json',
+  'Authorization':'Bearer {access-token}'
+};
+
+fetch('/v1/alerts',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```shell
+# You can also use wget
+curl -X GET /v1/alerts \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+`GET /alerts`
+
+*Get all alerts*
+
+> Example responses
+
+> 200 Response
+
+```json
+[
+  {
+    "id": "string",
+    "sensor_id": "string",
+    "kind": "string",
+    "value": "string",
+    "created_at": "2019-08-24T14:15:22Z"
+  }
+]
+```
+
+<h3 id="getalerts-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|ok|Inline|
+|default|Default|unexpected error|[Error](#schemaerror)|
+
+<h3 id="getalerts-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[AlertHistoryEntry](#schemaalerthistoryentry)]|false|none|none|
+|» id|string|true|none|none|
+|» sensor_id|string|true|none|none|
+|» kind|string|true|none|none|
+|» value|string|true|none|none|
+|» created_at|string(date-time)|true|none|none|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth ( Scopes: perm:alerts:read )
 </aside>
 
 # Schemas
@@ -1061,6 +1159,26 @@ bearerAuth ( Scopes: perm:sensors:read )
 |---|---|---|---|---|
 |temperature|number|true|none|none|
 
+<h2 id="tocS_SensorInfoIAQ">SensorInfoIAQ</h2>
+<!-- backwards compatibility -->
+<a id="schemasensorinfoiaq"></a>
+<a id="schema_SensorInfoIAQ"></a>
+<a id="tocSsensorinfoiaq"></a>
+<a id="tocssensorinfoiaq"></a>
+
+```json
+{
+  "iaq": 23.4
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|iaq|number|true|none|none|
+
 <h2 id="tocS_SensorInfo">SensorInfo</h2>
 <!-- backwards compatibility -->
 <a id="schemasensorinfo"></a>
@@ -1131,6 +1249,12 @@ xor
 |---|---|---|---|---|
 |» *anonymous*|[SensorInfoCamera](#schemasensorinfocamera)|false|none|none|
 
+xor
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|[SensorInfoIAQ](#schemasensorinfoiaq)|false|none|none|
+
 continued
 
 |Name|Type|Required|Restrictions|Description|
@@ -1144,4 +1268,33 @@ continued
 |kind|camera|
 |kind|humidity|
 |kind|temperature|
+|kind|iaq|
+
+<h2 id="tocS_AlertHistoryEntry">AlertHistoryEntry</h2>
+<!-- backwards compatibility -->
+<a id="schemaalerthistoryentry"></a>
+<a id="schema_AlertHistoryEntry"></a>
+<a id="tocSalerthistoryentry"></a>
+<a id="tocsalerthistoryentry"></a>
+
+```json
+{
+  "id": "string",
+  "sensor_id": "string",
+  "kind": "string",
+  "value": "string",
+  "created_at": "2019-08-24T14:15:22Z"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|id|string|true|none|none|
+|sensor_id|string|true|none|none|
+|kind|string|true|none|none|
+|value|string|true|none|none|
+|created_at|string(date-time)|true|none|none|
 

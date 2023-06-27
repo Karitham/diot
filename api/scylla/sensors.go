@@ -1,30 +1,22 @@
-package store
+package scylla
 
 import (
 	"context"
 	"time"
 
-	"github.com/Karitham/iDIoT/api/store/models"
+	"github.com/Karitham/iDIoT/api/redis"
+	"github.com/Karitham/iDIoT/api/scylla/models"
 	"github.com/go-json-experiment/json"
 	"github.com/gocql/gocql"
 	"github.com/scylladb/gocqlx/v2/qb"
 )
-
-type SensorReading struct {
-	IoTID       string    `json:"id_iot"`
-	Time        time.Time `json:"time"`
-	Temperature *float32  `json:"temperature"`
-	Humidity    *float32  `json:"humidity"`
-	Iaq         *float32  `json:"iaq"`
-	Battery     *float32  `json:"battery"`
-}
 
 const ReadingTTL = time.Hour * 24 * 30 * 12 // 1 year~
 
 type SensorInfoWithLastReading struct {
 	IoTID    string
 	Name     string
-	Readings []SensorReading // readings for each kind
+	Readings []redis.SensorReading // readings for each kind
 }
 
 func (s *Store) GetSensors(ctx context.Context) ([]SensorInfoWithLastReading, error) {
@@ -86,7 +78,7 @@ func (s *Store) GetSensors(ctx context.Context) ([]SensorInfoWithLastReading, er
 				continue
 			}
 
-			data := SensorReading{}
+			data := redis.SensorReading{}
 			err = json.Unmarshal(reading.Value, &data)
 			if err != nil {
 				return nil, err
@@ -142,7 +134,7 @@ func (s *Store) GetSensor(ctx context.Context, id string) (SensorInfoWithLastRea
 
 	// assign all readings to their sensor
 	for _, reading := range readings {
-		data := SensorReading{}
+		data := redis.SensorReading{}
 		err = json.Unmarshal(reading.Value, &data)
 		if err != nil {
 			return SensorInfoWithLastReading{}, err
@@ -154,7 +146,7 @@ func (s *Store) GetSensor(ctx context.Context, id string) (SensorInfoWithLastRea
 	return out, nil
 }
 
-func (s *Store) CreateSensorReading(ctx context.Context, data SensorReading) error {
+func (s *Store) createSensorReading(ctx context.Context, data redis.SensorReading) error {
 	jsonData, err := json.Marshal(data)
 	if err != nil {
 		return err
@@ -170,8 +162,8 @@ func (s *Store) CreateSensorReading(ctx context.Context, data SensorReading) err
 		ExecRelease()
 }
 
-func (s *Store) ReadingsSubscriber(ctx context.Context, data SensorReading) {
-	err := s.CreateSensorReading(ctx, data)
+func (s *Store) ReadingsSubscriber(ctx context.Context, data redis.SensorReading) {
+	err := s.createSensorReading(ctx, data)
 	if err != nil {
 		log.ErrorCtx(ctx, err.Error())
 	}

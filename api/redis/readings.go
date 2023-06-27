@@ -3,16 +3,24 @@ package redis
 import (
 	"context"
 	"encoding/json"
-
-	"github.com/Karitham/iDIoT/api/store"
+	"time"
 )
+
+type SensorReading struct {
+	IoTID       string    `json:"id_iot"`
+	Time        time.Time `json:"time"`
+	Temperature *float32  `json:"temperature"`
+	Humidity    *float32  `json:"humidity"`
+	Iaq         *float32  `json:"iaq"`
+	Battery     *float32  `json:"battery"`
+}
 
 // ReadingsSub blocks and waits for messages on the sensor channel.
 func (s *Store) ReadingsSub(ctx context.Context, eh EventHandler) error {
 	return s.client.Receive(ctx, s.client.B().Subscribe().Channel(sensorChannel).Build(), eh.OnEvent)
 }
 
-func (s *Store) ReadingsPub(ctx context.Context, r store.SensorReading) error {
+func (s *Store) ReadingsPub(ctx context.Context, r SensorReading) error {
 	jsonData, err := json.Marshal(r)
 	if err != nil {
 		return err

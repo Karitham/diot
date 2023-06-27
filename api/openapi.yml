@@ -289,6 +289,31 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /alerts:
+    x-go-middlewares: [auth]
+    get:
+      tags:
+        - alert
+      security:
+        - bearerAuth: [perm:alerts:read]
+      summary: Get all alerts
+      operationId: getAlerts
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AlertHistoryEntry"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
 components:
   schemas:
     User:
@@ -429,7 +454,29 @@ components:
             - $ref: "#/components/schemas/SensorInfoIAQ"
         id:
           type: string
-
+  
+    AlertHistoryEntry:
+      required:
+        - id
+        - sensor_id
+        - kind
+        - value
+        - created_at
+      properties:
+        id:
+          type: string
+          x-go-type:
+            type: ULID
+            import: github.com/oklog/ulid
+        sensor_id:
+          type: string
+        kind:
+          type: string
+        value:
+          type: string
+        created_at:
+          type: string
+          format: date-time
 
   securitySchemes:
     bearerAuth:
@@ -446,6 +493,7 @@ security:
       - "perm:users:create"
       - "perm:users:read"
       - "perm:users:delete"
+      - "perm:alerts:read"
       - "perm:sensors:read"
       - "perm:sensors:update"
       - "perm:sensors:delete"

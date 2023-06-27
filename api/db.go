@@ -10,9 +10,8 @@ import (
 	"time"
 
 	"github.com/Karitham/iDIoT/api/redis"
+	"github.com/Karitham/iDIoT/api/scylla"
 	"github.com/Karitham/iDIoT/api/session"
-	"github.com/Karitham/iDIoT/api/store"
-	"github.com/SherClockHolmes/webpush-go"
 	"github.com/oklog/ulid"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/crypto/bcrypt"
@@ -27,6 +26,36 @@ func DB() *cli.Command {
 			DBKeys(),
 			DBSessions(),
 			DBWebpush(),
+			DBMigrations(),
+		},
+	}
+}
+
+func DBMigrations() *cli.Command {
+	return &cli.Command{
+		Name:  "migrations",
+		Usage: "Migrations commands",
+		Subcommands: []*cli.Command{
+			{
+				Name: "ls",
+				Action: func(c *cli.Context) error {
+					s := scylla.New(context.Background(), c.StringSlice("cass")...)
+					defer s.Close()
+
+					migs, err := s.GetMigrations(c.Context)
+					if err != nil {
+						return err
+					}
+
+					w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', 0)
+					fmt.Fprintln(w, "ID\tContent\t")
+					for _, m := range migs {
+						fmt.Fprintf(w, "%d\t%s\n", m.Id, strings.Join(strings.Fields(m.Content), " "))
+					}
+
+					return w.Flush()
+				},
+			},
 		},
 	}
 }
@@ -45,7 +74,7 @@ func DBUsers() *cli.Command {
 
 func DBUsersAdd() *cli.Command {
 	action := func(c *cli.Context) error {
-		s := store.New(context.Background(), c.StringSlice("cass")...)
+		s := scylla.New(context.Background(), c.StringSlice("cass")...)
 		defer s.Close()
 
 		perms := session.Permissions{}
@@ -58,7 +87,7 @@ func DBUsersAdd() *cli.Command {
 			return err
 		}
 
-		u := store.User{
+		u := scylla.User{
 			ID:          ulid.MustNew(ulid.Now(), rand.Reader).String(),
 			Name:        c.String("name"),
 			Email:       c.String("email"),
@@ -173,7 +202,7 @@ func DBSessions() *cli.Command {
 					},
 				},
 				Action: func(c *cli.Context) error {
-					s := store.New(c.Context, c.StringSlice("cass")...)
+					s := scylla.New(c.Context, c.StringSlice("cass")...)
 					defer s.Close()
 
 					uid := ulid.MustParse(c.String("user"))
@@ -223,7 +252,7 @@ func DBWebpush() *cli.Command {
 					},
 				},
 				Action: func(c *cli.Context) error {
-					s := store.New(c.Context, c.StringSlice("cass")...)
+					s := scylla.New(c.Context, c.StringSlice("cass")...)
 					defer s.Close()
 
 					uid := ulid.MustParse(c.String("user"))
@@ -237,33 +266,13 @@ func DBWebpush() *cli.Command {
 						return nil
 					}
 
-					for _, subscription := range subs.Subs {
-
-						resp, err := webpush.SendNotificationWithContext(c.Context,
-							[]byte(c.String("message")),
-							&webpush.Subscription{
-								Endpoint: subscription.Endpoint,
-								Keys: webpush.Keys{
-									Auth:   subscription.Keys.Auth,
-									P256dh: subscription.Keys.P256dh,
-								},
-							},
-							&webpush.Options{
-								Subscriber:      "mailto:webpush@webpush",
-								VAPIDPrivateKey: keys.PrivateKey,
-								VAPIDPublicKey:  keys.PublicKey,
-							})
+					for _, sub := range subs.Subs {
+						err = scylla.SendWebpush(c.Context, keys, sub, []byte(c.String("message")))
 						if err != nil {
-							continue
+							log.Error("Failed to send webpush", "err", err)
 						}
-						resp.Body.Close()
-						if resp.StatusCode > 400 {
-							log.Warn("Webpush failed", "status", resp.StatusCode, "endpoint", subscription.Endpoint)
-							continue
-						}
-
-						log.Info("Webpush message sent", "user", uid)
 					}
+
 					return nil
 				},
 			},
@@ -279,7 +288,7 @@ func DBWebpush() *cli.Command {
 					},
 				},
 				Action: func(c *cli.Context) error {
-					s := store.New(context.Background(), c.StringSlice("cass")...)
+					s := scylla.New(context.Background(), c.StringSlice("cass")...)
 					defer s.Close()
 
 					uid := ulid.MustParse(c.String("user"))
@@ -317,7 +326,7 @@ func DBKeys() *cli.Command {
 				Name:  "rotate",
 				Usage: "Rotate keys",
 				Action: func(c *cli.Context) error {
-					s := store.New(context.Background(), c.StringSlice("cass")...)
+					s := scylla.New(context.Background(), c.StringSlice("cass")...)
 					defer s.Close()
 
 					k, err := s.RotateWebpushKey(c.Context)
@@ -333,7 +342,7 @@ func DBKeys() *cli.Command {
 				Name:  "get",
 				Usage: "Get key",
 				Action: func(c *cli.Context) error {
-					s := store.New(context.Background(), c.StringSlice("cass")...)
+					s := scylla.New(context.Background(), c.StringSlice("cass")...)
 					defer s.Close()
 
 					k, err := s.GetWebpushKey(c.Context)
@@ -351,7 +360,7 @@ func DBKeys() *cli.Command {
 
 func DBUsersList() *cli.Command {
 	action := func(c *cli.Context) error {
-		s := store.New(context.Background(), c.StringSlice("cass")...)
+		s := scylla.New(context.Background(), c.StringSlice("cass")...)
 		defer s.Close()
 
 		users, err := s.GetUsers(c.Context)

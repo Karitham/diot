@@ -31,6 +31,15 @@ var (
 	SensorDataKindTemperature = SensorDataKind{"temperature"}
 )
 
+// AlertHistoryEntry defines model for AlertHistoryEntry.
+type AlertHistoryEntry struct {
+	CreatedAt time.Time `json:"created_at"`
+	ID        ulid.ULID `json:"id"`
+	Kind      string    `json:"kind"`
+	SensorID  string    `json:"sensor_id"`
+	Value     string    `json:"value"`
+}
+
 // Error defines model for Error.
 type Error struct {
 	// Error message
@@ -230,6 +239,26 @@ func (resp *Response) MarshalJSON() ([]byte, error) {
 // This is used to only marshal the body of the response.
 func (resp *Response) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return e.Encode(resp.body)
+}
+
+// GetAlertsJSON200Response is a constructor method for a GetAlerts response.
+// A *Response is returned with the configured status code and content type from the spec.
+func GetAlertsJSON200Response(body []AlertHistoryEntry) *Response {
+	return &Response{
+		body:        body,
+		Code:        200,
+		contentType: "application/json",
+	}
+}
+
+// GetAlertsJSONDefaultResponse is a constructor method for a GetAlerts response.
+// A *Response is returned with the configured status code and content type from the spec.
+func GetAlertsJSONDefaultResponse(body Error) *Response {
+	return &Response{
+		body:        body,
+		Code:        200,
+		contentType: "application/json",
+	}
 }
 
 // AuthLoginJSON200Response is a constructor method for a AuthLogin response.

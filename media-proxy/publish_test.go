@@ -14,7 +14,7 @@ import (
 )
 
 const framesFolder = "test-data/frames"
-const localAddr = "http://localhost:8089"
+const localAddr = "https://cdn.idiot.0xf.fr"
 const FPS = 60
 
 func TestPublish(t *testing.T) {
@@ -58,7 +58,7 @@ func TestPublish(t *testing.T) {
 		w.Close()
 	}()
 
-	req, _ := http.NewRequestWithContext(context.TODO(), "POST", localAddr+"/video/test", r)
+	req, _ := http.NewRequestWithContext(context.TODO(), "POST", localAddr+"/video/test2", r)
 	// set headers for streaming
 	req.Header.Set("Content-Type", mw.FormDataContentType())
 	req.Header.Set("Transfer-Encoding", "chunked")

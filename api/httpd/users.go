@@ -9,7 +9,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/Karitham/iDIoT/api/httpd/api"
-	"github.com/Karitham/iDIoT/api/store"
+	"github.com/Karitham/iDIoT/api/scylla"
 )
 
 // (POST /users)
@@ -32,7 +32,7 @@ func (s Service) CreateUser(w http.ResponseWriter, r *http.Request) *api.Respons
 	}
 
 	// hash password
-	su := store.User{
+	su := scylla.User{
 		Email:    u.Email,
 		Name:     u.Name,
 		ID:       ulid.MustNew(ulid.Now(), rand.Reader).String(),

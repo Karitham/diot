@@ -24,6 +24,9 @@ const (
 	PermSensorUpdate Permission = "perm:sensors:update"
 	PermSensorDelete Permission = "perm:sensors:delete"
 
+	// PermAlertsRead is the permission to read alerts
+	PermAlertsRead Permission = "perm:alerts:read"
+
 	// PermSensorsStateUpdate is the permission to update a sensor state
 	PermSensorsStateUpdate Permission = "perm:sensors:state:update"
 )

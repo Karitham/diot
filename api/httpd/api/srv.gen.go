@@ -16,6 +16,9 @@ import (
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+	// Get all alerts
+	// (GET /alerts)
+	GetAlerts(w http.ResponseWriter, r *http.Request) *Response
 	// Login
 	// (POST /auth/login)
 	AuthLogin(w http.ResponseWriter, r *http.Request) *Response
@@ -55,11 +58,34 @@ type ServerInterfaceWrapper struct {
 	ErrorHandlerFunc func(w http.ResponseWriter, r *http.Request, err error)
 }
 
+// GetAlerts operation middleware
+func (siw *ServerInterfaceWrapper) GetAlerts(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, BearerAuthScopes, []string{"perm:alerts:read"})
+
+	var handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		resp := siw.Handler.GetAlerts(w, r)
+		if resp != nil {
+			if resp.body != nil {
+				render.Render(w, r, resp)
+			} else {
+				w.WriteHeader(resp.Code)
+			}
+		}
+	})
+
+	// Operation specific middleware
+	handler = siw.Middlewares.Auth(handler).ServeHTTP
+
+	handler(w, r.WithContext(ctx))
+}
+
 // AuthLogin operation middleware
 func (siw *ServerInterfaceWrapper) AuthLogin(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	ctx = context.WithValue(ctx, BearerAuthScopes, []string{"perm", "perm:users:create", "perm:users:read", "perm:users:delete", "perm:sensors:read", "perm:sensors:update", "perm:sensors:delete", "perm:sensors:state:update"})
+	ctx = context.WithValue(ctx, BearerAuthScopes, []string{"perm", "perm:users:create", "perm:users:read", "perm:users:delete", "perm:alerts:read", "perm:sensors:read", "perm:sensors:update", "perm:sensors:delete", "perm:sensors:state:update"})
 
 	var handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		resp := siw.Handler.AuthLogin(w, r)
@@ -426,6 +452,7 @@ func Handler(si ServerInterface, opts ...ServerOption) http.Handler {
 	}
 
 	r.Route(options.BaseURL, func(r chi.Router) {
+		r.Get("/alerts", wrapper.GetAlerts)
 		r.Post("/auth/login", wrapper.AuthLogin)
 		r.Post("/auth/logout", wrapper.AuthLogout)
 		r.Get("/notifications/webpush", wrapper.GetWebpushKey)

@@ -63,7 +63,7 @@ func TestAlertSubFan(t *testing.T) {
 		subFan.Subscribe(fn(fmt.Sprintf("subscriber %d", i)))
 	}
 
-	go s.AlertSub(context.Background(), subFan)
+	go s.AlertsSub(context.Background(), subFan)
 
 	for i := 0; i <= sendCount; i++ {
 		buf := make([]byte, 32)

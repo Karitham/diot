@@ -7,8 +7,9 @@ import (
 	"time"
 
 	"github.com/Karitham/iDIoT/api/httpd/api"
+	"github.com/Karitham/iDIoT/api/redis"
+	"github.com/Karitham/iDIoT/api/scylla"
 	"github.com/Karitham/iDIoT/api/session"
-	"github.com/Karitham/iDIoT/api/store"
 	"github.com/go-chi/render"
 	"github.com/oklog/ulid"
 	"golang.org/x/exp/slog"
@@ -19,26 +20,27 @@ var log = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
 })).With("pkg", "httpd")
 
 type UserStore interface {
-	CreateUser(ctx context.Context, user store.User) error
-	GetUsers(ctx context.Context) ([]store.User, error)
-	GetUser(ctx context.Context, id ulid.ULID) (store.User, error)
-	GetUserByEmail(ctx context.Context, email string) (store.User, error)
+	CreateUser(ctx context.Context, user scylla.User) error
+	GetUsers(ctx context.Context) ([]scylla.User, error)
+	GetUser(ctx context.Context, id ulid.ULID) (scylla.User, error)
+	GetUserByEmail(ctx context.Context, email string) (scylla.User, error)
 	DeleteUser(ctx context.Context, id ulid.ULID) error
 }
 
 type WebpushStore interface {
-	GetWebpushKey(ctx context.Context) (store.KeyPair, error)
+	GetWebpushKey(ctx context.Context) (scylla.KeyPair, error)
 	RegisterWebpush(ctx context.Context, userID ulid.ULID, endpoint, auth, p256dh string) error
 }
 
 type SensorStore interface {
-	GetSensors(ctx context.Context) ([]store.SensorInfoWithLastReading, error)
+	GetSensors(ctx context.Context) ([]scylla.SensorInfoWithLastReading, error)
 }
 
 type DBStore interface {
 	UserStore
 	WebpushStore
 	SensorStore
+	AlertStore
 }
 
 type SessionStore interface {
@@ -48,7 +50,11 @@ type SessionStore interface {
 }
 
 type ReadingSubscriber interface {
-	Subscribe(k string, ctx context.Context, sub func(ctx context.Context, message store.SensorReading))
+	Subscribe(k string, ctx context.Context, sub func(ctx context.Context, message redis.SensorReading))
+}
+
+type AlertStore interface {
+	GetAlerts(ctx context.Context) ([]scylla.Alert, error)
 }
 
 func New(dbstore DBStore, sessionStore SessionStore, readings ReadingSubscriber) *Service {

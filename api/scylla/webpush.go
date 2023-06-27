@@ -1,13 +1,14 @@
-package store
+package scylla
 
 import (
 	"bytes"
 	"context"
+	"fmt"
 
 	"github.com/go-json-experiment/json"
 	"github.com/oklog/ulid"
 
-	"github.com/Karitham/iDIoT/api/store/models"
+	"github.com/Karitham/iDIoT/api/scylla/models"
 	"github.com/SherClockHolmes/webpush-go"
 	"github.com/gocql/gocql"
 	"github.com/scylladb/gocqlx/v2/qb"
@@ -122,4 +123,56 @@ func (s *Store) GetWebpushSubscriptions(ctx context.Context, userID ulid.ULID) (
 	}
 
 	return out, nil
+}
+
+func (s *Store) GetAllWebpushSubs(ctx context.Context) ([]WebpushSubscription, error) {
+
+	var subs []models.WebpushSubscriptionsStruct
+	err := s.conn.Query(models.WebpushSubscriptions.SelectAll()).WithContext(ctx).SelectRelease(&subs)
+	if err != nil {
+		return nil, err
+	}
+
+	out := []WebpushSubscription{}
+	for _, sub := range subs {
+		for _, s := range sub.Subscription {
+			var sub WebpushSubscription
+			err := json.Unmarshal(s, &sub)
+			if err != nil {
+				return nil, err
+			}
+
+			out = append(out, sub)
+		}
+	}
+
+	return out, nil
+
+}
+
+func SendWebpush(ctx context.Context, keypair KeyPair, wws WebpushSubscription, payload []byte) error {
+
+	resp, err := webpush.SendNotificationWithContext(ctx,
+		payload,
+		&webpush.Subscription{
+			Endpoint: wws.Endpoint,
+			Keys: webpush.Keys{
+				Auth:   wws.Keys.Auth,
+				P256dh: wws.Keys.P256dh,
+			},
+		},
+		&webpush.Options{
+			Subscriber:      "mailto:webpush@webpush",
+			VAPIDPrivateKey: keypair.PrivateKey,
+			VAPIDPublicKey:  keypair.PublicKey,
+		})
+	if err != nil {
+		return err
+	}
+	resp.Body.Close()
+	if resp.StatusCode > 400 {
+		return fmt.Errorf("webpush: %s", resp.Status)
+	}
+
+	return nil
 }

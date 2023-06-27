@@ -9,6 +9,21 @@ import (
 
 // Table models.
 var (
+	Alerts = table.New(table.Metadata{
+		Name: "alerts",
+		Columns: []string{
+			"alert_status",
+			"alert_type",
+			"alert_value",
+			"device_id",
+			"id",
+		},
+		PartKey: []string{
+			"id",
+		},
+		SortKey: []string{},
+	})
+
 	Devices = table.New(table.Metadata{
 		Name: "devices",
 		Columns: []string{
@@ -38,14 +53,13 @@ var (
 		Name: "migrations",
 		Columns: []string{
 			"content",
+			"id",
 			"time",
 		},
 		PartKey: []string{
-			"content",
+			"id",
 		},
-		SortKey: []string{
-			"time",
-		},
+		SortKey: []string{},
 	})
 
 	SensorReadings = table.New(table.Metadata{
@@ -122,6 +136,13 @@ var (
 	})
 )
 
+type AlertsStruct struct {
+	AlertStatus string
+	AlertType   string
+	AlertValue  string
+	DeviceId    string
+	Id          string
+}
 type DevicesStruct struct {
 	Id   string
 	Name string
@@ -133,6 +154,7 @@ type KeysStruct struct {
 }
 type MigrationsStruct struct {
 	Content string
+	Id      int32
 	Time    [16]byte
 }
 type SensorReadingsStruct struct {

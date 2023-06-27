@@ -9,7 +9,7 @@ import (
 	"github.com/Karitham/iDIoT/api/httpd"
 	"github.com/Karitham/iDIoT/api/httpd/api"
 	"github.com/Karitham/iDIoT/api/redis"
-	"github.com/Karitham/iDIoT/api/store"
+	"github.com/Karitham/iDIoT/api/scylla"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
 	"github.com/urfave/cli/v2"
@@ -73,28 +73,38 @@ func HTTPD(c *cli.Context) error {
 	port := c.Int("port")
 	cassIPs := c.StringSlice("cass")
 
-	scylla := store.New(context.Background(), cassIPs...)
-	defer scylla.Close()
+	scyllaStore := scylla.New(context.Background(), cassIPs...)
+	defer scyllaStore.Close()
 
-	rd, err := redis.New(c.StringSlice("redis-addr"), c.String("redis-user"), c.String("redis-pass"))
+	redisStore, err := redis.New(c.StringSlice("redis-addr"), c.String("redis-user"), c.String("redis-pass"))
 	if err != nil {
 		return err
 	}
 
-	defer rd.Close()
-	sub := redis.NewFan[store.SensorReading]()
+	defer redisStore.Close()
+	subSensor := redis.NewFan[redis.SensorReading]()
 
 	// default db subscriber
-	sub.Subscribe("db", context.Background(), scylla.ReadingsSubscriber)
+	subSensor.Subscribe("db", context.Background(), scyllaStore.ReadingsSubscriber)
 	go func() {
-		err := rd.ReadingsSub(context.Background(), sub)
+		err := redisStore.ReadingsSub(context.Background(), subSensor)
+		if err != nil {
+			log.Error("main", "error", err)
+		}
+	}()
+
+	subAlerts := redis.NewFan[redis.AlertEvent]()
+	// default db subscriber
+	subAlerts.Subscribe("db", context.Background(), scyllaStore.AlertsSubscriber)
+	go func() {
+		err := redisStore.AlertsSub(context.Background(), subAlerts)
 		if err != nil {
 			log.Error("main", "error", err)
 		}
 	}()
 
 	// TODO(@Karitham): add alerts subscriber
-	httpdApi := httpd.New(scylla, rd, sub)
+	httpdApi := httpd.New(scyllaStore, redisStore, subSensor)
 
 	r := chi.NewRouter()
 	r.Use(httpd.Log(slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{})).With("pkg", "httpd")))
