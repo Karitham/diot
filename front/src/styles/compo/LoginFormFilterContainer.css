@@ -43,6 +43,12 @@
   font-family: var(--title);
 }
 
+.inputs1 .error {
+  color: var(--colors-red);
+  font-size: var(--label-size);
+  font-family: var(--label);
+}
+
 .lessgo-we-on2 {
   border: none;
 }
