@@ -1,0 +1,30 @@
+.button6,
+.buttoncontainer6 {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.button6 {
+  border-radius: var(--br-5xs);
+  box-shadow: var(--sm);
+  border: 1px solid var(--colors-red);
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  padding: var(--padding-xs) var(--padding-13xl);
+  align-items: center;
+  justify-content: center;
+  mix-blend-mode: normal;
+}
+.buttoncontainer6 {
+  align-self: stretch;
+  align-items: center;
+  font-size: var(--label-size);
+  color: var(--text-textneg);
+  font-family: var(--title);
+}
+
+.button-save6 {
+  color: var(--colors-red);
+}

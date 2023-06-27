@@ -4,3 +4,5 @@ api/idiot
 .DS_Store
 __pycache__
 __pycache__*
+front/package-lock.json
+front/package-lock.json
