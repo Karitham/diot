@@ -21,35 +21,39 @@ class ProcessData:
             humidity = data.get('humidity')
             iaq = data.get('iaq')
             battery = data.get('battery')
+            timestamp = data.get('timestamp')
         except Exception as e:
             print("Erreur lors de l'extraction des valeurs à partir des données JSON :", str(e))
             
-        print(f"Received from {id_iot}: temperature: {temperature}, humidity: {humidity} and iaq: {iaq}")
+        print(f"Received from {id_iot}: temperature: {temperature}, humidity: {humidity} and iaq: {iaq} at {timestamp}")
             
-        fire_detector = FireDetection(id_iot, temperature)
-        flooding_detector = FloodingDetection(id_iot, humidity)
-        iaq_detector = IaqDetection(id_iot, iaq)
-        battery_detector = BatteryDetection(id_iot, battery)
-        
-        try:
-            fire_detector.check_fire()
-        except Exception as e:
-            print("Erreur lors de l'appel de la fonction check_fire dans la classe FireDetector", str(e))
-        
-        try:
-            flooding_detector.check_flooding()
-        except Exception as e:
-            print("Erreur lors de l'appel de la fonction check_flooding dans la classe FloodingDetector", str(e))
+        if id_iot is not None and temperature is not None:
+            fire_detector = FireDetection(id_iot, temperature)
+            try:
+                fire_detector.check_fire()
+            except Exception as e:
+                print("Erreur lors de l'appel de la fonction check_fire dans la classe FireDetector", str(e))
+                
+        if id_iot is not None and humidity is not None:
+            flooding_detector = FloodingDetection(id_iot, humidity)
+            try:
+                flooding_detector.check_flooding()
+            except Exception as e:
+                print("Erreur lors de l'appel de la fonction check_flooding dans la classe FloodingDetector", str(e))
             
-        try:
-            iaq_detector.check_iaq()
-        except Exception as e:
-            print("Erreur lors de l'appel de la fonction check_iaq dans la classe IaqDetector", str(e))
-        
-        try:
-            battery_detector.check_battery()
-        except Exception as e:
-            print("Erreur élors de l'appel de la fonction check_battery dans la classe BatteryDetector", str(e))
-              
+        if id_iot is not None and iaq is not None:
+            iaq_detector = IaqDetection(id_iot, iaq)
+            try:
+                iaq_detector.check_iaq()
+            except Exception as e:
+                print("Erreur lors de l'appel de la fonction check_iaq dans la classe IaqDetector", str(e))
+            
+        if id_iot is not None and battery is not None:
+            battery_detector = BatteryDetection(id_iot, battery)
+            try:
+                battery_detector.check_battery()
+            except Exception as e:
+                print("Erreur élors de l'appel de la fonction check_battery dans la classe BatteryDetector", str(e))
+                
     def process_data_camera(self, json_data):
         pass
