@@ -7,13 +7,13 @@ import SubmitButton from './SubmitButton'
 //import DeleteButton from './DeleteButton'
 import AccountClosed from './AccountClosed'
 //import MyAccount from './MyAccount'
-/*
+
 const account1 = {
   name: "Charles Perrard"
 }
 const account2 = {
   name: "Pierre-Louis Pery"
-}*/
+}
 
 const accounts = [account1, account2]
 

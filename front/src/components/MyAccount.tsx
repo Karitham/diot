@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import AdminFormContainer from './AdminFormContainer';
 import MultiSelectDropdown from './MultiSelectDropdown';
 import DeleteButton from './DeleteButton';

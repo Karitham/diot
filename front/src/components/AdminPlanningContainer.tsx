@@ -1,5 +1,5 @@
-import { FunctionComponent, memo, useCallback, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { FunctionComponent, memo, useState } from 'react'
+//import { useNavigate } from 'react-router-dom'
 import '../styles/compo/AdminPlanningContainer.css'
 //import AdminFormContainer from './AdminFormContainer'
 //import MultiSelectDropdown from './MultiSelectDropdown'
@@ -11,7 +11,6 @@ import AdminDayContainer from './AdminDayContainer'
 import AdminHoursContainer from './AdminHoursContainer'
 
 const AdminPlanningContainer: FunctionComponent = memo(() => {
-  const navigate = useNavigate()
 
   const [startDay, setStartDay] = useState('')
   const [endDay, setEndDay] = useState('')
@@ -92,8 +91,8 @@ const AdminPlanningContainer: FunctionComponent = memo(() => {
                   />
                   <AdminHoursContainer
                     name="End"
-                    value={startTime}
-                    onInput={handleStartTimeChange}
+                    value={endTime}
+                    onInput={handleEndTimeChange}
                   />
                 </div>
               </div>

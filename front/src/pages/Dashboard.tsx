@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar'
 import '../styles/Dashboard.css'
 import { subscribePush } from '../api/sw'
 import { ws } from '../api/ws'
+import CamSensor from '../components/CamSensor'
 
 const alert = {
   dateTime: '/vector3.svg',
@@ -15,7 +16,6 @@ const alert = {
 const alerts = [alert]
 
 const camClick = { camName: 'Living Room', camURL: '/livingroom.png' }
-
 
 const cams: CamContainerType[] = [
   { camName: 'Living Room', camURL: '/livingroom.png' },
@@ -32,6 +32,25 @@ const Dashboard: FunctionComponent = () => {
     // ws is just a mock for now
     ws()
   })
+
+  const SensorData1 = {
+    sensorName: 'Capteur 1',
+    temperature: '11°C',
+    humidity: '90%',
+    airQuality: 'Bad',
+    alert: false, // Alerte activée/désactivé
+    disabled: false
+  }
+  const SensorData2 = {
+    sensorName: 'Capteur 1',
+    temperature: '25°C',
+    humidity: '50%',
+    airQuality: 'Good',
+    alert: true, // Alerte activée/désactivé
+    disabled: false
+  }
+
+  const SensorDatas = [SensorData1, SensorData2]
 
   return (
     <div className="dashboard2">
@@ -51,6 +70,25 @@ const Dashboard: FunctionComponent = () => {
             {cams.map(c => (
               <CamContainer {...c} />
             ))}
+            {SensorDatas.map(
+              (s: {
+                sensorName: string
+                temperature: string
+                humidity: string
+                airQuality: string
+                alert: boolean | undefined
+                disabled: boolean | undefined
+              }) => (
+                <CamSensor
+                  sensorName={s.sensorName}
+                  temperature={s.temperature}
+                  humidity={s.humidity}
+                  airQuality={s.airQuality}
+                  alert={s.alert}
+                  disabled={s.disabled}
+                />
+              )
+            )}
           </div>
         </div>
       </div>
