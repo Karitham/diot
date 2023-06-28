@@ -48,25 +48,31 @@ const UserAccount: FunctionComponent<UserAccountType> = memo(({ onAccountSave })
             title="Name"
             type="text"
             placeholder="René Dupuis"
-            icon="/pen2.svg"
+            icon={<img src="/pen2.svg" />}
             value={name}
-            onInput={setName}
+            onInput={(e) => {
+              setName(e.currentTarget.value)
+            }}
           />
           <AdminFormContainer
             title="Email"
             type="email"
             placeholder="rene.dupuis@gmail.com"
-            icon="/vector2.svg"
+            icon={<img src="/vector2.svg" />}
             value={email}
-            onInput={setEmail}
+            onInput={(e) => {
+              setName(e.currentTarget.value)
+            }}
           />
           <AdminFormContainer
             title="Password"
             type="password"
             placeholder="*****************"
-            icon="/password.svg"
+            icon={<img src="/password.svg" />}
             value={password}
-            onInput={setPassword}
+            onInput={(e) => {
+              setName(e.currentTarget.value)
+            }}
           />
           <SubmitButton onClick={onSaveContainerClick} text="Save" />
         </div>

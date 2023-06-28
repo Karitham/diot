@@ -37,17 +37,17 @@ const AdminPanelContainer: FunctionComponent<AdminPanelContainerProps> = memo(({
           <div className="charles-perrard">Me</div>
           <div className="fields">
             <div className="select">
-              <AdminFormContainer title="Name" type="text" placeholder="René Dupuis" icon="/vector2.svg" />
+              <AdminFormContainer title="Name" type="text" placeholder="René Dupuis" icon={<img src="/vector2.svg" />} />
             </div>
             <div className="select">
-              <AdminFormContainer title="Email" type="email" placeholder="rene.dupuis@gmail.com" icon="/pen2.svg" />
+              <AdminFormContainer title="Email" type="email" placeholder="rene.dupuis@gmail.com" icon={<img src="/pen2.svg" />} />
             </div>
             <div className="select">
               <AdminFormContainer
                 title="Password"
                 type="password"
                 placeholder="*****************"
-                icon="/password.svg"
+                icon={<img src="/password.svg" />}
               />
             </div>
             <div className="select">
