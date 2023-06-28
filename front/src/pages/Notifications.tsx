@@ -8,7 +8,6 @@ const Notifications: FunctionComponent = () => {
   const [alerts, setAlerts] = useState<AlertContainerProps[]>([])
   useEffect(() => {
     getNotifications().then(setAlerts)
-    console.log(alerts)
   }, [])
 
   return (

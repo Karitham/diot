@@ -34,7 +34,7 @@ const EditComponent: FunctionComponent<EditModalProps> = memo((props: EditModalP
       </div>
       <div className="properties">
         <div className="input6">
-          <AdminFormContainer onInput={setContent} value={props.content} />
+          <AdminFormContainer onInput={e => setContent(e.currentTarget.value)} />
         </div>
       </div>
       <SubmitButton onClick={onSaveContainerClick} text="Save" />

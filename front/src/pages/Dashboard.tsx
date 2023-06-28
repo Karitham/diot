@@ -1,16 +1,15 @@
 import { FunctionComponent, useEffect, useState } from 'react'
 import AlertContainer, { AlertContainerProps } from '../components/AlertContainer'
-import CamContainer, { CamContainerType } from '../components/CamContainer'
+import CamContainer, { Cam, CamContainerType as CamProps, Sensor, SensorProps } from '../components/CamContainer'
 import Navbar from '../components/Navbar'
 import '../styles/Dashboard.css'
 import { subscribePush } from '../api/sw'
-import { Sensor, mapSensorData, ws } from '../api/ws'
-import CamSensor, { SensorProps } from '../components/CamSensor'
+import { Sensor as SensorT, mapSensorData, ws } from '../api/ws'
 import { client } from '../api/client'
 
 const Dashboard: FunctionComponent = () => {
   const [alert, _] = useState<undefined | AlertContainerProps>()
-  const [sensors, setSensors] = useState<Array<Sensor>>([])
+  const [sensors, setSensors] = useState<Array<SensorT>>([])
 
   // on WebSocket message, update sensors, force rerender
   const onData = (data: MessageEvent) => {
@@ -50,14 +49,14 @@ const Dashboard: FunctionComponent = () => {
 
 export default Dashboard
 
-const getSensors = async (): Promise<Sensor[]> => {
+const getSensors = async (): Promise<SensorT[]> => {
   const resp = await client.get('/sensors', {})
   if (resp.error) {
     console.error(resp.error)
     return []
   }
 
-  let out = [] as Sensor[]
+  let out = [] as SensorT[]
   for (const s of resp.data) {
     out = mapSensorData(out, s)
   }
@@ -67,16 +66,24 @@ const getSensors = async (): Promise<Sensor[]> => {
 
 const Alert = (props: { alert?: AlertContainerProps }) => props.alert && <AlertContainer {...props.alert} />
 
-const SensorGrid = (props: { sensors: Sensor[] }) => {
+const SensorGrid = (props: { sensors: SensorT[] }) => {
   if (!props.sensors) {
     return <div>Loading...</div>
   }
 
   return props.sensors.map(s => {
     if ('url' in s) {
-      return <CamContainer {...(s as CamContainerType)} key={s.id} />
+      return (
+        <CamContainer key={s.id} {...(s as CamProps)}>
+          <Cam {...(s as CamProps)} />
+        </CamContainer>
+      )
     } else {
-      return <CamSensor {...(s as SensorProps)} key={s.id} />
+      return (
+        <CamContainer key={s.id} {...(s as SensorProps)}>
+          <Sensor {...(s as SensorProps)} />
+        </CamContainer>
+      )
     }
   })
 }
