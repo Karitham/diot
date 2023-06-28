@@ -33,8 +33,7 @@ func main() {
 				Name:    "redis-addr",
 				Usage:   "Redis address",
 				EnvVars: []string{"REDIS_ADDR"},
-
-				Value: cli.NewStringSlice("localhost:6379"),
+				Value:   cli.NewStringSlice("localhost:6379"),
 			},
 
 			&cli.StringFlag{
