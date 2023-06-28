@@ -8,16 +8,13 @@ import (
 )
 
 type AlertEvent struct {
-	IDIot string `json:"id_iot"`
-	// fire or flooding or bad air quality or battery low or intrusion
-	Type string `json:"type"`
-	// no value for intrusion and incident field = temperature or humidity or air quality or battery
-	IncidentField string `json:"incident field"`
-
-	// "2023-06-18 10:20:05"
-	Time time.Time `json:"time"`
-	// no value for intrusion or battery
-	Criticity string `json:"criticity"`
+	ID          string    `json:"id"`
+	Type        string    `json:"type"`
+	Temperature *float32  `json:"temperature,omitempty"`
+	Humidity    *float32  `json:"humidity,omitempty"`
+	AirQuality  *float32  `json:"air quality,omitempty"`
+	Timestamp   time.Time `json:"timestamp"`
+	Criticity   int       `json:"criticity"`
 }
 
 // AlertsSub blocks and waits for messages on the alerts channel.

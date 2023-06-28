@@ -28,7 +28,7 @@ const CamSensor: FunctionComponent<SensorProps> = (props: SensorProps) => {
   const temperatureStyle = props.alert ? { color: props.fontColor || 'white' } : { color: props.fontColor || '#808080' }
   const cStyle = props.alert ? { color: props.fontColor || 'white' } : { color: props.fontColor || 'black' }
 
-  const WrapInfo = (props: { data?: string; title: string }) => {
+  const WrapInfo = (props: { data?: string; title: string; unit?: string }) => {
     if (!props.data) {
       return null
     }
@@ -36,7 +36,7 @@ const CamSensor: FunctionComponent<SensorProps> = (props: SensorProps) => {
     return (
       <div className="c-parent">
         <div className="c" style={cStyle}>
-          {props.data}
+          {props.data} {props.unit && <span className="unit">{props.unit}</span>}
         </div>
         <div className="temperature" style={temperatureStyle}>
           {props.title}
@@ -58,7 +58,7 @@ const CamSensor: FunctionComponent<SensorProps> = (props: SensorProps) => {
           </div>
         </div>
         <div className="frame-parent1" style={props.alert ? { backgroundColor: '#C33E22' } : {}}>
-          <WrapInfo data={Number(props.temperature).toFixed(1)} title="temperature" />
+          <WrapInfo data={Number(props.temperature).toFixed(1)} title="temperature" unit="C°" />
           <WrapInfo data={Number(props.humidity).toFixed(1)} title="humidity" />
           <WrapInfo data={Number(props.iaq).toFixed(1)} title="air quality" />
         </div>

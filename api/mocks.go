@@ -60,13 +60,9 @@ func mockESP32() *cli.Command {
 						Name:  "device_id",
 						Value: "esp32_snowflake",
 					},
-					&cli.StringFlag{
+					&cli.IntFlag{
 						Name:  "criticity",
-						Value: "2",
-					},
-					&cli.StringFlag{
-						Name:  "message",
-						Value: "mock alert",
+						Value: 2,
 					},
 					&cli.StringFlag{
 						Name:  "type",
@@ -82,11 +78,14 @@ func mockESP32() *cli.Command {
 					defer alertStore.Close()
 
 					return alertStore.AlertsPub(context.Background(), redis.AlertEvent{
-						IDIot:         c.String("device_id"),
-						Type:          c.String("type"),
-						IncidentField: c.String("message"),
-						Criticity:     c.String("criticity"),
-						Time:          time.Now(),
+						ID:        c.String("device_id"),
+						Type:      c.String("type"),
+						Criticity: c.Int("criticity"),
+						Timestamp: time.Now(),
+						Temperature: func() *float32 {
+							x := badrand.Float32() * 100
+							return &x
+						}(),
 					})
 				},
 			},

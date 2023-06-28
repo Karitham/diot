@@ -3,6 +3,7 @@ package scylla
 import (
 	"context"
 	"crypto/rand"
+	"strconv"
 	"time"
 
 	"github.com/Karitham/iDIoT/api/redis"
@@ -22,14 +23,29 @@ type Alert struct {
 }
 
 func (s *Store) AlertsSubscriber(ctx context.Context, data redis.AlertEvent) {
-	log.InfoCtx(ctx, "alert", "device_id", data.IDIot, "type", data.Type, "message", data.IncidentField, "criticity", data.Criticity)
+	var value *float32 = nil
+	switch {
+	case data.AirQuality != nil:
+		value = data.AirQuality
+	case data.Humidity != nil:
+		value = data.Humidity
+	case data.Temperature != nil:
+		value = data.Temperature
+	}
+
+	vS := ""
+	if value != nil {
+		vS = strconv.FormatFloat(float64(*value), 'f', 2, 32)
+	}
+
+	log.InfoCtx(ctx, "alert", "device_id", data.ID, "type", data.Type, "criticity", data.Criticity, "value", vS)
 
 	err := s.createAlert(ctx, models.AlertsStruct{
 		Id:          ulid.MustNew(ulid.Now(), rand.Reader).String(),
-		DeviceId:    data.IDIot,
+		DeviceId:    data.ID,
 		AlertType:   data.Type,
-		AlertValue:  data.IncidentField,
-		AlertStatus: data.Criticity,
+		AlertValue:  vS,
+		AlertStatus: strconv.Itoa(data.Criticity),
 	})
 	if err != nil {
 		log.ErrorCtx(ctx, err.Error())

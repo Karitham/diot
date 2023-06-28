@@ -2,6 +2,7 @@ package redis
 
 import (
 	"context"
+	"os"
 	"sync"
 
 	"github.com/go-json-experiment/json"
@@ -47,6 +48,7 @@ func NewFan[T any]() *SubFanHandle[T] {
 
 	sh.onEvent = func(message rueidis.PubSubMessage) {
 		var msg T
+		os.Stderr.WriteString(message.Message + "\n")
 		json.Unmarshal([]byte(message.Message), &msg)
 		for k, sub := range sh.subs {
 			if sub.ctx.Err() != nil {
