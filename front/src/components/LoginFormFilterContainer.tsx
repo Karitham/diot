@@ -1,21 +1,33 @@
-import { FunctionComponent, useCallback, useState } from 'react'
-import LoginFormContainer from './LoginFormContainer'
-import { useNavigate } from 'react-router-dom'
-import '../styles/compo/LoginFormFilterContainer.css'
-import { client } from '../api/client'
+import { FunctionComponent, useCallback, useState } from 'react';
+import LoginFormContainer from './LoginFormContainer';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import '../styles/compo/LoginFormFilterContainer.css';
+import { client } from '../api/client';
 
 const LoginFormFilterContainer: FunctionComponent = () => {
-  const navigate = useNavigate()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState<null | string>(null)
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<null | string>(null);
 
-  const Error = () => error && <span className="error">{error}</span>
+  const Error = () => error && <span className="error">{error}</span>;
 
   const onButtonContainerClick = useCallback(async () => {
     if (!email || !password) {
-      setError('Please fill all the fields')
-      return
+      setError('Please fill all the fields');
+      toast.error('Erreur de connexion. Veuillez réessayer.', {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });
+      return;
     }
 
     const resp = await client.post('/auth/login', {
@@ -23,36 +35,58 @@ const LoginFormFilterContainer: FunctionComponent = () => {
         email: email,
         password: password
       }
-    })
+    });
 
     if (resp.error) {
-      console.log(resp.error)
-      return
+      toast.error('Erreur de connexion. Veuillez réessayer.');
+      console.log(resp.error);
+      return;
     }
 
-    localStorage.setItem('token', resp.data.token)
+    localStorage.setItem('token', resp.data.token);
 
-    navigate('/dashboard')
-  }, [navigate, email, password])
+    toast.success('Connexion réussie !', {
+      position: "bottom-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      });
+    navigate('/dashboard');
+  }, [navigate, email, password]);
 
   return (
     <form
       className="inputs-group"
-      onKeyDown={k => {
+      onKeyDown={(k) => {
         if (k.key === 'Enter') {
-          onButtonContainerClick()
+          onButtonContainerClick();
         }
-      }}>
+      }}
+    >
       <div className="inputs1">
         <Error />
-        <LoginFormContainer title="Email" type="email" value={email} onInput={e => setEmail(e)} />
-        <LoginFormContainer title="Password" value={password} type="password" onInput={e => setPassword(e)} />
+        <LoginFormContainer
+          title="Email"
+          type="email"
+          value={email}
+          onInput={(e) => setEmail(e)}
+        />
+        <LoginFormContainer
+          title="Password"
+          value={password}
+          type="password"
+          onInput={(e) => setPassword(e)}
+        />
       </div>
       <div className="button2" onClick={onButtonContainerClick}>
         <b className="click-me2">Log In</b>
       </div>
     </form>
-  )
-}
+  );
+};
 
-export default LoginFormFilterContainer
+export default LoginFormFilterContainer;

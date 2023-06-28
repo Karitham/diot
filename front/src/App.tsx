@@ -1,22 +1,33 @@
-import { Routes, Route, useNavigationType, useLocation } from 'react-router-dom';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import AdminPanel from './pages/AdminPanel';
-import Notifications from './pages/Notifications';
-import { useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom'
+import Login from './pages/Login'
+import Dashboard from './pages/Dashboard'
+import AdminPanel from './pages/AdminPanel'
+import Notifications from './pages/Notifications'
+import { useEffect } from 'react'
+
+import { ToastContainer, cssTransition } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
-  const action = useNavigationType()
   const location = useLocation()
-  const pathname = location.pathname
 
   useEffect(() => {
-    if (action !== 'POP') {
-      window.scrollTo(0, 0)
+    const disableBrowserBackButton = (event: PopStateEvent) => {
+      window.history.forward()
+      event.preventDefault()
     }
-  }, [action, pathname])
+
+    window.history.pushState(null, '', window.location.href)
+    window.addEventListener('popstate', disableBrowserBackButton)
+
+    return () => {
+      window.removeEventListener('popstate', disableBrowserBackButton)
+    }
+  }, [])
 
   useEffect(() => {
+    const { pathname } = location
+
     let title = ''
     let metaDescription = ''
 
@@ -49,15 +60,36 @@ function App() {
         metaDescriptionTag.content = metaDescription
       }
     }
-  }, [pathname])
+  }, [location])
 
   return (
-    <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/adminpanel" element={<AdminPanel />} />
-      <Route path="/notifications" element={<Notifications />} />
-    </Routes>
+    <div>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        limit={3}
+        theme="colored"
+        transition={cssTransition({
+          enter: 'toastify__slide-enter',
+          exit: 'toastify__slide-exit'
+        })}
+      />
+
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/adminpanel" element={<AdminPanel />} />
+        <Route path="/notifications" element={<Notifications />} />
+      </Routes>
+    </div>
   )
 }
+
 export default App
