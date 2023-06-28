@@ -1,15 +1,37 @@
-import { FunctionComponent, memo } from 'react'
+import { FunctionComponent, memo, useState } from 'react'
 import '../styles/compo/UserAccount.css'
 import AdminFormContainer from './AdminFormContainer'
 import SubmitButton from './SubmitButton'
 
-type UserAccountType = {
+export type UserAccountType = {
   onClose?: () => void
+  onAccountSave?: (account: AccountType) => void // Nouvelle prop pour sauvegarder le compte
 }
 
-const UserAccount: FunctionComponent<UserAccountType> = memo(({}) => {
+type AccountType = {
+  name: string
+}
+
+const UserAccount: FunctionComponent<UserAccountType> = memo(({ onAccountSave }) => {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
   function onSaveContainerClick(): void {
-    throw new Error('Function not implemented.')
+    // Créer un nouvel objet Account avec les données saisies
+    const newAccount: AccountType = {
+      name: name
+    }
+
+    // Appeler la fonction de sauvegarde du compte avec le nouvel objet Account
+    if (onAccountSave) {
+      onAccountSave(newAccount)
+    }
+
+    // Réinitialiser les champs du formulaire
+    setName('')
+    setEmail('')
+    setPassword('')
   }
 
   return (
@@ -22,18 +44,29 @@ const UserAccount: FunctionComponent<UserAccountType> = memo(({}) => {
           <div className="lessgo-we-on">User account</div>
         </div>
         <div className="input">
-          <AdminFormContainer title="Name" type="text" placeholder="René Dupuis" icon={<img src="/pen2.svg"></img>} />
+          <AdminFormContainer
+            title="Name"
+            type="text"
+            placeholder="René Dupuis"
+            icon="/pen2.svg"
+            value={name}
+            onInput={setName}
+          />
           <AdminFormContainer
             title="Email"
             type="email"
             placeholder="rene.dupuis@gmail.com"
-            icon={<img src="/vector2.svg"></img>}
+            icon="/vector2.svg"
+            value={email}
+            onInput={setEmail}
           />
           <AdminFormContainer
             title="Password"
             type="password"
             placeholder="*****************"
-            icon={<img src="/password.svg"></img>}
+            icon="/password.svg"
+            value={password}
+            onInput={setPassword}
           />
           <SubmitButton onClick={onSaveContainerClick} text="Save" />
         </div>

@@ -1,40 +1,33 @@
-import { FunctionComponent, memo, useCallback, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import '../styles/compo/AdminPanelContainer.css'
-import AdminFormContainer from './AdminFormContainer'
-import MultiSelectDropdown from './MultiSelectDropdown'
-import SubmitButton from './SubmitButton'
-//import DeleteButton from './DeleteButton'
-import AccountClosed from './AccountClosed'
-//import MyAccount from './MyAccount'
+import { FunctionComponent, memo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../styles/compo/AdminPanelContainer.css';
+import AdminFormContainer from './AdminFormContainer';
+import MultiSelectDropdown from './MultiSelectDropdown';
+import SubmitButton from './SubmitButton';
+import AccountClosed from './AccountClosed';
 
-const account1 = {
-  name: 'Charles Perrard'
-}
-const account2 = {
-  name: 'Pierre-Louis Pery'
+interface AdminPanelContainerProps {
+  accounts: { name: string }[];
 }
 
-const accounts = [account1, account2]
-
-const AdminPanelContainer: FunctionComponent = memo(() => {
+const AdminPanelContainer: FunctionComponent<AdminPanelContainerProps> = memo(({ accounts }) => {
   const options = [
     { value: 'option1', label: 'View cameras' },
     { value: 'option2', label: 'Disable all cameras' },
-    { value: 'option3', label: 'Option 3' }
-  ]
+    { value: 'option3', label: 'Option 3' },
+  ];
 
-  const [selectedValues, setSelectedValues] = useState<string[]>([])
+  const [selectedValues, setSelectedValues] = useState<string[]>([]);
 
   const handleDropdownChange = (selectedValues: string[]) => {
-    setSelectedValues(selectedValues)
-  }
+    setSelectedValues(selectedValues);
+  };
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const onEditContainerClick = useCallback(() => {
-    navigate('/adminpanel')
-  }, [navigate])
+  const onEditContainerClick = () => {
+    navigate('/adminpanel');
+  };
 
   return (
     <div className="users">
@@ -44,27 +37,17 @@ const AdminPanelContainer: FunctionComponent = memo(() => {
           <div className="charles-perrard">Me</div>
           <div className="fields">
             <div className="select">
-              <AdminFormContainer
-                title="Name"
-                type="text"
-                placeholder="René Dupuis"
-                icon={<img src="/pen2.svg" alt="pen" />}
-              />
+              <AdminFormContainer title="Name" type="text" placeholder="René Dupuis" icon="/vector2.svg" />
             </div>
             <div className="select">
-              <AdminFormContainer
-                title="Email"
-                type="email"
-                placeholder="rene.dupuis@gmail.com"
-                icon={<img src="/email2.svg" alt="vector2" />}
-              />
+              <AdminFormContainer title="Email" type="email" placeholder="rene.dupuis@gmail.com" icon="/pen2.svg" />
             </div>
             <div className="select">
               <AdminFormContainer
                 title="Password"
                 type="password"
                 placeholder="*****************"
-                icon={<img src="/password2.svg" alt="vector3" />}
+                icon="/password.svg"
               />
             </div>
             <div className="select">
@@ -84,12 +67,12 @@ const AdminPanelContainer: FunctionComponent = memo(() => {
             <SubmitButton onClick={onEditContainerClick} text="Save" />
           </div>
         </div>
-        {accounts.map(a => (
-          <AccountClosed name={a.name} />
+        {accounts.map((a, index) => (
+          <AccountClosed key={index} name={a.name} />
         ))}
       </div>
     </div>
-  )
-})
+  );
+});
 
-export default AdminPanelContainer
+export default AdminPanelContainer;

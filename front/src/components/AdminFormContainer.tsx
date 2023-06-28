@@ -1,14 +1,14 @@
 import { FunctionComponent } from 'react'
 import '../styles/compo/AdminFormContainer.css'
 
-export type AdminFormContainerType = {
+ type AdminFormContainerType = {
   placeholder?: string
   title?: string
   description?: string
   value?: string
   type?: string
   onInput?: (value: string) => void
-  icon?: JSX.Element
+  icon?: string // Nouvelle propriété pour le chemin d'accès de l'icône
 }
 
 const AdminFormContainer: FunctionComponent<AdminFormContainerType> = (props: AdminFormContainerType) => {
@@ -27,9 +27,7 @@ const AdminFormContainer: FunctionComponent<AdminFormContainerType> = (props: Ad
         value={props.value}
         onInput={e => props.onInput?.(e.currentTarget.value)}
       />
-      {!!props.icon && ( // Si la propriété icon est définie
-        <span className="admin-pen-icon100">{props.icon}</span>
-      )}
+      <img className="admin-pen-icon100" alt="" src={props.icon} /> {/* Utilisation de la nouvelle propriété icon */}
     </div>
   )
 }

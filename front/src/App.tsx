@@ -18,6 +18,7 @@ function App() {
       toast.dismiss(); // Supprime tous les toasts actuellement affichés
     }
   }, [action]);
+  //------------------------
 
   useEffect(() => {
     const disableBrowserBackButton = (event: PopStateEvent) => {
@@ -77,7 +78,7 @@ function App() {
       <ToastContainer
         position="bottom-right"
         autoClose={1000}
-        hideProgressBar={true}
+        hideProgressBar={false}
         closeOnClick={true}
         rtl={false}
         limit={3}

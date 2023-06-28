@@ -1,35 +1,41 @@
-import { FunctionComponent, useState, useCallback } from 'react'
-import UserAccount from '../components/UserAccount'
-import PortalPopup from '../components/PortalPopup'
-import { useNavigate } from 'react-router-dom'
-import AdminPanelContainer from '../components/AdminPanelContainer'
-import AdminPanelDeviceContainer from '../components/AdminPanelDeviceContainer'
-import '../styles/AdminPanel.css'
-import Navbar from '../components/Navbar'
-import AdminPlanningContainer from '../components/AdminPlanningContainer'
+import { FunctionComponent, useState, useCallback } from 'react';
+import UserAccount from '../components/UserAccount';
+import PortalPopup from '../components/PortalPopup';
+import { useNavigate } from 'react-router-dom';
+import AdminPanelContainer from '../components/AdminPanelContainer';
+import AdminPanelDeviceContainer from '../components/AdminPanelDeviceContainer';
+import '../styles/AdminPanel.css';
+import Navbar from '../components/Navbar';
+import AdminPlanningContainer from '../components/AdminPlanningContainer';
 
-const device1 = { src: '/clap.svg', name: 'Living Room Cam 1' }
-const device2 = { src: '/spinner.svg', name: 'Living Room Cam 2' }
-const device3 = { src: '/checkbi.svg', name: 'Bedroom Fire Captor' }
-const device4 = { src: '/skull.svg', name: 'Bedroom Cam' }
+const device1 = { src: '/clap.svg', name: 'Living Room Cam 1' };
+const device2 = { src: '/spinner.svg', name: 'Living Room Cam 2' };
+const device3 = { src: '/checkbi.svg', name: 'Bedroom Fire Captor' };
+const device4 = { src: '/skull.svg', name: 'Bedroom Cam' };
 
-const devices = [device1, device2, device3, device4]
+const devices = [device1, device2, device3, device4];
 
 const AdminPanel: FunctionComponent = () => {
-  const [isUserAccountOpen, setUserAccountOpen] = useState(false)
-  const navigate = useNavigate()
+  const [isUserAccountOpen, setUserAccountOpen] = useState(false);
+  const navigate = useNavigate();
 
   const openUserAccount = useCallback(() => {
-    setUserAccountOpen(true)
-  }, [])
+    setUserAccountOpen(true);
+  }, []);
 
   const closeUserAccount = useCallback(() => {
-    setUserAccountOpen(false)
-  }, [])
+    setUserAccountOpen(false);
+  }, []);
 
   const onLogoutContainerClick = useCallback(() => {
-    navigate('/')
-  }, [navigate])
+    navigate('/');
+  }, [navigate]);
+
+  const accounts = [
+    { name: 'Charles Perrard' },
+    { name: 'Pierre-Louis Pery' },
+    { name: 'René Dupuis' }
+  ];
 
   return (
     <>
@@ -40,13 +46,13 @@ const AdminPanel: FunctionComponent = () => {
             <div className="titre">Settings</div>
           </div>
           <AdminPlanningContainer />
-          <AdminPanelContainer />
+          <AdminPanelContainer accounts={accounts} />
 
           <div className="devices">
             <div className="devices1">Devices</div>
             <div className="accounts1">
               <div className="device-list">
-                {devices.map(d => (
+                {devices.map((d) => (
                   <AdminPanelDeviceContainer src={d.src} name={d.name} />
                 ))}
               </div>
@@ -66,7 +72,7 @@ const AdminPanel: FunctionComponent = () => {
         </PortalPopup>
       )}
     </>
-  )
-}
+  );
+};
 
-export default AdminPanel
+export default AdminPanel;

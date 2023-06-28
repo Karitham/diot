@@ -19,7 +19,9 @@ const LoginFormFilterContainer: FunctionComponent = () => {
   const onButtonContainerClick = useCallback(async () => {
     if (!email || !password) {
       setError('Please fill all the fields');
-      toast.error('Erreur de connexion. Veuillez réessayer.');
+      toast.error('Erreur de connexion. Veuillez réessayer.', {
+        autoClose: 1000
+        });
 
       return;
     }
