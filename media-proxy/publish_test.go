@@ -14,8 +14,8 @@ import (
 )
 
 const framesFolder = "test-data/frames"
-const localAddr = "https://cdn.idiot.0xf.fr"
-const FPS = 60
+const localAddr = "http://localhost:8089"
+const FPS = 12
 
 func TestPublish(t *testing.T) {
 	fsD := os.DirFS(framesFolder)

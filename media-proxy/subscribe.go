@@ -56,11 +56,11 @@ func SubscribeVideoHandler(
 	}
 }
 
-func jpegFramesToFLV(ctx context.Context, c <-chan io.Reader) (av.Demuxer, error) {
+func jpegFramesToFLV(ctx context.Context, r io.Reader) (av.Demuxer, error) {
 	pr, pw := io.Pipe()
 
 	go func() {
-		err := ffmpegFromJPGToFLV(ctx, ioutils.NewChannelReader(c), pw)
+		err := ffmpegFromJPGToFLV(ctx, r, pw)
 		if err != nil {
 			log.Error("streaming error", "error", err)
 		}

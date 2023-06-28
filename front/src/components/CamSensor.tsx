@@ -59,8 +59,8 @@ const CamSensor: FunctionComponent<SensorProps> = (props: SensorProps) => {
         </div>
         <div className="frame-parent1" style={props.alert ? { backgroundColor: '#C33E22' } : {}}>
           <WrapInfo data={Number(props.temperature).toFixed(1)} title="temperature" unit="C°" />
-          <WrapInfo data={Number(props.humidity).toFixed(1)} title="humidity" />
-          <WrapInfo data={Number(props.iaq).toFixed(1)} title="air quality" />
+          <WrapInfo data={Number(props.humidity).toFixed(1)} title="humidity" unit="%" />
+          <WrapInfo data={Number(props.iaq).toFixed(1)} title="air quality" unit=" KOhms" />
         </div>
       </div>
       {isEditComponentOpen && (
