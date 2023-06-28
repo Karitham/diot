@@ -22,18 +22,21 @@ const UserAccount: FunctionComponent<UserAccountType> = memo(({}) => {
           <div className="lessgo-we-on">User account</div>
         </div>
         <div className="input">
-        <AdminFormContainer title="Name" type="text" placeholder="René Dupuis" icon="/pen2.svg" />{' '}
-        
-          <AdminFormContainer title="Email" type="email" placeholder="rene.dupuis@gmail.com" icon="/vector2.svg" />
+          <AdminFormContainer title="Name" type="text" placeholder="René Dupuis" icon={<img src="/pen2.svg"></img>} />
           <AdminFormContainer
-                title="Password"
-                type="password"
-                placeholder="*****************"
-                icon="/password.svg"
-              />
-              <SubmitButton onClick={onSaveContainerClick} text="Save" />
+            title="Email"
+            type="email"
+            placeholder="rene.dupuis@gmail.com"
+            icon={<img src="/vector2.svg"></img>}
+          />
+          <AdminFormContainer
+            title="Password"
+            type="password"
+            placeholder="*****************"
+            icon={<img src="/password.svg"></img>}
+          />
+          <SubmitButton onClick={onSaveContainerClick} text="Save" />
         </div>
-
       </div>
     </div>
   )

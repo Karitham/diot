@@ -29,6 +29,8 @@ func PostFramesHandler(validBasicAuth func(user, pass string) error, pubQ *PubQ)
 			return
 		}
 
+		log.Debug("got request", "channel", channel, "content-type", mt, "boundary", mu["boundary"])
+
 		if mt != "multipart/form-data" {
 			w.WriteHeader(400)
 			return
@@ -42,6 +44,7 @@ func PostFramesHandler(validBasicAuth func(user, pass string) error, pubQ *PubQ)
 				return
 			}
 
+			log.Debug("got part", "part", mpart.FileName(), "size", len(buf))
 			err = pubQ.PublishFile(r.Context(), channel, buf, time.Hour)
 			if err != nil {
 				w.WriteHeader(500)

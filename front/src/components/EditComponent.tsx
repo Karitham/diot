@@ -1,27 +1,23 @@
-import { FunctionComponent, memo, useCallback } from "react";
-import CamModifyModal from "./CamModifyModal";
-import SubmitButton from "./SubmitButton";
-import "../styles/compo/EditComponent.css";
-import { useNavigate } from "react-router-dom";
+import { FunctionComponent, memo, useCallback, useState } from 'react'
+import SubmitButton from './SubmitButton'
+import '../styles/compo/EditComponent.css'
+import { useNavigate } from 'react-router-dom'
+import AdminFormContainer from './AdminFormContainer'
 
-type EditComponentType = {
-  onClose?: () => void;
-};
+type EditModalProps = {
+  onClose?: () => void
+  content?: string
+  label?: string
+}
 
-const EditComponent: FunctionComponent<EditComponentType> = memo(({ onClose }) => {
-  const navigate = useNavigate();
+const EditComponent: FunctionComponent<EditModalProps> = memo((props: EditModalProps) => {
+  const navigate = useNavigate()
+
+  const [content, setContent] = useState<string>(props.content ?? '')
 
   const onSaveContainerClick = useCallback(() => {
-    navigate("/dashboard");
-  }, [navigate]);
-
-  const handleImageClick = useCallback(() => {
-    if (onClose) {
-      onClose();
-    }
-  }, [onClose]);
-
-  
+    navigate('/dashboard')
+  }, [navigate])
 
   return (
     <div className="edit-component">
@@ -30,16 +26,20 @@ const EditComponent: FunctionComponent<EditComponentType> = memo(({ onClose }) =
           <div className="sneak1">
             <img className="pen-icon1" alt="" src="/pen1.svg" />
           </div>
-          <div className="living-room">Living room</div>
+          <div className="living-room">{props.label ?? content}</div>
         </div>
         <div>
-          <img className="pen-icon1" alt="" src="/vector8.svg" onClick={handleImageClick} />
+          <img className="pen-icon1" alt="" src="/vector8.svg" onClick={props.onClose} />
         </div>
       </div>
-      <CamModifyModal />
+      <div className="properties">
+        <div className="input6">
+          <AdminFormContainer onInput={setContent} value={props.content} />
+        </div>
+      </div>
       <SubmitButton onClick={onSaveContainerClick} text="Save" />
     </div>
-  );
-});
+  )
+})
 
-export default EditComponent;
+export default EditComponent

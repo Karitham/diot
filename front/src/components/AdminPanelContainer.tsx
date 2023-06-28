@@ -9,10 +9,10 @@ import AccountClosed from './AccountClosed'
 //import MyAccount from './MyAccount'
 
 const account1 = {
-  name: "Charles Perrard"
+  name: 'Charles Perrard'
 }
 const account2 = {
-  name: "Pierre-Louis Pery"
+  name: 'Pierre-Louis Pery'
 }
 
 const accounts = [account1, account2]
@@ -44,17 +44,27 @@ const AdminPanelContainer: FunctionComponent = memo(() => {
           <div className="charles-perrard">Me</div>
           <div className="fields">
             <div className="select">
-              <AdminFormContainer title="Name" type="text" placeholder="René Dupuis" icon="/pen2.svg" />
+              <AdminFormContainer
+                title="Name"
+                type="text"
+                placeholder="René Dupuis"
+                icon={<img src="/pen2.svg" alt="pen" />}
+              />
             </div>
             <div className="select">
-              <AdminFormContainer title="Email" type="email" placeholder="rene.dupuis@gmail.com" icon="/vector2.svg" />
+              <AdminFormContainer
+                title="Email"
+                type="email"
+                placeholder="rene.dupuis@gmail.com"
+                icon={<img src="/email2.svg" alt="vector2" />}
+              />
             </div>
             <div className="select">
               <AdminFormContainer
                 title="Password"
                 type="password"
                 placeholder="*****************"
-                icon="/password.svg"
+                icon={<img src="/password2.svg" alt="vector3" />}
               />
             </div>
             <div className="select">
@@ -62,12 +72,12 @@ const AdminPanelContainer: FunctionComponent = memo(() => {
               <div className="permissions-allow-you">
                 Permissions allow you to configure what action a user is able to accomplish.
               </div>
-                <MultiSelectDropdown
-                  options={options}
-                  selectedValues={selectedValues}
-                  onChange={handleDropdownChange}
-                  closedLabel="Click here to select permissions"
-                />
+              <MultiSelectDropdown
+                options={options}
+                selectedValues={selectedValues}
+                onChange={handleDropdownChange}
+                closedLabel="Click here to select permissions"
+              />
             </div>
           </div>
           <div className="buttonblock">

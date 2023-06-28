@@ -1,16 +1,16 @@
-import { FunctionComponent } from 'react';
-import AdminFormContainer from './AdminFormContainer';
-import MultiSelectDropdown from './MultiSelectDropdown';
-import DeleteButton from './DeleteButton';
-import SubmitButton from './SubmitButton';
+import { FunctionComponent } from 'react'
+import AdminFormContainer from './AdminFormContainer'
+import MultiSelectDropdown from './MultiSelectDropdown'
+import DeleteButton from './DeleteButton'
+import SubmitButton from './SubmitButton'
 
 interface MyAccountProps {
-  name: string;
-  options: { value: string; label: string }[];
-  selectedValues: string[];
-  handleDropdownChange: (selectedValues: string[]) => void;
-  onDeleteContainerClick: () => void;
-  onSaveContainerClick: () => void;
+  name: string
+  options: { value: string; label: string }[]
+  selectedValues: string[]
+  handleDropdownChange: (selectedValues: string[]) => void
+  onDeleteContainerClick: () => void
+  onSaveContainerClick: () => void
 }
 
 const MyAccount: FunctionComponent<MyAccountProps> = ({
@@ -19,14 +19,19 @@ const MyAccount: FunctionComponent<MyAccountProps> = ({
   selectedValues,
   handleDropdownChange,
   onDeleteContainerClick,
-  onSaveContainerClick,
+  onSaveContainerClick
 }) => {
   return (
     <div className="my-account">
       <div className="charles-perrard">{name}</div>
       <div className="fields">
         <div className="select">
-          <AdminFormContainer title="Name" type="text" placeholder="René Dupuis" icon="/pen2.svg" />
+          <AdminFormContainer
+            title="Name"
+            type="text"
+            placeholder="René Dupuis"
+            icon={<img src="/pen2.svg" alt="pen" />}
+          />
         </div>
         <div className="select">
           <div className="login6">Permissions</div>
@@ -51,7 +56,7 @@ const MyAccount: FunctionComponent<MyAccountProps> = ({
         <SubmitButton onClick={onSaveContainerClick} text="Save" />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MyAccount;
+export default MyAccount
