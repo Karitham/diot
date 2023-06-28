@@ -86,6 +86,7 @@
 
 .frame-parent1 {
   display: flex;
+  width: 100%;
   border-radius: var(--br-5xs);
   background-color: #cfded4;
   aspect-ratio: 16/9;
@@ -100,12 +101,16 @@
 }
 
 .c-parent {
-  align-self: stretch;
-  flex: 1;
-  overflow: hidden;
   display: flex;
-  flex-direction: column;
+  width: 10rem;
   align-items: center;
+  flex-direction: column;
   justify-content: center;
   gap: var(--gap-5xs);
+}
+
+.c {
+  font-size: var(--font-size-xl);
+  color: var(--text-text1);
+  font-family: var(--title);
 }
