@@ -3,6 +3,7 @@ package scylla
 import (
 	"context"
 	"crypto/rand"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -60,9 +61,9 @@ func (s *Store) AlertsSubscriber(ctx context.Context, data redis.AlertEvent) {
 
 func (s *Store) GetAlerts(ctx context.Context) ([]Alert, error) {
 	var alerts []models.AlertsStruct
-	err := s.conn.Query(models.Alerts.Select()).WithContext(ctx).GetRelease(&alerts)
+	err := s.conn.Query(models.Alerts.SelectAll()).WithContext(ctx).SelectRelease(&alerts)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("fetching all alerts: %w", err)
 	}
 
 	out := make([]Alert, len(alerts))

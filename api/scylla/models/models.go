@@ -15,6 +15,7 @@ var (
 			"alert_status",
 			"alert_type",
 			"alert_value",
+			"criticity",
 			"device_id",
 			"id",
 		},
@@ -77,19 +78,6 @@ var (
 		},
 	})
 
-	Sessions = table.New(table.Metadata{
-		Name: "sessions",
-		Columns: []string{
-			"id",
-			"permissions",
-			"user_id",
-		},
-		PartKey: []string{
-			"id",
-		},
-		SortKey: []string{},
-	})
-
 	Users = table.New(table.Metadata{
 		Name: "users",
 		Columns: []string{
@@ -140,6 +128,7 @@ type AlertsStruct struct {
 	AlertStatus string
 	AlertType   string
 	AlertValue  string
+	Criticity   string
 	DeviceId    string
 	Id          string
 }
@@ -161,11 +150,6 @@ type SensorReadingsStruct struct {
 	IotId string
 	Time  time.Time
 	Value []byte
-}
-type SessionsStruct struct {
-	Id          string
-	Permissions []string
-	UserId      string
 }
 type UsersStruct struct {
 	Email       string

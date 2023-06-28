@@ -1,7 +1,7 @@
 import '../styles/compo/AlertContainer.css'
 
 export type AlertContainerProps = {
-  icon: string
+  icon: JSX.Element
   label: string
   time: Date
   sensor: string
@@ -17,15 +17,23 @@ const AlertContainer = (props: AlertContainerProps) => {
         style={{
           backgroundColor: props.alert ? 'var(--colors-red)' : 'var(--colors-button)'
         }}>
-        <div className="sneak3">
-          <img className="vector-icon19" alt="" src={props.icon} />
-        </div>
+        <div className={`icon${props.alert ? ' alert' : ''}`}>{props.icon}</div>
       </div>
       <div className="content">
-        <div className="may-5th">{props.label}</div>
+        <div className="label">{props.label}</div>
         <div className="properties1">
-          <div className="may-5th">{props.time.getTime()}</div>
-          <div className="may-5th">{props.time.getDate()}</div>
+          <div className="may-5th">
+            {props.time.toLocaleDateString('default', {
+              day: 'numeric',
+              month: 'short'
+            })}
+          </div>
+          <div className="may-5th">
+            {props.time.toLocaleTimeString('default', {
+              hour: 'numeric',
+              minute: 'numeric'
+            })}
+          </div>
           <div className="may-5th">{props.sensor}</div>
         </div>
       </div>
