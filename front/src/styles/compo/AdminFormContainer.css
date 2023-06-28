@@ -15,8 +15,17 @@
   gap: var(--gap-7xs);
 
   width: 100%;
-  
 }
+
+
+/*
+@media screen and (max-width: 320px) {
+  .admin-wrapper {
+    width: 60%;
+  }
+}*/
+
+
 
 input.admin-input {
   /* border box */
@@ -37,8 +46,8 @@ input.admin-input {
   display: flex;
 }
 
-img.admin-pen-icon100{
+img.admin-pen-icon100 {
   position: absolute;
-  top: 50%;
+  top: 60%;
   right: 4%; /* Ajustez cette valeur en fonction de la distance souhaitée entre l'icône et l'input */
 }

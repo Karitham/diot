@@ -1,8 +1,11 @@
 .admin-input-hours {
     border: none;
     outline: none;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
     width: 100%;
   }
+
+.admin-wrappers {
+  position: relative;
+  gap: var(--gap-7xs);
+  width: 100%;
+}

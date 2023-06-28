@@ -1,8 +1,10 @@
 import { FunctionComponent, useCallback, useState } from 'react';
 import LoginFormContainer from './LoginFormContainer';
 import { useNavigate } from 'react-router-dom';
+
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 import '../styles/compo/LoginFormFilterContainer.css';
 import { client } from '../api/client';
 
@@ -17,16 +19,8 @@ const LoginFormFilterContainer: FunctionComponent = () => {
   const onButtonContainerClick = useCallback(async () => {
     if (!email || !password) {
       setError('Please fill all the fields');
-      toast.error('Erreur de connexion. Veuillez réessayer.', {
-        position: "bottom-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        });
+      toast.error('Erreur de connexion. Veuillez réessayer.');
+
       return;
     }
 
@@ -45,16 +39,7 @@ const LoginFormFilterContainer: FunctionComponent = () => {
 
     localStorage.setItem('token', resp.data.token);
 
-    toast.success('Connexion réussie !', {
-      position: "bottom-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-      });
+    toast.success('Connexion réussie !');
     navigate('/dashboard');
   }, [navigate, email, password]);
 

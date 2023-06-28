@@ -1,6 +1,7 @@
 .dropdown-container {
     position: relative;
     display: inline-block;
+    width: 100%;
   }
   
   .dropdown-header {
@@ -17,7 +18,6 @@
     align-items: center;
     justify-content: space-between;
     mix-blend-mode: normal;
-    width:max-content;
   }
   
   .dropdown-icon {

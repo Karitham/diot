@@ -18,7 +18,7 @@ const AdminHoursContainer: FunctionComponent<AdminHoursContainerProps> = (props:
       <div className="login3s">{props.name}</div>
       <div className="preview-the-dayss">To select a time esier, click on the clock icon</div>
       <div className="input7s">
-        <div className="admin-wrapper">
+        <div className="admin-wrappers">
           <label htmlFor={props.title} className="admin-label">
             {props.title}
           </label>

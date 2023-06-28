@@ -1,15 +1,23 @@
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, useLocation, useNavigationType } from 'react-router-dom'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import AdminPanel from './pages/AdminPanel'
 import Notifications from './pages/Notifications'
 import { useEffect } from 'react'
 
-import { ToastContainer, cssTransition } from 'react-toastify'
+import { ToastContainer, cssTransition, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
   const location = useLocation()
+  const action = useNavigationType();
+
+  // Close the toasts when change the page
+  useEffect(() => {
+    if (action === 'PUSH') {
+      toast.dismiss(); // Supprime tous les toasts actuellement affichés
+    }
+  }, [action]);
 
   useEffect(() => {
     const disableBrowserBackButton = (event: PopStateEvent) => {
@@ -62,18 +70,16 @@ function App() {
     }
   }, [location])
 
+  
+
   return (
     <div>
       <ToastContainer
         position="bottom-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
+        autoClose={1000}
+        hideProgressBar={true}
+        closeOnClick={true}
         rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
         limit={3}
         theme="colored"
         transition={cssTransition({
