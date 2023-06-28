@@ -30,8 +30,13 @@ const LoginFormFilterContainer: FunctionComponent = () => {
   return (
     <div className="inputs-group">
       <div className="inputs1">
-        <AdminFormContainer title="Email" type="email" value={email} onInput={e => setEmail(e)} />
-        <AdminFormContainer title="Password" value={password} type="password" onInput={e => setPassword(e)} />
+        <AdminFormContainer title="Email" type="email" value={email} onInput={e => setEmail(e.currentTarget.value)} />
+        <AdminFormContainer
+          title="Password"
+          value={password}
+          type="password"
+          onInput={e => setPassword(e.currentTarget.value)}
+        />
       </div>
       <div className="button2" onClick={onButtonContainerClick}>
         <b className="click-me2">Log In</b>
