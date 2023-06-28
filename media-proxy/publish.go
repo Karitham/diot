@@ -45,7 +45,7 @@ func PostFramesHandler(validBasicAuth func(user, pass string) error, pubQ *PubQ)
 			}
 
 			log.Debug("got part", "part", mpart.FileName(), "size", len(buf))
-			err = pubQ.PublishFile(r.Context(), channel, buf, time.Hour)
+			err = pubQ.PublishFile(r.Context(), channel, buf, 24*time.Hour)
 			if err != nil {
 				w.WriteHeader(500)
 				return

@@ -73,6 +73,20 @@ func main() {
 			},
 		},
 		Action: Main,
+		Commands: []*cli.Command{
+			{
+				Name: "mock",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:    "url",
+						Usage:   "URL to send frames",
+						EnvVars: []string{"URL"},
+						Value:   "http://localhost:8089/video/1",
+					},
+				},
+				Action: Mock,
+			},
+		},
 	}
 
 	app.Run(os.Args)
