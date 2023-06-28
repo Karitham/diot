@@ -17,6 +17,7 @@ const ReadingTTL = time.Hour * 24 * 30 * 12 // 1 year~
 type SensorInfoWithLastReading struct {
 	IoTID    string
 	Name     string
+	URL      string
 	Readings []redis.SensorReading // readings for each kind
 }
 
@@ -69,6 +70,7 @@ func (s *Store) GetSensors(ctx context.Context) ([]SensorInfoWithLastReading, er
 		out = append(out, SensorInfoWithLastReading{
 			IoTID: device.Id,
 			Name:  device.Name,
+			URL:   device.Url,
 		})
 	}
 
@@ -165,6 +167,19 @@ func (s *Store) createSensorReading(ctx context.Context, data redis.SensorReadin
 
 func (s *Store) ReadingsSubscriber(ctx context.Context, data redis.SensorReading) {
 	err := s.createSensorReading(ctx, data)
+	if err != nil {
+		log.ErrorCtx(ctx, err.Error())
+	}
+}
+
+func (s *Store) MediaPublisherSubscriber(ctx context.Context, data redis.MediaPublisher) {
+	err := s.conn.Query(models.Devices.InsertBuilder().Columns("id", "url").ToCql()).
+		BindMap(map[string]any{
+			"id":  data.IoTID,
+			"url": data.IoTID,
+		}).
+		WithContext(ctx).
+		ExecRelease()
 	if err != nil {
 		log.ErrorCtx(ctx, err.Error())
 	}

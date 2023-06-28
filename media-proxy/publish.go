@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"io"
 	"mime"
 	"mime/multipart"
@@ -13,7 +14,11 @@ import (
 // read all files from the request body (multipart form data)
 // for each file, write to file-system and pass fs path to publish q
 // return 200 if all files were written to fs and published to q
-func PostFramesHandler(validBasicAuth func(user, pass string) error, pubQ *PubQ) func(w http.ResponseWriter, r *http.Request) {
+func PostFramesHandler(
+	validBasicAuth func(user, pass string) error,
+	publishPublisher func(ctx context.Context, channel string) error,
+	pubQ *PubQ,
+) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// use basic auth to authenticate the publisher
 		user, pass, _ := r.BasicAuth()
@@ -25,6 +30,7 @@ func PostFramesHandler(validBasicAuth func(user, pass string) error, pubQ *PubQ)
 		channel := chi.URLParam(r, "channel")
 		mt, mu, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 		if err != nil {
+			log.Error("failed to parse content-type", "err", err)
 			w.WriteHeader(500)
 			return
 		}
@@ -35,6 +41,8 @@ func PostFramesHandler(validBasicAuth func(user, pass string) error, pubQ *PubQ)
 			w.WriteHeader(400)
 			return
 		}
+
+		go publishPublisher(context.Background(), channel)
 
 		mr := multipart.NewReader(r.Body, mu["boundary"])
 		for mpart, err := mr.NextPart(); err == nil; mpart, err = mr.NextPart() {

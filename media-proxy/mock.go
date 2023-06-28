@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"io"
 	"io/fs"
@@ -32,11 +31,15 @@ func Mock(c *cli.Context) error {
 		return a < b
 	})
 
+	url := c.String("url")
 	for {
 		r, w := io.Pipe()
 
 		mw := multipart.NewWriter(w)
 		go func() {
+			defer mw.Close()
+			defer w.Close()
+			log.Info("sending frames", "url", url)
 			for _, file := range files {
 				f, err := fsD.Open(file)
 				if err != nil {
@@ -52,22 +55,22 @@ func Mock(c *cli.Context) error {
 				f.Close()
 				time.Sleep(time.Second / FPS)
 			}
-
-			mw.Close()
-			w.Close()
 		}()
 
-		req, _ := http.NewRequestWithContext(context.TODO(), "POST", c.String("url"), r)
+		req, err := http.NewRequestWithContext(c.Context, "POST", url, r)
+		if err != nil {
+			return err
+		}
 		// set headers for streaming
 		req.Header.Set("Content-Type", mw.FormDataContentType())
-		req.Header.Set("Transfer-Encoding", "chunked")
-		req.Header.Set("Connection", "keep-alive")
 
-		resp, err := http.DefaultClient.Do(req)
+		log.Info("sending request", "url", url, "headers", req.Header)
+		_, err = http.DefaultClient.Do(req)
 		if err != nil {
 			return err
 		}
 
-		log.Info("response", "status", resp.Status)
+		log.Info("done sending frames", "url", url)
 	}
+
 }

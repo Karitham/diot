@@ -104,6 +104,16 @@ func HTTPD(c *cli.Context) error {
 		}
 	}()
 
+	// media publisher subscriber
+	pubMedia := redis.NewFan[redis.MediaPublisher]()
+	pubMedia.Subscribe("media", context.Background(), scyllaStore.MediaPublisherSubscriber)
+	go func() {
+		err := redisStore.MediaPublisherSub(context.Background(), pubMedia)
+		if err != nil {
+			log.Error("main", "error", err)
+		}
+	}()
+
 	httpdApi := httpd.New(scyllaStore, redisStore, subSensor)
 
 	r := chi.NewRouter()
