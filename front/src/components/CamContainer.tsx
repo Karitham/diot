@@ -1,7 +1,8 @@
-import { useCallback, useState } from 'react'
+import { createRef, useCallback, useEffect, useState } from 'react'
 import '../styles/compo/CamContainer.css'
 import EditComponent from './EditComponent'
 import PortalPopup from './PortalPopup'
+import FlvJs from 'flv.js'
 
 export type CamContainerType = {
   id: string
@@ -24,23 +25,42 @@ const CamContainer = (props: CamContainerType) => {
     setEditComponentOpen(false)
   }, [])
 
-  const Cam = () =>
-    props.disabled ? (
-      <div className="video disabled">
-        <div className="disabled-text">
-          <img className="disabled-icon" alt="" src="/start.svg" />
+  const Cam = () => {
+    if (props.disabled || !FlvJs.isSupported())
+      return (
+        <div className="video disabled">
+          <div className="disabled-text">
+            <img className="disabled-icon" alt="" src="/start.svg" />
+          </div>
         </div>
-      </div>
-    ) : (
-      <img
-        className="video"
-        alt=""
-        src={props.url}
+      )
+
+    // create ref to video
+    const videoRef = createRef<HTMLVideoElement>()
+
+    useEffect(() => {
+      var flvPlayer = FlvJs.createPlayer({
+        type: 'flv',
+        isLive: true,
+        hasAudio: false,
+        hasVideo: true,
+        cors: true,
+        url: `${props.url}?api-key=${localStorage.getItem('token')}`
+      })
+      flvPlayer.attachMediaElement(videoRef.current!)
+      flvPlayer.load()
+      flvPlayer.play()
+    }, [props.url, videoRef])
+
+    return (
+      <video
+        id="videoElement"
+        ref={videoRef}
         style={{
           borderTop: props.alert ? '10px solid var(--colors-red)' : 'none'
-        }}
-      />
+        }}></video>
     )
+  }
 
   return (
     <>

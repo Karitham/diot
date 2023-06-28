@@ -3,6 +3,7 @@ package httpd
 import (
 	"context"
 	"net/http"
+	"net/url"
 	"strconv"
 	"time"
 
@@ -15,21 +16,41 @@ import (
 )
 
 func (s *Service) GetSensors(w http.ResponseWriter, r *http.Request) *api.Response {
-	readings, err := s.store.GetSensors(r.Context())
+	sensors, err := s.store.GetSensors(r.Context())
 	if err != nil {
 		return WError(w, r, err, 500, err.Error())
 	}
 
-	out := make([]api.SensorInfo, 0, len(readings))
-	for _, reading := range readings {
-		for _, info := range reading.Readings {
+	out := make([]api.SensorInfo, 0, len(sensors))
+	for _, sensor := range sensors {
+		for _, info := range sensor.Readings {
 			for _, data := range sensorToData(info) {
 				out = append(out, api.SensorInfo{
-					Label:      reading.Name,
+					Label:      sensor.Name,
 					SensorData: data,
 				})
 			}
 		}
+
+		if sensor.URL == "" {
+			continue
+		}
+
+		path, _ := url.JoinPath("video", sensor.URL)
+		out = append(out, api.SensorInfo{
+			Label: sensor.Name,
+			SensorData: api.SensorData{
+				ID:   sensor.IoTID,
+				Kind: api.SensorDataKindCamera,
+				Data: api.SensorInfoCamera{
+					FeedURI: (&url.URL{
+						Scheme: "http",
+						Host:   s.CDNHost,
+						Path:   path,
+					}).String(),
+				},
+			},
+		})
 	}
 
 	return api.GetSensorsJSON200Response(out)

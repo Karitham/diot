@@ -173,10 +173,11 @@ func (s *Store) ReadingsSubscriber(ctx context.Context, data redis.SensorReading
 }
 
 func (s *Store) MediaPublisherSubscriber(ctx context.Context, data redis.MediaPublisher) {
-	err := s.conn.Query(models.Devices.InsertBuilder().Columns("id", "url").ToCql()).
-		BindMap(map[string]any{
-			"id":  data.IoTID,
-			"url": data.IoTID,
+	err := s.conn.Query(models.Devices.Insert()).
+		BindStruct(models.DevicesStruct{
+			Id:   data.IoTID,
+			Name: "Sensor " + data.IoTID,
+			Url:  data.IoTID,
 		}).
 		WithContext(ctx).
 		ExecRelease()

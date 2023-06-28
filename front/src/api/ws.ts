@@ -17,6 +17,7 @@ export const ws = (onData: (e: MessageEvent) => void) => {
 export type Sensor = CamProps | SensorProps
 
 export const mapSensorData = (inD: Sensor[], data: components['schemas']['SensorInfo']): Sensor[] => {
+  console.log('mapSensorData', data)
   switch (data.kind as string) {
     case 'camera':
       inD.push({

@@ -63,6 +63,13 @@ func main() {
 			Value:   "default",
 			Hidden:  true,
 		},
+		&cli.StringFlag{
+			Name:    "cdn-host",
+			Usage:   "CDN host",
+			EnvVars: []string{"CDN_HOST"},
+			Value:   "localhost:8089",
+			Hidden:  true,
+		},
 	}
 	app.Action = HTTPD
 	if err := app.Run(os.Args); err != nil {
@@ -114,7 +121,7 @@ func HTTPD(c *cli.Context) error {
 		}
 	}()
 
-	httpdApi := httpd.New(scyllaStore, redisStore, subSensor)
+	httpdApi := httpd.New(scyllaStore, redisStore, subSensor, c.String("cdn-host"))
 
 	r := chi.NewRouter()
 	r.Use(cors.AllowAll().Handler)
