@@ -13,21 +13,14 @@
 .admin-wrapper {
   position: relative;
   gap: var(--gap-7xs);
-
   width: 100%;
 }
 
+.edit-component .properties {
+  width: 100%;
+}
 
-/*
-@media screen and (max-width: 320px) {
-  .admin-wrapper {
-    width: 60%;
-  }
-}*/
-
-
-
-input.admin-input {
+.admin-wrapper .admin-input {
   /* border box */
   box-sizing: border-box;
   width: 100%;
@@ -41,13 +34,15 @@ input.admin-input {
   mix-blend-mode: normal;
   color: var(--text-text0);
 
-  padding-right: 40px;
   align-self: stretch;
   display: flex;
 }
 
-img.admin-pen-icon100 {
+.admin-wrapper .admin-pen-icon100 {
   position: absolute;
-  top: 60%;
-  right: 4%; /* Ajustez cette valeur en fonction de la distance souhaitée entre l'icône et l'input */
+  right: 12px;
+  top: 0px;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
