@@ -1,5 +1,4 @@
-import { CamContainerType as CamProps } from '../components/CamContainer'
-import { SensorProps } from '../components/CamSensor'
+import { CamContainerType as CamProps, SensorProps } from '../components/CamContainer'
 import { components } from './api'
 import { API_URL } from './client'
 

@@ -63,6 +63,9 @@ var migrations = []string{
 		criticity varchar,
 		PRIMARY KEY (id)
 	);`,
+
+	// add url to sensor if it is a camera
+	`ALTER TABLE idiot.devices ADD url varchar;`,
 }
 
 func Migrate(ctx context.Context, conn gocqlx.Session) error {

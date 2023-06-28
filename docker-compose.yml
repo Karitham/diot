@@ -33,6 +33,7 @@ services:
       REDIS_PASS: ${REDIS_PASS:?REDIS_PASS not set}
       REDIS_ADDR: ${REDIS_ADDR:-redis:6379}
       REDIS_USER: ${REDIS_USER:?REDIS_USER not set}
+      CDN_HOST: ${CDN_HOST:?CDN_HOST not set}
       PORT: 7667
     depends_on:
       scylla-0: 

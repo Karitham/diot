@@ -33,8 +33,7 @@ func main() {
 				Name:    "redis-addr",
 				Usage:   "Redis address",
 				EnvVars: []string{"REDIS_ADDR"},
-
-				Value: cli.NewStringSlice("localhost:6379"),
+				Value:   cli.NewStringSlice("localhost:6379"),
 			},
 
 			&cli.StringFlag{
@@ -111,7 +110,16 @@ func Main(c *cli.Context) error {
 
 	r.Use(httpd.Log(log))
 	r.Get("/video/{channel}", SubscribeVideoHandler(ValidToken(rd), pq))
-	r.Post("/video/{channel}", PostFramesHandler(func(user, pass string) error { return nil }, pq))
+	r.Post("/video/{channel}", PostFramesHandler(
+		func(user, pass string) error { return nil },
+		func(ctx context.Context, channel string) error {
+			rd.MediaPublisherPub(ctx, redis.MediaPublisher{
+				IoTID: channel,
+			})
+			return nil
+		},
+		pq,
+	))
 
 	log.Info("starting server", "port", c.Int("port"))
 	return http.ListenAndServe(fmt.Sprintf(":%d", c.Int("port")), r)

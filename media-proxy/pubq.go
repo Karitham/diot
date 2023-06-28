@@ -58,15 +58,10 @@ func (p *PubQ) GetFilesFromChannel(ctx context.Context, channel string) (io.Read
 
 func (p *PubQ) PublishFile(ctx context.Context, channel string, contents []byte, TTL time.Duration) error {
 	return p.badger.Update(func(txn *badger.Txn) error {
-		err := txn.SetEntry(&badger.Entry{
-			Key:       []byte(prefixChannel(channel)),
+		return txn.SetEntry(&badger.Entry{
+			Key:       prefixChannel(channel),
 			Value:     contents,
 			ExpiresAt: uint64(time.Now().Add(TTL).Unix()),
 		})
-		if err != nil {
-			return err
-		}
-
-		return nil
 	})
 }

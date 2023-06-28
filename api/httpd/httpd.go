@@ -58,11 +58,12 @@ type AlertStore interface {
 	GetAlerts(ctx context.Context) ([]scylla.Alert, error)
 }
 
-func New(dbstore DBStore, sessionStore SessionStore, readings ReadingSubscriber) *Service {
+func New(dbstore DBStore, sessionStore SessionStore, readings ReadingSubscriber, CDNHost string) *Service {
 	return &Service{
 		store:        dbstore,
 		readings:     readings,
 		sessionStore: sessionStore,
+		CDNHost:      CDNHost,
 	}
 }
 
@@ -70,6 +71,8 @@ type Service struct {
 	store        DBStore
 	readings     ReadingSubscriber
 	sessionStore SessionStore
+
+	CDNHost string
 }
 
 func WError(w http.ResponseWriter, r *http.Request, err error, code int, m string) *api.Response {

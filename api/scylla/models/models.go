@@ -30,6 +30,7 @@ var (
 		Columns: []string{
 			"id",
 			"name",
+			"url",
 		},
 		PartKey: []string{
 			"id",
@@ -135,6 +136,7 @@ type AlertsStruct struct {
 type DevicesStruct struct {
 	Id   string
 	Name string
+	Url  string
 }
 type KeysStruct struct {
 	Id         string
