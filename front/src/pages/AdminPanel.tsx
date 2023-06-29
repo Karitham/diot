@@ -9,6 +9,7 @@ import Navbar from '../components/Navbar'
 import AdminPlanningContainer from '../components/AdminPlanningContainer'
 import { client } from '../api/client'
 import SubmitButton from '../components/SubmitButton'
+import useAuth from '../api/useAuth'
 
 const device1 = { src: '/clap.svg', name: 'Living Room Cam 1' }
 const device2 = { src: '/spinner.svg', name: 'Living Room Cam 2' }
@@ -31,6 +32,8 @@ const AdminPanel: FunctionComponent = () => {
   }, [])
 
   const onLogoutContainerClick = useCallback(() => {
+    const destroySession = useAuth()[2]
+    destroySession()
     navigate('/')
   }, [navigate])
 

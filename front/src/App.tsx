@@ -7,17 +7,18 @@ import { useEffect } from 'react'
 
 import { ToastContainer, cssTransition, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import AuthGuard from './components/AuthGuard'
 
 function App() {
   const location = useLocation()
-  const action = useNavigationType();
+  const action = useNavigationType()
 
   // Close the toasts when change the page
   useEffect(() => {
     if (action === 'PUSH') {
-      toast.dismiss(); // Supprime tous les toasts actuellement affichés
+      toast.dismiss() // Supprime tous les toasts actuellement affichés
     }
-  }, [action]);
+  }, [action])
   //------------------------
 
   useEffect(() => {
@@ -71,8 +72,6 @@ function App() {
     }
   }, [location])
 
-  
-
   return (
     <div>
       <ToastContainer
@@ -91,9 +90,30 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/adminpanel" element={<AdminPanel />} />
-        <Route path="/notifications" element={<Notifications />} />
+        <Route
+          path="/dashboard"
+          element={
+            <AuthGuard>
+              <Dashboard />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/adminpanel"
+          element={
+            <AuthGuard>
+              <AdminPanel />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            <AuthGuard>
+              <Notifications />
+            </AuthGuard>
+          }
+        />
       </Routes>
     </div>
   )
