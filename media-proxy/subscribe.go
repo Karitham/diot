@@ -69,7 +69,7 @@ func jpegFramesToFLV(ctx context.Context, r io.Reader) (av.Demuxer, error) {
 	return flv.NewDemuxer(pr), nil
 }
 
-const FPS = 60
+const FPS = 12
 
 func ffmpegFromJPGToFLV(ctx context.Context, r io.Reader, w io.Writer) error {
 	cmd := exec.CommandContext(ctx, "ffmpeg",

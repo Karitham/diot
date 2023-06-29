@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/dgraph-io/badger/v4"
+	"github.com/dgraph-io/badger/v4/pb"
 )
 
 type PubQ struct {
@@ -20,36 +21,30 @@ func NewPubQ(db *badger.DB) *PubQ {
 }
 
 func prefixChannel(channel string) []byte {
-	return []byte(fmt.Sprintf("channel:%s:", channel))
+	return []byte(fmt.Sprintf("channel:%s", channel))
 }
 
 func (p *PubQ) GetFilesFromChannel(ctx context.Context, channel string) (io.Reader, error) {
 	reader, writer := io.Pipe()
 	go func() {
 		log.Debug("starting to get files from channel", "channel", channel)
-
-		for {
-			select {
-			case <-ctx.Done():
-				log.Debug("done getting files from channel", "channel", channel, "error", ctx.Err())
-				return
-			default:
-				item, err := p.badger.NewTransaction(false).Get(prefixChannel(channel))
+		err := p.badger.Subscribe(ctx, func(kv *badger.KVList) error {
+			for _, item := range kv.Kv {
+				_, err := writer.Write(item.Value)
 				if err != nil {
-					log.ErrorCtx(ctx, "error while getting files from channel", "error", err)
-					return
-				}
-
-				err = item.Value(func(val []byte) error {
-					writer.Write(val)
-					return nil
-				})
-				if err != nil {
-					log.ErrorCtx(ctx, "error while getting files from channel", "error", err)
-					continue
+					log.Error("error writing to pipe", "error", err)
+					return err
 				}
 			}
-
+			return nil
+		}, []pb.Match{
+			{
+				Prefix: prefixChannel(channel),
+			},
+		})
+		if err != nil {
+			log.Error("error subscribing to badger", "error", err)
+			return
 		}
 	}()
 
