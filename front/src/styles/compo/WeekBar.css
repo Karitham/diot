@@ -11,18 +11,13 @@
   width: 20.75rem;
 }
 .monday {
-  width: 3.75rem;
+  width: 5rem;
   flex-shrink: 0;
 }
-.planning-child,
-.planning-child17 {
-  align-self: stretch;
-  flex: 1;
-  position: relative;
-  background-color: var(--colors-primary);
-}
-.planning-child17 {
-  background-color: var(--bg-bg2);
+.canvas-full {
+  height: 100%;
+  width: 100%;
+  border-radius: 4px;
 }
 .monday-parent,
 .planning2 {
@@ -36,6 +31,5 @@
   height: 1.25rem;
 }
 .monday-parent {
-  width: 100%;
   gap: var(--gap-xs);
 }

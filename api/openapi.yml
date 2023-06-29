@@ -212,7 +212,7 @@ paths:
         - user
       summary: Delete a user by id
       security:
-        - bearerAuth: [users:delete]
+        - bearerAuth: [perm:users:delete]
       operationId: deleteUserById
       parameters:
         - name: id
@@ -268,7 +268,7 @@ paths:
       tags:
         - sensor
       security:
-        - bearerAuth: ["perm:sensors:update"]
+        - bearerAuth: [perm:sensors:update]
       summary: Rename a sensor
       operationId: renameSensor
       parameters:
@@ -366,10 +366,16 @@ components:
         email:
           type: string
           example: x@example.com
+        permissions:
+          type: array
+          items:
+            type: string
+          example: [perm:users:read, perm:users:update]
       required:
         - id
         - name
         - email
+        - permissions
     UserCreate:
       properties:
         name:
@@ -381,10 +387,17 @@ components:
         password:
           type: string
           example: DWD21378udh#g3@#d
+        permissions:
+          type: array
+          items:
+            type: string
+          example: [perm:users:read, perm:users:update]
       required:
         - name
         - email
         - password
+        - permissions
+
     Error:
       properties:
         message:

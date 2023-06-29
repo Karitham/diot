@@ -61,7 +61,7 @@ func (s *Store) GetUsers(ctx context.Context) ([]User, error) {
 }
 
 func (s *Store) DeleteUser(ctx context.Context, id ulid.ULID) error {
-	return s.conn.Query(qb.Delete(models.Users.Name()).Where(qb.Eq("id")).ToCql()).
+	return s.conn.Query(`DELETE FROM idiot.users WHERE id=?`, []string{"id"}).
 		BindMap(qb.M{"id": id.String()}).
 		WithContext(ctx).
 		ExecRelease()

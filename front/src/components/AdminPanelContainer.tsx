@@ -13,9 +13,10 @@ import { Account } from './UserAccount'
 
 export type AdminPanelContainerProps = {
   accounts: Account[]
+  refresh: () => void
 }
 
-const AdminPanelContainer: FunctionComponent<AdminPanelContainerProps> = memo(({ accounts }) => {
+const AdminPanelContainer: FunctionComponent<AdminPanelContainerProps> = memo((props: AdminPanelContainerProps) => {
   /*
   const options = [
     { value: 'option1', label: 'View cameras' },
@@ -39,8 +40,8 @@ const AdminPanelContainer: FunctionComponent<AdminPanelContainerProps> = memo(({
     <div className="users">
       <div className="users1">Users</div>
       <div className="accounts">
-        {accounts.map((a, index) => (
-          <AccountClosed key={index} account={a} />
+        {props.accounts.map((a, index) => (
+          <AccountClosed key={index} account={a} refresh={props.refresh} />
         ))}
       </div>
     </div>

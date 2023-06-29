@@ -10,6 +10,7 @@ import (
 
 	"github.com/Karitham/iDIoT/api/httpd/api"
 	"github.com/Karitham/iDIoT/api/scylla"
+	"github.com/Karitham/iDIoT/api/session"
 )
 
 // (POST /users)
@@ -33,10 +34,11 @@ func (s Service) CreateUser(w http.ResponseWriter, r *http.Request) *api.Respons
 
 	// hash password
 	su := scylla.User{
-		Email:    u.Email,
-		Name:     u.Name,
-		ID:       ulid.MustNew(ulid.Now(), rand.Reader).String(),
-		Password: string(p),
+		Email:       u.Email,
+		Name:        u.Name,
+		ID:          ulid.MustNew(ulid.Now(), rand.Reader).String(),
+		Password:    string(p),
+		Permissions: session.FromString(u.Permissions...),
 	}
 
 	err = s.store.CreateUser(r.Context(), su)
@@ -45,9 +47,10 @@ func (s Service) CreateUser(w http.ResponseWriter, r *http.Request) *api.Respons
 	}
 
 	return api.CreateUserJSON200Response(api.User{
-		ID:    ulid.MustParse(su.ID),
-		Email: su.Email,
-		Name:  su.Name,
+		ID:          ulid.MustParse(su.ID),
+		Email:       su.Email,
+		Name:        su.Name,
+		Permissions: su.Permissions.Strings(),
 	})
 }
 
@@ -59,9 +62,10 @@ func (us Service) GetUserByID(w http.ResponseWriter, r *http.Request, id ulid.UL
 	}
 
 	return api.GetUserByIDJSON200Response(api.User{
-		ID:    ulid.MustParse(u.ID),
-		Email: u.Email,
-		Name:  u.Name,
+		ID:          ulid.MustParse(u.ID),
+		Email:       u.Email,
+		Name:        u.Name,
+		Permissions: u.Permissions.Strings(),
 	})
 }
 
@@ -76,9 +80,10 @@ func (us Service) GetUsers(w http.ResponseWriter, r *http.Request) *api.Response
 	var users []api.User
 	for _, v := range u {
 		users = append(users, api.User{
-			ID:    ulid.MustParse(v.ID),
-			Email: v.Email,
-			Name:  v.Name,
+			ID:          ulid.MustParse(v.ID),
+			Email:       v.Email,
+			Name:        v.Name,
+			Permissions: v.Permissions.Strings(),
 		})
 	}
 

@@ -11,13 +11,12 @@ interface MyAccountProps {
   selectedValues: string[]
   handleDropdownChange: (selectedValues: string[]) => void
   onDeleteContainerClick: () => void
-  onSaveContainerClick: () => void
+  onSaveContainerClick: (acc: Account) => void
 }
 
 const MyAccount: FunctionComponent<MyAccountProps> = ({
   account,
   options,
-  selectedValues,
   handleDropdownChange,
   onDeleteContainerClick,
   onSaveContainerClick
@@ -51,7 +50,7 @@ const MyAccount: FunctionComponent<MyAccountProps> = ({
           </div>
           <MultiSelectDropdown
             options={options}
-            selectedValues={selectedValues}
+            selectedValues={account.permissions}
             onChange={handleDropdownChange}
             closedLabel="Click here to select permissions"
           />
@@ -62,7 +61,7 @@ const MyAccount: FunctionComponent<MyAccountProps> = ({
       </div>
       <div className="buttonblock">
         <DeleteButton onClick={onDeleteContainerClick} text="Delete" />
-        <SubmitButton onClick={onSaveContainerClick} text="Save" />
+        <SubmitButton onClick={() => onSaveContainerClick(account)} text="Save" />
       </div>
     </div>
   )

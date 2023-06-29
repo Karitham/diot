@@ -45,6 +45,7 @@ func (s *Store) AlertsSubscriber(ctx context.Context, data redis.AlertEvent) {
 		Id:          ulid.MustNew(ulid.Now(), rand.Reader).String(),
 		DeviceId:    data.ID,
 		AlertType:   data.Type,
+		Criticity:   strconv.Itoa(data.Criticity),
 		AlertValue:  vS,
 		AlertStatus: strconv.Itoa(data.Criticity),
 	})

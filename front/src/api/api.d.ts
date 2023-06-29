@@ -3,367 +3,383 @@
  * Do not make direct changes to the file.
  */
 
-
 export interface paths {
-  "/auth/login": {
+  '/auth/login': {
     /** Login */
-    post: operations["authLogin"];
-  };
-  "/auth/logout": {
+    post: operations['authLogin']
+  }
+  '/auth/logout': {
     /** Logout */
-    post: operations["authLogout"];
-  };
-  "/notifications/webpush": {
+    post: operations['authLogout']
+  }
+  '/notifications/webpush': {
     /** Send a webpush notification key */
-    get: operations["getWebpushKey"];
+    get: operations['getWebpushKey']
     /** Send a webpush notification registration payload */
-    post: operations["registerWebpush"];
-  };
-  "/users": {
+    post: operations['registerWebpush']
+  }
+  '/users': {
     /** Get all users */
-    get: operations["getUsers"];
+    get: operations['getUsers']
     /** Create a user */
-    post: operations["createUser"];
-  };
-  "/users/{id}": {
+    post: operations['createUser']
+  }
+  '/users/{id}': {
     /** Get a user by id */
-    get: operations["getUserById"];
+    get: operations['getUserById']
     /** Delete a user by id */
-    delete: operations["deleteUserById"];
-  };
-  "/sensors": {
+    delete: operations['deleteUserById']
+  }
+  '/sensors': {
     /** Get all sensors */
-    get: operations["getSensors"];
-  };
-  "/sensors/{id}/rename": {
+    get: operations['getSensors']
+  }
+  '/sensors/{id}/rename': {
     /** Rename a sensor */
-    post: operations["renameSensor"];
-  };
-  "/sensors/live": {
+    post: operations['renameSensor']
+  }
+  '/sensors/live': {
     /**
-     * Get live sensor data 
+     * Get live sensor data
      * @description This endpoint returns live data from the sensors.
      * It is a websocket endpoint, so you need to use a websocket client to connect to it.
      */
-    get: operations["getSensorsLive"];
-  };
-  "/alerts": {
+    get: operations['getSensorsLive']
+  }
+  '/alerts': {
     /** Get all alerts */
-    get: operations["getAlerts"];
-  };
+    get: operations['getAlerts']
+  }
 }
 
-export type webhooks = Record<string, never>;
+export type webhooks = Record<string, never>
 
 export interface components {
   schemas: {
     User: {
-      id: string;
+      id: string
       /** @example hi mark */
-      name: string;
+      name: string
       /** @example x@example.com */
-      email: string;
-    };
+      email: string
+      /**
+       * @example [
+       *   "perm:users:read",
+       *   "perm:users:update"
+       * ]
+       */
+      permissions: string[]
+    }
     UserCreate: {
       /** @example hi mark */
-      name: string;
+      name: string
       /** @example x@example.com */
-      email: string;
+      email: string
       /** @example DWD21378udh#g3@#d */
-      password: string;
-    };
+      password: string
+      /**
+       * @example [
+       *   "perm:users:read",
+       *   "perm:users:update"
+       * ]
+       */
+      permissions: string[]
+    }
     Error: {
       /** @description Error message */
-      message: string;
+      message: string
       /** @description Request ID */
-      request_id?: string;
-    };
+      request_id?: string
+    }
     WebpushKey: {
       /** @description Webpush key */
-      key: string;
-    };
+      key: string
+    }
     WebpushRegistration: {
       /** @description Webpush endpoint */
-      endpoint: string;
+      endpoint: string
       /** @description Webpush keys */
       keys: {
         /** @description Webpush p256dh key */
-        p256dh: string;
+        p256dh: string
         /** @description Webpush auth key */
-        auth: string;
-      };
-    };
+        auth: string
+      }
+    }
     SensorInfoCamera: {
-      feed_uri: string;
-    };
+      feed_uri: string
+    }
     SensorInfoHumidity: {
       /** @example 23.4 */
-      humidity: number;
-    };
+      humidity: number
+    }
     SensorInfoTemperature: {
       /** @example 23.4 */
-      temperature: number;
-    };
+      temperature: number
+    }
     SensorInfoIAQ: {
       /** @example 23.4 */
-      iaq: number;
-    };
+      iaq: number
+    }
     SensorInfo: {
-      kind: "SensorInfo";
-    } & Omit<components["schemas"]["SensorData"], "kind"> & {
-      /**
-       * @description A human readable label for the sensor 
-       * @example living room cam 1
-       */
-      label: string;
-    };
+      kind: 'SensorInfo'
+    } & Omit<components['schemas']['SensorData'], 'kind'> & {
+        /**
+         * @description A human readable label for the sensor
+         * @example living room cam 1
+         */
+        label: string
+      }
     SensorData: {
       /**
-       * @description The kind of sensor 
+       * @description The kind of sensor
        * @enum {string}
        */
-      kind: "camera" | "humidity" | "temperature" | "iaq";
+      kind: 'camera' | 'humidity' | 'temperature' | 'iaq'
       /** @description The sensor data */
-      data: components["schemas"]["SensorInfoHumidity"] | components["schemas"]["SensorInfoTemperature"] | components["schemas"]["SensorInfoCamera"] | components["schemas"]["SensorInfoIAQ"];
-      id: string;
-    };
+      data:
+        | components['schemas']['SensorInfoHumidity']
+        | components['schemas']['SensorInfoTemperature']
+        | components['schemas']['SensorInfoCamera']
+        | components['schemas']['SensorInfoIAQ']
+      id: string
+    }
     AlertHistoryEntry: {
-      id: string;
-      sensor_id: string;
-      kind: string;
-      value: string;
+      id: string
+      sensor_id: string
+      kind: string
+      value: string
       /** Format: date-time */
-      created_at: string;
-    };
-  };
-  responses: never;
-  parameters: never;
-  requestBodies: never;
-  headers: never;
-  pathItems: never;
+      created_at: string
+    }
+  }
+  responses: never
+  parameters: never
+  requestBodies: never
+  headers: never
+  pathItems: never
 }
 
-export type external = Record<string, never>;
+export type external = Record<string, never>
 
 export interface operations {
-
   /** Login */
   authLogin: {
     /** @description Login */
     requestBody: {
       content: {
-        "application/json": {
+        'application/json': {
           /** @example abc@efg.xyz */
-          email: string;
+          email: string
           /** @example DHBUD@&#W(IJOQDJCNE@DQFX$#D) */
-          password: string;
-        };
-      };
-    };
+          password: string
+        }
+      }
+    }
     responses: {
       /** @description ok */
       200: {
         content: {
-          "application/json": {
+          'application/json': {
             /** @example sess_dwquijlbndwqbyuidhkwqdyuibqwd89d30y12dh22389d:dh189gd2d1ghod921 */
-            token: string;
+            token: string
             /**
-             * Format: date-time 
+             * Format: date-time
              * @example 2021-01-01T00:00:00Z
              */
-            expire_at: string;
-          };
-        };
-      };
+            expire_at: string
+          }
+        }
+      }
       /** @description unexpected error */
       default: {
         content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['Error']
+        }
+      }
+    }
+  }
   /** Logout */
   authLogout: {
     responses: {
       /** @description ok */
-      200: never;
+      200: never
       /** @description unexpected error */
       default: {
         content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['Error']
+        }
+      }
+    }
+  }
   /** Send a webpush notification key */
   getWebpushKey: {
     responses: {
       /** @description ok */
       200: {
         content: {
-          "application/json": components["schemas"]["WebpushKey"];
-        };
-      };
+          'application/json': components['schemas']['WebpushKey']
+        }
+      }
       /** @description unexpected error */
       default: {
         content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['Error']
+        }
+      }
+    }
+  }
   /** Send a webpush notification registration payload */
   registerWebpush: {
     /** @description Create a new user */
     requestBody: {
       content: {
-        "application/json": components["schemas"]["WebpushRegistration"];
-      };
-    };
+        'application/json': components['schemas']['WebpushRegistration']
+      }
+    }
     responses: {
       /** @description ok */
-      200: never;
+      200: never
       /** @description unexpected error */
       default: {
         content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['Error']
+        }
+      }
+    }
+  }
   /** Get all users */
   getUsers: {
     responses: {
       /** @description ok */
       200: {
         content: {
-          "application/json": (components["schemas"]["User"])[];
-        };
-      };
+          'application/json': components['schemas']['User'][]
+        }
+      }
       /** @description unexpected error */
       default: {
         content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['Error']
+        }
+      }
+    }
+  }
   /** Create a user */
   createUser: {
     /** @description Create a new user */
     requestBody: {
       content: {
-        "application/json": components["schemas"]["UserCreate"];
-      };
-    };
+        'application/json': components['schemas']['UserCreate']
+      }
+    }
     responses: {
       /** @description ok */
       200: {
         content: {
-          "application/json": components["schemas"]["User"];
-        };
-      };
+          'application/json': components['schemas']['User']
+        }
+      }
       /** @description unexpected error */
       default: {
         content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['Error']
+        }
+      }
+    }
+  }
   /** Get a user by id */
   getUserById: {
     parameters: {
       path: {
         /** @description id of user to return */
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
       /** @description ok */
       200: {
         content: {
-          "application/json": components["schemas"]["User"];
-        };
-      };
+          'application/json': components['schemas']['User']
+        }
+      }
       /** @description unexpected error */
       default: {
         content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['Error']
+        }
+      }
+    }
+  }
   /** Delete a user by id */
   deleteUserById: {
     parameters: {
       path: {
         /** @description id of user to delete */
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
       /** @description ok */
       200: {
         content: {
-          "application/json": components["schemas"]["User"];
-        };
-      };
+          'application/json': components['schemas']['User']
+        }
+      }
       /** @description unexpected error */
       default: {
         content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['Error']
+        }
+      }
+    }
+  }
   /** Get all sensors */
   getSensors: {
     responses: {
       /** @description ok */
       200: {
         content: {
-          "application/json": (components["schemas"]["SensorInfo"])[];
-        };
-      };
+          'application/json': components['schemas']['SensorInfo'][]
+        }
+      }
       /** @description unexpected error */
       default: {
         content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['Error']
+        }
+      }
+    }
+  }
   /** Rename a sensor */
   renameSensor: {
     parameters: {
       query: {
         /** @description new name of sensor */
-        name: string;
-      };
+        name: string
+      }
       path: {
         /** @description id of sensor to rename */
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
       /** @description ok */
       200: {
         content: {
-          "application/json": components["schemas"]["SensorInfo"];
-        };
-      };
+          'application/json': components['schemas']['SensorInfo']
+        }
+      }
       /** @description unexpected error */
       default: {
         content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['Error']
+        }
+      }
+    }
+  }
   /**
-   * Get live sensor data 
+   * Get live sensor data
    * @description This endpoint returns live data from the sensors.
    * It is a websocket endpoint, so you need to use a websocket client to connect to it.
    */
@@ -372,32 +388,32 @@ export interface operations {
       /** @description ok */
       200: {
         content: {
-          "application/json": (components["schemas"]["SensorData"])[];
-        };
-      };
+          'application/json': components['schemas']['SensorData'][]
+        }
+      }
       /** @description unexpected error */
       default: {
         content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['Error']
+        }
+      }
+    }
+  }
   /** Get all alerts */
   getAlerts: {
     responses: {
       /** @description ok */
       200: {
         content: {
-          "application/json": (components["schemas"]["AlertHistoryEntry"])[];
-        };
-      };
+          'application/json': components['schemas']['AlertHistoryEntry'][]
+        }
+      }
       /** @description unexpected error */
       default: {
         content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['Error']
+        }
+      }
+    }
+  }
 }
