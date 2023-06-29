@@ -6,7 +6,7 @@ import MultiSelectDropdown from './MultiSelectDropdown';
 import SubmitButton from './SubmitButton';
 import AccountClosed from './AccountClosed';
 
-interface AdminPanelContainerProps {
+export type AdminPanelContainerProps= {
   accounts: { name: string }[];
 }
 
