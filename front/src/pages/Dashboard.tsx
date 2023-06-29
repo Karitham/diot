@@ -17,10 +17,7 @@ const Dashboard: FunctionComponent = () => {
   // onMount
   useEffect(() => {
     getSensors().then(setSensors)
-
-    // TODO(@chp567): Make sure we're logged in
     subscribePush()
-
     ws(onData)
   }, [])
 

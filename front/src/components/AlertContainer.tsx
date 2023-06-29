@@ -1,6 +1,7 @@
 import '../styles/compo/AlertContainer.css'
 
 export type AlertContainerProps = {
+  id: string
   icon: JSX.Element
   label: string
   time: Date

@@ -19,7 +19,7 @@ const Notifications: FunctionComponent = () => {
           <div className="alerts-parent">
             <div className="alerts">
               {alerts.map(a => (
-                <div className="grow-container">
+                <div className="grow-container" key={a.id}>
                   <AlertContainer {...a} />
                 </div>
               ))}
@@ -42,6 +42,7 @@ const getNotifications = async (): Promise<AlertContainerProps[]> => {
 
   return a.data.map(a => {
     return {
+      id: a.id,
       icon: <Icon kind={a.kind}></Icon>,
       time: new Date(a.created_at),
       sensor: a.sensor_id,
