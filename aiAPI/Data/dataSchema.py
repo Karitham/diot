@@ -55,7 +55,7 @@ class DataSchema:
         
         return json_data
     
-    def human_schema(self, id_iot, human_presence, timestamp):
+    def human_schema(self, id_iot, timestamp):
         data = {
                     'id': id_iot,
                     'type': "intrusion",

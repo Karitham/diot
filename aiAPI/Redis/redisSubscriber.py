@@ -37,7 +37,32 @@ class RedisSubscriber:
                     #Appeler la fonction pour traiter les données dans le json 
                     processData.process_data_sensor(json_data)
         except Exception as e:
-            print("Erreur lors de l'appel de la fonction process_data dans la classe ProcessData", str(e))
+            print("Erreur lors de l'appel de la fonction process_data_sensor dans la classe ProcessData", str(e))
+            
+        
+            try:
+                self.redis_client.close()
+            except Exception as e:
+                print("Erreur lors de la fermeture de la connexion Redis :", str(e))
+    
+    def subscribe_key_cam(self):
+        try:
+            subscription = self.redis_client.pubsub()
+            subscription.subscribe(self.key_cam)
+        except Exception as e:
+             print("Erreur lors de la création de l'objet subscription ou de l'abonnement à la clé de données iot:camera :", str(e))
+        
+        try:
+            for message in subscription.listen():
+                if message['type'] == 'message':
+                    # Récupérer les données JSON
+                    json_data = message['data']
+                    #Charger le json dans la classe
+                    processData = ProcessData()
+                    #Appeler la fonction pour traiter les données dans le json 
+                    processData.process_data_camera(json_data)
+        except Exception as e:
+            print("Erreur lors de l'appel de la fonction process_data_camera dans la classe ProcessData", str(e))
             
         
             try:
