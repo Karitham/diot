@@ -40,16 +40,19 @@ const AdminPanel: FunctionComponent = () => {
   useEffect(() => {
     const fetchAccounts = async () => {
       try {
-        const response = await client.get('/users', {}) // Appel à l'API avec le chemin "/users"
-        const accountNames = response.data.map((account: any) => account.name)
-        setAccounts(accountNames)
-        console.log('Accounts:', accountNames)
+        const response = await client.get('/users', {})
+        if (response.data) {
+          const accountNames = response.data.map((account: any) => account.name)
+          setAccounts(accountNames)
+          console.log('Accounts:', accountNames)
+        } else {
+          console.error('Error fetching accounts: Response data is undefined')
+        }
       } catch (error) {
-        // Gérer l'erreur ici
         console.error('Error fetching accounts:', error)
       }
     }
-  
+
     fetchAccounts()
   }, [])
 
