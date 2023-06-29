@@ -2,8 +2,6 @@ import { FunctionComponent } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/compo/DeleteButton.css';
-import 'react-toastify/dist/ReactToastify.css'
-
 
 type ButtonProps = {
   onClick?: () => void;
