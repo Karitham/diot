@@ -6,6 +6,7 @@ import AdminFormContainer from './AdminFormContainer'
 
 type EditModalProps = {
   onClose?: () => void
+  onSave?: (content: string) => void
   content?: string
   label?: string
 }
@@ -16,8 +17,10 @@ const EditComponent: FunctionComponent<EditModalProps> = memo((props: EditModalP
   const [content, setContent] = useState<string>(props.content ?? '')
 
   const onSaveContainerClick = useCallback(() => {
+    props.onSave?.(content)
+    props.onClose?.()
     navigate('/dashboard')
-  }, [navigate])
+  }, [navigate, props, content])
 
   return (
     <div className="edit-component">

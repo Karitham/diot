@@ -12,10 +12,7 @@ const Dashboard: FunctionComponent = () => {
   const [sensors, setSensors] = useState<Array<SensorT>>([])
 
   // on WebSocket message, update sensors, force rerender
-  const onData = (data: MessageEvent) => {
-    const sensorData = mapSensorData(sensors, JSON.parse(data.data))
-    setSensors([...sensorData])
-  }
+  const onData = (data: MessageEvent) => setSensors([...mapSensorData(sensors, JSON.parse(data.data))])
 
   // onMount
   useEffect(() => {
@@ -39,7 +36,7 @@ const Dashboard: FunctionComponent = () => {
             <div className="titre2">Dashboard</div>
           </div>
           <div className="cam-grid-container">
-            <SensorGrid sensors={sensors} />
+            <SensorGrid sensors={sensors} setSensors={setSensors} />
           </div>
         </div>
       </div>
@@ -66,7 +63,7 @@ const getSensors = async (): Promise<SensorT[]> => {
 
 const Alert = (props: { alert?: AlertContainerProps }) => props.alert && <AlertContainer {...props.alert} />
 
-const SensorGrid = (props: { sensors: SensorT[] }) => {
+const SensorGrid = (props: { sensors: SensorT[]; setSensors: (sensors: SensorT[]) => void }) => {
   if (!props.sensors) {
     return <div>Loading...</div>
   }
@@ -74,14 +71,14 @@ const SensorGrid = (props: { sensors: SensorT[] }) => {
   return props.sensors.map(s => {
     if ('url' in s) {
       return (
-        <CamContainer key={s.id} {...(s as CamProps)}>
-          <Cam {...(s as CamProps)} />
+        <CamContainer key={s.id} {...(s as CamProps)} id={s.id} refresh={() => getSensors().then(props.setSensors)}>
+          <Cam {...(s as CamProps)} id={s.id} />
         </CamContainer>
       )
     } else {
       return (
-        <CamContainer key={s.id} {...(s as SensorProps)}>
-          <Sensor {...(s as SensorProps)} />
+        <CamContainer key={s.id} {...(s as SensorProps)} id={s.id} refresh={() => getSensors().then(props.setSensors)}>
+          <Sensor {...(s as SensorProps)} id={s.id} />
         </CamContainer>
       )
     }

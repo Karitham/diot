@@ -173,6 +173,12 @@ type AuthLoginJSONBody struct {
 // RegisterWebpushJSONBody defines parameters for RegisterWebpush.
 type RegisterWebpushJSONBody WebpushRegistration
 
+// RenameSensorParams defines parameters for RenameSensor.
+type RenameSensorParams struct {
+	// new name of sensor
+	Name string `json:"name"`
+}
+
 // CreateUserJSONBody defines parameters for CreateUser.
 type CreateUserJSONBody UserCreate
 
@@ -357,6 +363,26 @@ func GetSensorsLiveJSON200Response(body []SensorData) *Response {
 // GetSensorsLiveJSONDefaultResponse is a constructor method for a GetSensorsLive response.
 // A *Response is returned with the configured status code and content type from the spec.
 func GetSensorsLiveJSONDefaultResponse(body Error) *Response {
+	return &Response{
+		body:        body,
+		Code:        200,
+		contentType: "application/json",
+	}
+}
+
+// RenameSensorJSON200Response is a constructor method for a RenameSensor response.
+// A *Response is returned with the configured status code and content type from the spec.
+func RenameSensorJSON200Response(body SensorInfo) *Response {
+	return &Response{
+		body:        body,
+		Code:        200,
+		contentType: "application/json",
+	}
+}
+
+// RenameSensorJSONDefaultResponse is a constructor method for a RenameSensor response.
+// A *Response is returned with the configured status code and content type from the spec.
+func RenameSensorJSONDefaultResponse(body Error) *Response {
 	return &Response{
 		body:        body,
 		Code:        200,

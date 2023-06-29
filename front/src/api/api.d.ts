@@ -35,6 +35,10 @@ export interface paths {
     /** Get all sensors */
     get: operations["getSensors"];
   };
+  "/sensors/{id}/rename": {
+    /** Rename a sensor */
+    post: operations["renameSensor"];
+  };
   "/sensors/live": {
     /**
      * Get live sensor data 
@@ -321,6 +325,33 @@ export interface operations {
       200: {
         content: {
           "application/json": (components["schemas"]["SensorInfo"])[];
+        };
+      };
+      /** @description unexpected error */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /** Rename a sensor */
+  renameSensor: {
+    parameters: {
+      query: {
+        /** @description new name of sensor */
+        name: string;
+      };
+      path: {
+        /** @description id of sensor to rename */
+        id: string;
+      };
+    };
+    responses: {
+      /** @description ok */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SensorInfo"];
         };
       };
       /** @description unexpected error */

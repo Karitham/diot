@@ -185,3 +185,13 @@ func (s *Store) MediaPublisherSubscriber(ctx context.Context, data redis.MediaPu
 		log.ErrorCtx(ctx, err.Error())
 	}
 }
+
+func (s *Store) RenameSensor(ctx context.Context, id string, name string) error {
+	return s.conn.Query(models.Devices.UpdateBuilder().Set("name").Where(qb.Eq("id")).ToCql()).
+		BindMap(qb.M{
+			"id":   id,
+			"name": name,
+		}).
+		WithContext(ctx).
+		ExecRelease()
+}

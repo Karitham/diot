@@ -37,6 +37,9 @@ type ServerInterface interface {
 	// Get live sensor data
 	// (GET /sensors/live)
 	GetSensorsLive(w http.ResponseWriter, r *http.Request) *Response
+	// Rename a sensor
+	// (POST /sensors/{id}/rename)
+	RenameSensor(w http.ResponseWriter, r *http.Request, id string, params RenameSensorParams) *Response
 	// Get all users
 	// (GET /users)
 	GetUsers(w http.ResponseWriter, r *http.Request) *Response
@@ -201,6 +204,48 @@ func (siw *ServerInterfaceWrapper) GetSensorsLive(w http.ResponseWriter, r *http
 
 	var handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		resp := siw.Handler.GetSensorsLive(w, r)
+		if resp != nil {
+			if resp.body != nil {
+				render.Render(w, r, resp)
+			} else {
+				w.WriteHeader(resp.Code)
+			}
+		}
+	})
+
+	// Operation specific middleware
+	handler = siw.Middlewares.Auth(handler).ServeHTTP
+
+	handler(w, r.WithContext(ctx))
+}
+
+// RenameSensor operation middleware
+func (siw *ServerInterfaceWrapper) RenameSensor(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	if err := runtime.BindStyledParameter("simple", false, "id", chi.URLParam(r, "id"), &id); err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{err, "id"})
+		return
+	}
+
+	ctx = context.WithValue(ctx, BearerAuthScopes, []string{"perm:sensors:update"})
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params RenameSensorParams
+
+	// ------------- Required query parameter "name" -------------
+
+	if err := runtime.BindQueryParameter("form", true, true, "name", r.URL.Query(), &params.Name); err != nil {
+		err = fmt.Errorf("invalid format for parameter name: %w", err)
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{err, "name"})
+		return
+	}
+
+	var handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		resp := siw.Handler.RenameSensor(w, r, id, params)
 		if resp != nil {
 			if resp.body != nil {
 				render.Render(w, r, resp)
@@ -459,6 +504,7 @@ func Handler(si ServerInterface, opts ...ServerOption) http.Handler {
 		r.Post("/notifications/webpush", wrapper.RegisterWebpush)
 		r.Get("/sensors", wrapper.GetSensors)
 		r.Get("/sensors/live", wrapper.GetSensorsLive)
+		r.Post("/sensors/{id}/rename", wrapper.RenameSensor)
 		r.Get("/users", wrapper.GetUsers)
 		r.Post("/users", wrapper.CreateUser)
 		r.Delete("/users/{id}", wrapper.DeleteUserByID)

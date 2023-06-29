@@ -11,6 +11,7 @@ import (
 
 	"github.com/Karitham/iDIoT/api/httpd/api"
 	"github.com/Karitham/iDIoT/api/redis"
+	"github.com/Karitham/iDIoT/api/session"
 	"nhooyr.io/websocket"
 	"nhooyr.io/websocket/wsjson"
 )
@@ -121,5 +122,20 @@ func (s *Service) GetSensorsLive(w http.ResponseWriter, r *http.Request) *api.Re
 
 	<-subctx.Done()
 	s.readings.Unsubscribe(rid)
+	return nil
+}
+
+// (POST /sensors/{id}/rename)
+func (s *Service) RenameSensor(w http.ResponseWriter, r *http.Request, id string, params api.RenameSensorParams) *api.Response {
+	user := session.FromContext(r.Context())
+	if user == nil {
+		return WError(w, r, nil, 401, "unauthorized")
+	}
+
+	err := s.store.RenameSensor(r.Context(), id, params.Name)
+	if err != nil {
+		return WError(w, r, err, 500, err.Error())
+	}
+
 	return nil
 }

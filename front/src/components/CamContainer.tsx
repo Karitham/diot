@@ -3,11 +3,14 @@ import '../styles/compo/CamContainer.css'
 import EditComponent from './EditComponent'
 import PortalPopup from './PortalPopup'
 import FlvJs from 'flv.js'
+import { client } from '../api/client'
 
 const CamContainer = (props: {
   fullwidth?: boolean
   disabled?: boolean
   label: string
+  id: string
+  refresh: () => void
 
   children: JSX.Element
 }) => {
@@ -37,7 +40,27 @@ const CamContainer = (props: {
       </div>
       {isEditComponentOpen && (
         <PortalPopup overlayColor="rgba(113, 113, 113, 0.3)" placement="Centered" onOutsideClick={closeEditComponent}>
-          <EditComponent onClose={closeEditComponent} label={props.label} />
+          <EditComponent
+            onClose={closeEditComponent}
+            label={props.label}
+            onSave={content => {
+              if (!content || content.length < 2) return
+              client
+                .post('/sensors/{id}/rename', {
+                  params: {
+                    path: {
+                      id: props.id
+                    },
+                    query: {
+                      name: content
+                    }
+                  }
+                })
+                .then(() => {
+                  props.refresh()
+                })
+            }}
+          />
         </PortalPopup>
       )}
     </>

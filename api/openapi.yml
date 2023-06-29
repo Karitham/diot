@@ -261,6 +261,43 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+
+  /sensors/{id}/rename:
+    x-go-middlewares: [auth]
+    post:
+      tags:
+        - sensor
+      security:
+        - bearerAuth: ["perm:sensors:update"]
+      summary: Rename a sensor
+      operationId: renameSensor
+      parameters:
+        - name: id
+          in: path
+          description: id of sensor to rename
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: query
+          description: new name of sensor
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SensorInfo"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   /sensors/live:
     x-go-middlewares: [auth]
     get: 

@@ -34,6 +34,7 @@ type WebpushStore interface {
 
 type SensorStore interface {
 	GetSensors(ctx context.Context) ([]scylla.SensorInfoWithLastReading, error)
+	RenameSensor(ctx context.Context, id string, name string) error
 }
 
 type DBStore interface {
