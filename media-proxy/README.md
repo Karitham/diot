@@ -43,7 +43,3 @@ Example:
 ```http
 GET /video/arduino_id HTTP/1.1
 ```
-
-## TODO
-
-- [ ] Authentication for publishing

@@ -106,6 +106,13 @@ export const Cam = (props: CamContainerType) => {
     flvPlayer.attachMediaElement(videoRef.current!)
     flvPlayer.load()
     flvPlayer.play()
+
+    return () => {
+      flvPlayer.pause()
+      flvPlayer.unload()
+      flvPlayer.detachMediaElement()
+      flvPlayer.destroy()
+    }
   }, [props.url, videoRef])
 
   return (

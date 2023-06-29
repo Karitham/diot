@@ -116,10 +116,14 @@ func Main(c *cli.Context) error {
 		return nil
 	}
 
+	ip := func(ctx context.Context, intrusion redis.Intrusion) error {
+		return rd.IntrusionPub(ctx, intrusion)
+	}
+
 	r.Use(httpd.Log(log))
 	r.Get("/video/{channel}", SubscribeVideoHandler(ValidToken(rd), pq))
 	r.Post("/video/{channel}", PostFramesHandler(aq, mpp, pq))
-	r.Post("/image/{channel}", PostFrameHandler(aq, mpp, pq))
+	r.Post("/image/{channel}", PostFrameHandler(aq, mpp, ip, pq))
 
 	log.Info("starting server", "port", c.Int("port"))
 	return http.ListenAndServe(fmt.Sprintf(":%d", c.Int("port")), r)
