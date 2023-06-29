@@ -110,7 +110,6 @@
   align-items: flex-start;
   justify-content: flex-start;
   gap: var(--gap-5xl);
-  font-size: var(--title-size);
   color: var(--text-text0);
 }
 .logout,
@@ -118,6 +117,7 @@
   border-radius: var(--br-5xs);
   background-color: var(--colors-button);
   box-shadow: var(--sm);
+  color: var(--text-textneg);
   overflow: hidden;
   flex-shrink: 0;
   flex-direction: row;
@@ -146,18 +146,7 @@
   font-size: var(--label-size);
   color: var(--text-textneg);
   font-family: var(--title);
-  
 }
-
-
-
-
-
-
-
-
-
-
 
 .text1 {
   display: flex;
@@ -208,4 +197,8 @@
   font-size: var(--font-size-base);
   color: var(--colors-accent);
   font-family: var(--title);
+}
+
+.admin-label {
+  width: 100%;
 }

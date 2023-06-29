@@ -38,14 +38,12 @@ const MyAccount: FunctionComponent<MyAccountProps> = ({
           <div className="permissions-allow-you">
             Permissions allow you to configure what action a user is able to accomplish.
           </div>
-          <div className="">
-            <MultiSelectDropdown
-              options={options}
-              selectedValues={selectedValues}
-              onChange={handleDropdownChange}
-              closedLabel="Click here to select permissions"
-            />
-          </div>
+          <MultiSelectDropdown
+            options={options}
+            selectedValues={selectedValues}
+            onChange={handleDropdownChange}
+            closedLabel="Click here to select permissions"
+          />
           <div className="permissions-allow-you2">
             Permissions allow you to configure what action a user is able to accomplish.
           </div>
