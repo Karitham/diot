@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import '../styles/compo/Navbar.css'
 
@@ -28,13 +28,18 @@ const Navbar: React.FC<NavbarProps> = ({ settingsText }) => {
   return (
     <nav className="nav">
       <div className="topnav">
-        <div className="logoslogan">
-          <img className="logotext-icon" alt="" src="/logotext.svg" onClick={onTopNavContainerClick}/>
+        <div className="logoslogan hover-effect">
+          <img className="logotext-icon" alt="" src="/logotext.svg" onClick={onTopNavContainerClick} />
           <b className="smart-homes-smarter">Smart homes, smarter</b>
         </div>
         <div className="icons">
-          <img className="notification-icon" alt="" src="/notification.svg" onClick={onNotificationIconClick}/>
-          <img className="user-icon" alt="" src="/user.svg" onClick={onUserLogoClick} />
+          <img
+            className="notification-icon hover-effect"
+            alt=""
+            src="/notification.svg"
+            onClick={onNotificationIconClick}
+          />
+          <img className="user-icon hover-effect" alt="" src="/user.svg" onClick={onUserLogoClick} />
         </div>
       </div>
       <div className="breadcrumbs">
@@ -42,9 +47,8 @@ const Navbar: React.FC<NavbarProps> = ({ settingsText }) => {
           Dashboard
         </Link>
         <div className="crumb1">
-          <img className="caret-icon" alt="" src="/caret.svg"/>
-            {settingsText}
-
+          <img className="caret-icon" alt="" src="/caret.svg" />
+          {settingsText}
         </div>
         <div className="crumb2">
           <img className="caret-icon" alt="" src="/caret1.svg" />

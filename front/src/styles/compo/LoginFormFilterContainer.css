@@ -15,7 +15,6 @@
   border-radius: var(--br-9xs);
   background-color: var(--colors-primary);
   box-shadow: var(--sm);
-  overflow: hidden;
   display: flex;
   flex-direction: row;
   padding: var(--padding-xs) var(--padding-13xl);

@@ -32,7 +32,7 @@ const Dashboard: FunctionComponent = () => {
         <Alert alert={alert} />
         <div className="camscontainer">
           <div className="titlecontainer1">
-            <img className="pause-icon1" alt="" src="/pause1.svg" />
+            <img className="pause-icon1 hover-effect" alt="" src="/pause1.svg" />
             <div className="titre2">Dashboard</div>
           </div>
           <div className="cam-grid-container">

@@ -17,12 +17,10 @@
   align-self: stretch;
   flex: 1;
   max-width: 100%;
-  overflow: hidden;
   max-height: 100%;
 }
 .magnifyingglass15,
 .magnifyingglass16 {
-  overflow: hidden;
   flex-direction: row;
   padding: var(--padding-11xs);
   align-items: center;
@@ -48,7 +46,6 @@
   background-color: var(--text-textneg);
   box-shadow: var(--sm);
   border: 1px solid var(--bg-bg2);
-  overflow: hidden;
   flex-direction: row;
   padding: var(--padding-xs);
   align-items: center;

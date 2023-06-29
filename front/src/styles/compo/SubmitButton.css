@@ -6,23 +6,22 @@
 }
 
 .button1 {
+  cursor: pointer;
   border-radius: var(--br-5xs);
   background-color: var(--colors-button);
   box-shadow: var(--sm);
-  overflow: hidden;
   padding: var(--padding-xs) var(--padding-13xl);
   align-items: flex-end;
   mix-blend-mode: normal;
   border: none;
 }
+
 .buttoncontainer1 {
-  align-self: stretch;
-  align-items: center;
   font-size: var(--label-size);
   color: var(--text-textneg);
   font-family: var(--title);
 }
 
-.button-save{
-    color: white;
-  }
+.button-save {
+  color: white;
+}

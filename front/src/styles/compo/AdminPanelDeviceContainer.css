@@ -16,7 +16,6 @@
   position: relative;
   width: 1.25rem;
   height: 1.25rem;
-  overflow: hidden;
   flex-shrink: 0;
 }
 .label1 {
@@ -39,7 +38,6 @@
   border-radius: var(--br-5xs);
   background-color: var(--bg-bg1);
   box-shadow: var(--sm);
-  overflow: hidden;
   padding: var(--padding-5xl);
   gap: var(--gap-base);
 }

@@ -1,19 +1,19 @@
-import { FunctionComponent } from 'react';
-import "../styles/compo/DeleteButton.css"
+import { FunctionComponent } from 'react'
+import '../styles/compo/DeleteButton.css'
 
 type ButtonProps = {
-  onClick?: () => void;
-  text?: string;
-};
+  onClick?: () => void
+  text?: string
+}
 
 const Button: FunctionComponent<ButtonProps> = ({ onClick, text }) => {
   return (
-    <div className="buttoncontainer6">
+    <div className="buttoncontainer6 hover-effect">
       <button className="button6" onClick={onClick}>
         <b className="button-save6">{text}</b>
       </button>
-      </div>
-  );
-};
+    </div>
+  )
+}
 
-export default Button;
+export default Button

@@ -9,7 +9,6 @@
   border-radius: var(--br-5xs);
   box-shadow: var(--sm);
   border: 1px solid var(--colors-red);
-  overflow: hidden;
   display: flex;
   flex-direction: row;
   padding: var(--padding-xs) var(--padding-13xl);

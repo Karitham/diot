@@ -3,7 +3,6 @@
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  overflow: hidden;
   text-overflow: ellipsis;
   gap: var(--gap-5xs);
 }
@@ -21,7 +20,6 @@
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
-  overflow: hidden;
   text-overflow: ellipsis;
   width: 100%;
   white-space: nowrap;

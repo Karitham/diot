@@ -20,7 +20,6 @@
   flex: 1;
   position: relative;
   background-color: var(--colors-primary);
-  overflow: hidden;
 }
 .planning-child17 {
   background-color: var(--bg-bg2);

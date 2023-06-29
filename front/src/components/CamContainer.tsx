@@ -29,11 +29,11 @@ const CamContainer = (props: {
       <div className={`cam-container ${props.fullwidth ? 'full-width' : ''} ${props.disabled ? 'disabled' : ''}`}>
         <div className="label">
           <div className="label-text">
-            <img className="label-text-icon" alt="" src="/pause1.svg" />
+            <img className="label-text-icon hover-effect" alt="" src="/pause1.svg" />
             <div className="label-title">{props.label}</div>
           </div>
           <div className="label-icons">
-            <img className="label-icon" alt="" src="/pen3.svg" onClick={openEditComponent} />
+            <img className="label-icon hover-effect" alt="" src="/pen3.svg" onClick={openEditComponent} />
           </div>
         </div>
         {props.children}

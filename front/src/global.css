@@ -63,3 +63,14 @@ footer {
   /* Effects */
   --sm: 0px 2px 10px rgba(50, 50, 50, 0.1);
 }
+
+.hover-effect-xl:hover,
+.hover-effect:hover {
+  translate: 0.3s;
+  transition: 0.3s;
+  transform: translateY(2px);
+}
+
+.hover-effect-xl:hover {
+  transform: translateY(4px);
+}

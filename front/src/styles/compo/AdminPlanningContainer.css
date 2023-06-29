@@ -43,7 +43,6 @@
   position: relative;
   font-weight: 500;
   font-family: var(--title);
-
 }
 .title1s {
   align-self: stretch;
@@ -71,12 +70,10 @@
 .vector-icon4s {
   flex: 1;
   max-width: 100%;
-  overflow: hidden;
   max-height: 100%;
 }
 .calendars,
 .magnifyingglass6s {
-  overflow: hidden;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -100,7 +97,6 @@
   background-color: var(--text-textneg);
   box-shadow: var(--sm);
   border: 1px solid var(--bg-bg2);
-  overflow: hidden;
   flex-direction: row;
   padding: var(--padding-xs);
   align-items: center;
@@ -131,7 +127,6 @@
   background-color: var(--text-textneg);
   box-shadow: var(--sm);
   border: 1px solid var(--colors-red);
-  overflow: hidden;
   padding: 0.88rem 1rem;
   align-items: center;
   justify-content: center;
@@ -155,7 +150,6 @@
   align-items: center;
 }
 .planning9s {
-  overflow: hidden;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--gap-xs);
@@ -176,7 +170,6 @@
   border-radius: var(--br-5xs);
   background-color: var(--colors-button);
   box-shadow: var(--sm);
-  overflow: hidden;
   flex-direction: row;
   padding: var(--padding-xs) var(--padding-13xl);
   align-items: center;
@@ -234,7 +227,6 @@
 }
 .input15s,
 .mails {
-  overflow: hidden;
 }
 .input15s {
   align-self: stretch;
@@ -255,7 +247,6 @@
   position: relative;
   width: 0.75rem;
   height: 0.75rem;
-  overflow: hidden;
   flex-shrink: 0;
 }
 .permissions-allow-yous {
@@ -275,7 +266,6 @@
   flex-direction: column;
 }
 .downs {
-  overflow: hidden;
   align-items: center;
   justify-content: center;
 }
@@ -295,7 +285,6 @@
 .button3s {
   border-radius: var(--br-5xs);
   box-shadow: var(--sm);
-  overflow: hidden;
   flex-direction: row;
   padding: var(--padding-xs) var(--padding-13xl);
   align-items: center;
@@ -327,7 +316,6 @@
   border-radius: var(--br-5xs);
   background-color: var(--bg-bg1);
   box-shadow: var(--sm);
-  overflow: hidden;
   flex-direction: column;
   padding: var(--padding-5xl);
   align-items: flex-start;
@@ -345,7 +333,6 @@
   border-radius: var(--br-5xs);
   background-color: var(--colors-accent);
   box-shadow: var(--sm);
-  overflow: hidden;
   padding: var(--padding-xs) var(--padding-13xl);
   justify-content: center;
   mix-blend-mode: normal;
@@ -361,7 +348,6 @@
   border-radius: var(--br-5xs);
   background-color: var(--bg-bg1);
   box-shadow: var(--sm);
-  overflow: hidden;
   flex-direction: column;
   padding: var(--padding-5xl);
   align-items: flex-start;
@@ -379,7 +365,6 @@
   background-color: var(--text-textneg);
   box-shadow: var(--sm);
   border: 1px solid var(--bg-bg2);
-  overflow: hidden;
   display: flex;
   flex-direction: row;
   padding: var(--padding-xs);
@@ -400,7 +385,6 @@
   background-color: var(--text-textneg);
   border-right: 1px solid var(--bg-bg2);
   border-left: 1px solid var(--bg-bg2);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   padding: var(--padding-3xs);
@@ -458,7 +442,6 @@
   border-radius: var(--br-5xs);
   box-shadow: var(--sm);
   border: 1px solid var(--colors-red);
-  overflow: hidden;
   display: flex;
   flex-direction: row;
   padding: var(--padding-xs) var(--padding-13xl);
@@ -487,7 +470,6 @@
   position: relative;
   width: 1.25rem;
   height: 1.25rem;
-  overflow: hidden;
   flex-shrink: 0;
 }
 .accounts2s,
@@ -501,7 +483,6 @@
   border-radius: var(--br-5xs);
   background-color: var(--bg-bg1);
   box-shadow: var(--sm);
-  overflow: hidden;
   display: flex;
   padding: var(--padding-5xl);
   gap: var(--gap-base);
@@ -531,7 +512,6 @@
   border-radius: var(--br-5xs);
   background-color: var(--colors-accent);
   box-shadow: var(--sm);
-  overflow: hidden;
   flex-shrink: 0;
   flex-direction: row;
   padding: var(--padding-xs) var(--padding-13xl);

@@ -32,7 +32,7 @@ const EditComponent: FunctionComponent<EditModalProps> = memo((props: EditModalP
           <div className="living-room">{props.label ?? content}</div>
         </div>
         <div>
-          <img className="pen-icon1" alt="" src="/vector8.svg" onClick={props.onClose} />
+          <img className="pen-icon1 hover-effect-xl" alt="" src="/vector8.svg" onClick={props.onClose} />
         </div>
       </div>
       <div className="properties">

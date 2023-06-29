@@ -34,8 +34,7 @@
   border-radius: var(--br-5xs);
   background-color: var(--text-textneg);
   box-shadow: 11px 20px 25px rgba(0, 0, 0, 0.25);
-  width: 22.19rem;
-  overflow: hidden;
+  width: 25rem;
   display: flex;
   flex-direction: column;
   padding: var(--padding-5xl);
