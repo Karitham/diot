@@ -108,18 +108,18 @@ func Main(c *cli.Context) error {
 
 	r := chi.NewRouter()
 
+	aq := func(user, pass string) error { return nil }
+	mpp := func(ctx context.Context, channel string) error {
+		rd.MediaPublisherPub(ctx, redis.MediaPublisher{
+			IoTID: channel,
+		})
+		return nil
+	}
+
 	r.Use(httpd.Log(log))
 	r.Get("/video/{channel}", SubscribeVideoHandler(ValidToken(rd), pq))
-	r.Post("/video/{channel}", PostFramesHandler(
-		func(user, pass string) error { return nil },
-		func(ctx context.Context, channel string) error {
-			rd.MediaPublisherPub(ctx, redis.MediaPublisher{
-				IoTID: channel,
-			})
-			return nil
-		},
-		pq,
-	))
+	r.Post("/video/{channel}", PostFramesHandler(aq, mpp, pq))
+	r.Post("/image/{channel}", PostFrameHandler(aq, mpp, pq))
 
 	log.Info("starting server", "port", c.Int("port"))
 	return http.ListenAndServe(fmt.Sprintf(":%d", c.Int("port")), r)
