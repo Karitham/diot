@@ -16,28 +16,31 @@ export const ws = (onData: (e: MessageEvent) => void) => {
 export type Sensor = CamProps | SensorProps
 
 export const mapSensorData = (inD: Sensor[], data: components['schemas']['SensorInfo']): Sensor[] => {
-  switch (data.kind as string) {
-    case 'camera':
-      inD.push({
-        label: data.label,
-        id: data.id,
-        url: (data.data as components['schemas']['SensorInfoCamera']).feed_uri
-      } as CamProps)
-      break
-    default:
-      // find existing sensor
-      const exIDx = (inD as SensorProps[]).findIndex(s2 => data.id === s2.id)
-      if (exIDx !== -1) {
-        // set existing's data
-        Object.assign(inD[exIDx], data.data)
-      } else {
-        // create new sensor
-        inD.push({
-          id: data.id,
-          label: data.label,
-          ...data.data
-        } as SensorProps)
-      }
+  if ('feed_uri' in data.data) {
+    inD.push({
+      id: data.id,
+      label: data.label,
+      url: (data.data as any).feed_uri
+    } as Sensor)
+    return inD
+  }
+
+  // if id doesn't exist, add it
+  if (!inD.find(d => d.id === data.id)) {
+    inD.push({
+      id: data.id,
+      label: data.label,
+      ...data.data
+    } as SensorProps)
+    return inD
+  }
+
+  // find sensor to update that's not a camera
+  const sensorIdx = inD.findIndex(d => d.id === data.id && !('url' in d))
+  inD[sensorIdx] = {
+    ...inD[sensorIdx],
+    ...data.data,
+    label: inD[sensorIdx].label
   }
 
   return inD
