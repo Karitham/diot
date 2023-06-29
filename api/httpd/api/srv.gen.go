@@ -319,7 +319,7 @@ func (siw *ServerInterfaceWrapper) DeleteUserByID(w http.ResponseWriter, r *http
 		return
 	}
 
-	ctx = context.WithValue(ctx, BearerAuthScopes, []string{"users:delete"})
+	ctx = context.WithValue(ctx, BearerAuthScopes, []string{"perm:users:delete"})
 
 	var handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		resp := siw.Handler.DeleteUserByID(w, r, id)

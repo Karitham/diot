@@ -13,6 +13,7 @@ export type Account = {
   name: string
   password?: string
   email: string
+  permissions: string[]
 }
 
 const UserAccount: FunctionComponent<UserAccountProps> = memo(({ onAccountSave }) => {
@@ -26,7 +27,8 @@ const UserAccount: FunctionComponent<UserAccountProps> = memo(({ onAccountSave }
       onAccountSave({
         name: name,
         password: password,
-        email: email
+        email: email,
+        permissions: []
       })
     }
   }

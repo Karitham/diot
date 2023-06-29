@@ -87,7 +87,8 @@ const createUserAccount = async (user: Account) => {
     body: {
       name: user.name,
       password: user.password!,
-      email: user.email
+      email: user.email,
+      permissions: user.permissions
     }
   })
 

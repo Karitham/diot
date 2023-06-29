@@ -3,6 +3,7 @@ import SubmitButton from './SubmitButton'
 import MyAccount from './MyAccount'
 import { useNavigate } from 'react-router-dom'
 import { Account } from './UserAccount'
+import { client } from '../api/client'
 
 const AccountClosed = (props: { account: Account }) => {
   const [showEditComponent, setShowEditComponent] = useState(false)
@@ -30,6 +31,7 @@ const AccountClosed = (props: { account: Account }) => {
   }, [navigate])
 
   const onDeleteContainerClick = useCallback(() => {
+    deleteUserAccount(props.account.id!)
     navigate('/adminpanel')
   }, [navigate])
 
@@ -55,3 +57,14 @@ const AccountClosed = (props: { account: Account }) => {
 }
 
 export default AccountClosed
+
+const deleteUserAccount = async (id: string) => {
+  const resp = await client.del(`/users/{id}`, {
+    params: {
+      path: {
+        id: id
+      }
+    }
+  })
+  return resp
+}
