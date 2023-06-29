@@ -2,6 +2,8 @@ import { FunctionComponent, memo, useState } from 'react'
 import '../styles/compo/UserAccount.css'
 import AdminFormContainer from './AdminFormContainer'
 import SubmitButton from './SubmitButton'
+import MultiSelectDropdown from './MultiSelectDropdown'
+import { permissionOptions } from './AccountClosed'
 
 export type UserAccountProps = {
   onClose?: () => void
@@ -20,6 +22,7 @@ const UserAccount: FunctionComponent<UserAccountProps> = memo(({ onAccountSave }
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [permissions, setPermissions] = useState<string[]>([])
 
   function onSaveContainerClick(): void {
     // Appeler la fonction de sauvegarde du compte avec le nouvel objet Account
@@ -64,8 +67,25 @@ const UserAccount: FunctionComponent<UserAccountProps> = memo(({ onAccountSave }
             icon={<img src="/password.svg" />}
             onInput={e => setPassword(e.currentTarget.value)}
           />
-          <SubmitButton onClick={onSaveContainerClick} text="Save" />
+          <div className="select">
+            <div className="select">
+              <div className="login6">Permissions</div>
+              <div className="permissions-allow-you">
+                Permissions allow you to configure what action a user is able to accomplish.
+              </div>
+              <MultiSelectDropdown
+                options={permissionOptions}
+                selectedValues={permissions}
+                onChange={setPermissions}
+                closedLabel="Click here to select permissions"
+              />
+              <div className="permissions-allow-you2">
+                Permissions allow you to configure what action a user is able to accomplish.
+              </div>
+            </div>
+          </div>
         </div>
+        <SubmitButton onClick={onSaveContainerClick} text="Save" />
       </div>
     </div>
   )

@@ -5,23 +5,23 @@ import { useNavigate } from 'react-router-dom'
 import { Account } from './UserAccount'
 import { client } from '../api/client'
 
+export const permissionOptions = [
+  { value: 'perm', label: 'admin' },
+  { value: 'perm:users:create', label: 'create users' },
+  { value: 'perm:users:read', label: 'read users' },
+  { value: 'perm:users:delete', label: 'delete users' },
+  { value: 'perm:alerts:read', label: 'read alerts' },
+  { value: 'perm:sensors:read', label: 'read sensors' },
+  { value: 'perm:sensors:update', label: 'update sensors' },
+  { value: 'perm:sensors:delete', label: 'delete sensors' },
+  { value: 'perm:sensors:state:update', label: 'update sensors state' }
+]
+
 const AccountClosed = (props: { account: Account; refresh: () => void }) => {
   const [showEditComponent, setShowEditComponent] = useState(false)
 
   const handleEditContainerClick = () => {
     setShowEditComponent(true)
-  }
-
-  const options = [
-    { value: 'option1', label: 'View cameras' },
-    { value: 'option2', label: 'Disable all cameras' },
-    { value: 'option3', label: 'Option 3' }
-  ]
-
-  const [selectedValues, setSelectedValues] = useState<string[]>([])
-
-  const handleDropdownChange = (selectedValues: string[]) => {
-    setSelectedValues(selectedValues)
   }
 
   const navigate = useNavigate()
@@ -38,9 +38,9 @@ const AccountClosed = (props: { account: Account; refresh: () => void }) => {
     return (
       <MyAccount
         account={props.account}
-        options={options}
-        selectedValues={selectedValues}
-        handleDropdownChange={handleDropdownChange}
+        options={permissionOptions}
+        selectedValues={props.account.permissions}
+        handleDropdownChange={p => (props.account.permissions = p)}
         onDeleteContainerClick={onDeleteContainerClick}
         onSaveContainerClick={onSaveContainerClick}
       />
