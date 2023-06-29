@@ -4,9 +4,8 @@ import datetime
 from AI.motherDetector import MotherDetection
 
 class HumanDetection:
-    def __init__(self, id_iot, image):
+    def __init__(self, id_iot):
         self.id_iot = id_iot
-        self.image = image
 
     def detecter_human(self):
         # Vérifier si l'image n'est pas vide
