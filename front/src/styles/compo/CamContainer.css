@@ -108,7 +108,7 @@
 }
 
 .c {
-  font-size: var(--font-size-xl);
+  font-size: 20px;
   color: var(--text-text1);
   font-family: var(--title);
 }
