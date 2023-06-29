@@ -1,6 +1,6 @@
-import { FunctionComponent, memo } from 'react';
+import { FunctionComponent, memo } from 'react'
 
-import '../styles/compo/AdminPanelContainer.css';
+import '../styles/compo/AdminPanelContainer.css'
 /*
 import { useNavigate } from 'react-router-dom';
 import AdminFormContainer from './AdminFormContainer';
@@ -8,14 +8,15 @@ import MultiSelectDropdown from './MultiSelectDropdown';
 
 import SubmitButton from './SubmitButton';
 */
-import AccountClosed from './AccountClosed';
+import AccountClosed from './AccountClosed'
+import { Account } from './UserAccount'
 
-export type AdminPanelContainerProps= {
-  accounts: { name: string }[];
+export type AdminPanelContainerProps = {
+  accounts: Account[]
 }
 
 const AdminPanelContainer: FunctionComponent<AdminPanelContainerProps> = memo(({ accounts }) => {
-/*
+  /*
   const options = [
     { value: 'option1', label: 'View cameras' },
     { value: 'option2', label: 'Disable all cameras' },
@@ -38,22 +39,15 @@ const AdminPanelContainer: FunctionComponent<AdminPanelContainerProps> = memo(({
     <div className="users">
       <div className="users1">Users</div>
       <div className="accounts">
-
         {accounts.map((a, index) => (
-          <AccountClosed key={index} name={a.name} />
+          <AccountClosed key={index} account={a} />
         ))}
       </div>
     </div>
-  );
-});
+  )
+})
 
-export default AdminPanelContainer;
-
-
-
-
-
-
+export default AdminPanelContainer
 
 /*
         <div className="my-account">

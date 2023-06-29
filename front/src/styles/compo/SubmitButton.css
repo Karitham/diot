@@ -6,7 +6,6 @@
 }
 
 .button1 {
-  cursor: pointer;
   border-radius: var(--br-5xs);
   background-color: var(--colors-button);
   box-shadow: var(--sm);
@@ -17,6 +16,7 @@
 }
 
 .buttoncontainer1 {
+  cursor: pointer;
   font-size: var(--label-size);
   color: var(--text-textneg);
   font-family: var(--title);

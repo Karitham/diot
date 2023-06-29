@@ -1,18 +1,15 @@
-import { FunctionComponent, useCallback, useState } from 'react';
-import SubmitButton from './SubmitButton';
-import MyAccount from './MyAccount';
-import { useNavigate } from 'react-router-dom';
+import { useCallback, useState } from 'react'
+import SubmitButton from './SubmitButton'
+import MyAccount from './MyAccount'
+import { useNavigate } from 'react-router-dom'
+import { Account } from './UserAccount'
 
-interface AccountClosedProps {
-    name: string;
-}
-
-const AccountClosed: FunctionComponent<AccountClosedProps> = ({ name }) => {
-  const [showEditComponent, setShowEditComponent] = useState(false);
+const AccountClosed = (props: { account: Account }) => {
+  const [showEditComponent, setShowEditComponent] = useState(false)
 
   const handleEditContainerClick = () => {
-    setShowEditComponent(true);
-  };
+    setShowEditComponent(true)
+  }
 
   const options = [
     { value: 'option1', label: 'View cameras' },
@@ -36,27 +33,25 @@ const AccountClosed: FunctionComponent<AccountClosedProps> = ({ name }) => {
     navigate('/adminpanel')
   }, [navigate])
 
-  
-
   if (showEditComponent) {
     return (
-        <MyAccount
-        name={name}
+      <MyAccount
+        account={props.account}
         options={options}
         selectedValues={selectedValues}
         handleDropdownChange={handleDropdownChange}
         onDeleteContainerClick={onDeleteContainerClick}
         onSaveContainerClick={onSaveContainerClick}
       />
-    );
+    )
   }
 
   return (
     <div className="account-closed">
-      <div className="xavier-thellier">{name}</div>
+      <div className="xavier-thellier">{props.account.name}</div>
       <SubmitButton onClick={handleEditContainerClick} text="Edit" />
     </div>
-  );
-};
+  )
+}
 
-export default AccountClosed;
+export default AccountClosed

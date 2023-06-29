@@ -3,9 +3,10 @@ import AdminFormContainer from './AdminFormContainer'
 import MultiSelectDropdown from './MultiSelectDropdown'
 import DeleteButton from './DeleteButton'
 import SubmitButton from './SubmitButton'
+import { Account } from './UserAccount'
 
 interface MyAccountProps {
-  name: string
+  account: Account
   options: { value: string; label: string }[]
   selectedValues: string[]
   handleDropdownChange: (selectedValues: string[]) => void
@@ -14,7 +15,7 @@ interface MyAccountProps {
 }
 
 const MyAccount: FunctionComponent<MyAccountProps> = ({
-  name,
+  account,
   options,
   selectedValues,
   handleDropdownChange,
@@ -23,12 +24,22 @@ const MyAccount: FunctionComponent<MyAccountProps> = ({
 }) => {
   return (
     <div className="my-account">
-      <div className="charles-perrard">{name}</div>
+      <div className="charles-perrard">{account.name}</div>
       <div className="fields">
         <div className="select">
           <AdminFormContainer
             title="Name"
             type="text"
+            value={account.name}
+            placeholder="René Dupuis"
+            icon={<img src="/pen2.svg" alt="pen" />}
+          />
+        </div>
+        <div className="select">
+          <AdminFormContainer
+            title="Email"
+            type="text"
+            value={account.email}
             placeholder="René Dupuis"
             icon={<img src="/pen2.svg" alt="pen" />}
           />

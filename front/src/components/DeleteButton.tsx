@@ -8,11 +8,9 @@ type ButtonProps = {
 
 const Button: FunctionComponent<ButtonProps> = ({ onClick, text }) => {
   return (
-    <div className="buttoncontainer6 hover-effect">
-      <button className="button6" onClick={onClick}>
-        <b className="button-save6">{text}</b>
-      </button>
-    </div>
+    <button className="buttoncontainer1 hover-effect button6" onClick={onClick}>
+      <b className="button-save6">{text}</b>
+    </button>
   )
 }
 
