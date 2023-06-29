@@ -26,7 +26,7 @@ const Dashboard: FunctionComponent = () => {
 
   return (
     <div className="dashboard2">
-      <Navbar settingsText="" />
+      <Navbar settingsText="" showBreadcrumbs={false} />
 
       <div className="contentwrapper1">
         <Alert alert={alert} />

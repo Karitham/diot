@@ -4,9 +4,10 @@ import '../styles/compo/Navbar.css'
 
 interface NavbarProps {
   settingsText: string
+  showBreadcrumbs: boolean
 }
 
-const Navbar: React.FC<NavbarProps> = ({ settingsText }) => {
+const Navbar: React.FC<NavbarProps> = ({ settingsText, showBreadcrumbs }) => {
   const navigate = useNavigate()
 
   const onTopNavContainerClick = useCallback(() => {
@@ -42,19 +43,21 @@ const Navbar: React.FC<NavbarProps> = ({ settingsText }) => {
           <img className="user-icon hover-effect" alt="" src="/user.svg" onClick={onUserLogoClick} />
         </div>
       </div>
-      <div className="breadcrumbs">
-        <Link to="/dashboard" className="dashboard" onClick={onDashboardTextClick}>
-          Dashboard
-        </Link>
-        <div className="crumb1">
-          <img className="caret-icon" alt="" src="/caret.svg" />
-          {settingsText}
+      {showBreadcrumbs && (
+        <div className="breadcrumbs">
+          <Link to="/dashboard" className="dashboard" onClick={onDashboardTextClick}>
+            Dashboard
+          </Link>
+          <div className="crumb1">
+            <img className="caret-icon" alt="" src="/caret.svg" />
+            {settingsText}
+          </div>
+          <div className="crumb2">
+            <img className="caret-icon" alt="" src="/caret1.svg" />
+            <div className="edit">Edit</div>
+          </div>
         </div>
-        <div className="crumb2">
-          <img className="caret-icon" alt="" src="/caret1.svg" />
-          <div className="edit">Edit</div>
-        </div>
-      </div>
+      )}
     </nav>
   )
 }

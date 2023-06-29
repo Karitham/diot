@@ -12,7 +12,7 @@ const Notifications: FunctionComponent = () => {
 
   return (
     <div className="notifications1">
-      <Navbar settingsText="Notifications" />
+      <Navbar settingsText="Notifications" showBreadcrumbs={true} />
       <div className="contentwrapper">
         <div className="notifications3">
           <div className="titre1">Notification History</div>

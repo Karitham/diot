@@ -58,7 +58,7 @@ const AdminPanel: FunctionComponent = () => {
   return (
     <>
       <div className="admin-panel">
-        <Navbar settingsText="Settings" />
+        <Navbar settingsText="Settings" showBreadcrumbs={true} />
         <div className="container contentwrapper1">
           <div className="titlecontainer">
             <div className="titre">Settings</div>
