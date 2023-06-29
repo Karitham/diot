@@ -2,7 +2,7 @@ import { FunctionComponent, useState, useCallback, useEffect } from 'react'
 import UserAccount, { Account } from '../components/UserAccount'
 import PortalPopup from '../components/PortalPopup'
 import { useNavigate } from 'react-router-dom'
-import AdminPanelContainer, { AdminPanelContainerProps } from '../components/AdminPanelContainer'
+import AdminPanelContainer from '../components/AdminPanelContainer'
 import AdminPanelDeviceContainer from '../components/AdminPanelDeviceContainer'
 import '../styles/AdminPanel.css'
 import Navbar from '../components/Navbar'
@@ -20,7 +20,7 @@ const devices = [device1, device2, device3, device4]
 
 const AdminPanel: FunctionComponent = () => {
   const [isUserAccountOpen, setUserAccountOpen] = useState(false)
-  const [users, setUsers] = useState<AdminPanelContainerProps>()
+  const [users, setUsers] = useState<Account[]>()
   const navigate = useNavigate()
 
   const openUserAccount = useCallback(() => {
@@ -50,7 +50,7 @@ const AdminPanel: FunctionComponent = () => {
             <div className="titre">Settings</div>
           </div>
           <AdminPlanningContainer />
-          {users && <AdminPanelContainer accounts={users.accounts} />}
+          {users && <AdminPanelContainer accounts={users} refresh={() => refreshAccounts(setUsers)} />}
           <div className="devices">
             <div className="devices1">Devices</div>
             <div className="accounts1">
@@ -99,11 +99,11 @@ const createUserAccount = async (user: Account) => {
   return response.data
 }
 
-const refreshAccounts = async (setUsers: (a: AdminPanelContainerProps) => void) => {
+const refreshAccounts = async (setUsers: (a: Account[]) => void) => {
   try {
     const response = await client.get('/users', {})
     if (response.data) {
-      setUsers({ accounts: response.data })
+      setUsers(response.data)
       console.log('Accounts:', response.data)
     } else {
       console.error('Error fetching accounts: Response data is undefined')

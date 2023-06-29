@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { Account } from './UserAccount'
 import { client } from '../api/client'
 
-const AccountClosed = (props: { account: Account }) => {
+const AccountClosed = (props: { account: Account; refresh: () => void }) => {
   const [showEditComponent, setShowEditComponent] = useState(false)
 
   const handleEditContainerClick = () => {
@@ -31,8 +31,7 @@ const AccountClosed = (props: { account: Account }) => {
   }, [navigate])
 
   const onDeleteContainerClick = useCallback(() => {
-    deleteUserAccount(props.account.id!)
-    navigate('/adminpanel')
+    deleteUserAccount(props.account.id!).then(() => props.refresh())
   }, [navigate])
 
   if (showEditComponent) {
