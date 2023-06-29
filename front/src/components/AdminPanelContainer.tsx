@@ -1,9 +1,13 @@
-import { FunctionComponent, memo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { FunctionComponent, memo } from 'react';
+
 import '../styles/compo/AdminPanelContainer.css';
+/*
+import { useNavigate } from 'react-router-dom';
 import AdminFormContainer from './AdminFormContainer';
 import MultiSelectDropdown from './MultiSelectDropdown';
+
 import SubmitButton from './SubmitButton';
+*/
 import AccountClosed from './AccountClosed';
 
 export type AdminPanelContainerProps= {
@@ -11,6 +15,7 @@ export type AdminPanelContainerProps= {
 }
 
 const AdminPanelContainer: FunctionComponent<AdminPanelContainerProps> = memo(({ accounts }) => {
+/*
   const options = [
     { value: 'option1', label: 'View cameras' },
     { value: 'option2', label: 'Disable all cameras' },
@@ -28,11 +33,29 @@ const AdminPanelContainer: FunctionComponent<AdminPanelContainerProps> = memo(({
   const onEditContainerClick = () => {
     navigate('/adminpanel');
   };
-
+*/
   return (
     <div className="users">
       <div className="users1">Users</div>
       <div className="accounts">
+
+        {accounts.map((a, index) => (
+          <AccountClosed key={index} name={a.name} />
+        ))}
+      </div>
+    </div>
+  );
+});
+
+export default AdminPanelContainer;
+
+
+
+
+
+
+
+/*
         <div className="my-account">
           <div className="charles-perrard">Me</div>
           <div className="fields">
@@ -67,12 +90,4 @@ const AdminPanelContainer: FunctionComponent<AdminPanelContainerProps> = memo(({
             <SubmitButton onClick={onEditContainerClick} text="Save" />
           </div>
         </div>
-        {accounts.map((a, index) => (
-          <AccountClosed key={index} name={a.name} />
-        ))}
-      </div>
-    </div>
-  );
-});
-
-export default AdminPanelContainer;
+*/

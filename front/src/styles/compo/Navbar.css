@@ -92,6 +92,7 @@
   gap: var(--gap-9xs);
   color: var(--text-text1);
   font-family: var(--label);
+  font-size: 11px;
 }
 .nav {
   align-self: stretch;
