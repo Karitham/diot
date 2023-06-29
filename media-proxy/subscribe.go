@@ -76,11 +76,11 @@ func ffmpegFromJPGToFLV(ctx context.Context, r io.Reader, w io.Writer) error {
 		"-f", "mjpeg", // input format
 		"-i", "pipe:0", // input from stdin
 		"-r", fmt.Sprintf("%d", FPS), // framerate
-		"-sn",             // no subtitles
 		"-an",             // no audio
 		"-c:v", "libx264", // h264
 		"-preset", "ultrafast", // needed for low latency
 		"-pix_fmt", "yuv420p", // needed for html5 video
+		"-g", fmt.Sprintf("%d", FPS), // keyframe every FPS frames
 		"-f", "flv", // output format
 		"pipe:1", // output to stdout
 	)
