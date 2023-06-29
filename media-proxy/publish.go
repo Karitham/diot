@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/Karitham/iDIoT/api/redis"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -70,6 +71,7 @@ func PostFramesHandler(
 func PostFrameHandler(
 	validBasicAuth func(user, pass string) error,
 	publishPublisher func(ctx context.Context, channel string) error,
+	publishIntrusion func(ctx context.Context, intrusion redis.Intrusion) error,
 	pubQ *PubQ,
 ) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -82,6 +84,19 @@ func PostFrameHandler(
 
 		channel := chi.URLParam(r, "channel")
 		log.Debug("got request", "channel", channel)
+
+		if v := r.Header.Get("X-Intrusion"); v != "" {
+			log.Debug("got intrusion", "channel", channel, "intrusion", v)
+			err := publishIntrusion(r.Context(), redis.Intrusion{
+				IDIoT: channel,
+				Image: v,
+			})
+			if err != nil {
+				log.Error("failed to publish intrusion", "err", err)
+				w.WriteHeader(500)
+				return
+			}
+		}
 
 		go publishPublisher(context.Background(), channel)
 

@@ -3,7 +3,7 @@ module github.com/Karitham/iDIoT/media-server
 go 1.20
 
 require (
-	github.com/Karitham/iDIoT/api v0.0.0-20230628122503-a59e6a5b5dbf
+	github.com/Karitham/iDIoT/api v0.0.0-20230629123153-e0f6f5de0183
 	github.com/dgraph-io/badger/v4 v4.1.0
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/nareix/joy4 v0.0.0-20200507095837-05a4ffbb5369
@@ -31,10 +31,7 @@ require (
 	github.com/google/flatbuffers v23.5.26+incompatible // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/hailocab/go-hostpool v0.0.0-20160125115350-e80d13ce29ed // indirect
-	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/klauspost/compress v1.16.6 // indirect
-	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
-	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/redis/rueidis v1.0.10 // indirect
@@ -46,7 +43,6 @@ require (
 	go.opencensus.io v0.24.0 // indirect
 	golang.org/x/crypto v0.10.0 // indirect
 	golang.org/x/net v0.11.0 // indirect
-	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.9.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
