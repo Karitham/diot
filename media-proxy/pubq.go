@@ -26,6 +26,25 @@ func prefixChannel(channel string) []byte {
 
 func (p *PubQ) GetFilesFromChannel(ctx context.Context, channel string) (io.Reader, error) {
 	reader, writer := io.Pipe()
+	err := p.badger.View(func(txn *badger.Txn) error {
+		item, err := txn.Get(prefixChannel(channel))
+		if err != nil {
+			return fmt.Errorf("error getting file from badger: %w", err)
+		}
+
+		return item.Value(func(val []byte) error {
+			_, err := writer.Write(val)
+			if err != nil {
+				return fmt.Errorf("error writing to pipe: %w", err)
+			}
+			return nil
+		})
+	})
+	if err != nil {
+		log.Error("error getting file from badger", "error", err)
+		return nil, err
+	}
+
 	go func() {
 		log.Debug("starting to get files from channel", "channel", channel)
 		err := p.badger.Subscribe(ctx, func(kv *badger.KVList) error {
