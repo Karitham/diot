@@ -63,10 +63,10 @@ class ProcessData:
         except Exception as e:
             print("Erreur lors de l'extraction des valeurs à partir des données JSON :", str(e))
             
-        print(f"Received from {id_iot}: image: {image}")
+    #print(f"Received from {id_iot}: image: {image}")
         
         if id_iot is not None and image is not None:
-            human_detector = HumanDetection(id_iot, img)
+            human_detector = HumanDetection(id_iot, image)
             try:
                 human_detector.detecter_human()
             except Exception as e:

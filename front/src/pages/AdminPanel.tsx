@@ -38,6 +38,15 @@ const AdminPanel: FunctionComponent = () => {
     refreshDevices(setDevices)
   }, [setUsers])
 
+  const Device = (props: components['schemas']['SensorInfo']) => {
+    const [icon, setIcon] = useState(<SvgSpinners180Ring></SvgSpinners180Ring>)
+    setTimeout(() => {
+      setIcon(<img src="/checkbi.svg"></img>)
+    }, 10000)
+
+    return <AdminPanelDeviceContainer name={props.label} icon={icon} />
+  }
+
   return (
     <>
 
@@ -54,7 +63,7 @@ const AdminPanel: FunctionComponent = () => {
             <div className="accounts1">
               <div className="device-list">
                 {devices.map(d => (
-                  <AdminPanelDeviceContainer name={d.label} icon={<SvgSpinners180Ring></SvgSpinners180Ring>} />
+                  <Device {...d} />
                 ))}
               </div>
             </div>

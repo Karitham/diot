@@ -20,12 +20,15 @@ class RedisSubscriber:
         except redis.ConnectionError as e:
             print("Erreur de connexion à Redis :", str(e))
     
-    def subscribe_key_sensor(self):
+    def subscribe_key(self):
         try:
             subscription = self.redis_client.pubsub()
             subscription.subscribe(self.key_sensor)
+            
+            subscription2 = self.redis_client.pubsub()
+            subscription2.subscribe(self.key_cam)
         except Exception as e:
-             print("Erreur lors de la création de l'objet subscription ou de l'abonnement à la clé de données iot:sensor :", str(e))
+             print("Erreur lors de la création de l'objet subscription ou de l'abonnement à la clé de données iot:sensor et iot:camera :", str(e))
         
         try:
             for message in subscription.listen():
@@ -38,22 +41,9 @@ class RedisSubscriber:
                     processData.process_data_sensor(json_data)
         except Exception as e:
             print("Erreur lors de l'appel de la fonction process_data_sensor dans la classe ProcessData", str(e))
-            
-        
-            try:
-                self.redis_client.close()
-            except Exception as e:
-                print("Erreur lors de la fermeture de la connexion Redis :", str(e))
-    
-    def subscribe_key_cam(self):
-        try:
-            subscription = self.redis_client.pubsub()
-            subscription.subscribe(self.key_cam)
-        except Exception as e:
-             print("Erreur lors de la création de l'objet subscription ou de l'abonnement à la clé de données iot:camera :", str(e))
         
         try:
-            for message in subscription.listen():
+            for message in subscription2.listen():
                 if message['type'] == 'message':
                     # Récupérer les données JSON
                     json_data = message['data']
@@ -65,7 +55,8 @@ class RedisSubscriber:
             print("Erreur lors de l'appel de la fonction process_data_camera dans la classe ProcessData", str(e))
             
         
-            try:
-                self.redis_client.close()
-            except Exception as e:
-                print("Erreur lors de la fermeture de la connexion Redis :", str(e))
+        try:
+            self.redis_client.close()
+        except Exception as e:
+            print("Erreur lors de la fermeture de la connexion Redis :", str(e))
+    

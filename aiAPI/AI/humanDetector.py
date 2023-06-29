@@ -29,7 +29,7 @@ class HumanDetection:
             try:
                 json_data = MotherDetection.dataSchema.human_schema(self.id_iot, formatted_timestamp)
             except Exception as e:
-                print("Erreur lors de l'appel de la fonction flooding_schema dans la classe DataSchema", str(e))
+                print("Erreur lors de l'appel de la fonction human_schema dans la classe DataSchema", str(e))
             
             try:
                 MotherDetection.redisPublisher.publish_alert(json_data)
