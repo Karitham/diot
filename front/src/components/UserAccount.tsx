@@ -4,6 +4,7 @@ import AdminFormContainer from './AdminFormContainer'
 import SubmitButton from './SubmitButton'
 import MultiSelectDropdown from './MultiSelectDropdown'
 import { permissionOptions } from './AccountClosed'
+import 'react-toastify/dist/ReactToastify.css'
 
 export type UserAccountProps = {
   onClose?: () => void
@@ -85,7 +86,7 @@ const UserAccount: FunctionComponent<UserAccountProps> = memo(({ onAccountSave }
             </div>
           </div>
         </div>
-        <SubmitButton onClick={onSaveContainerClick} text="Save" />
+        <SubmitButton onClick={onSaveContainerClick} text="Save" toastMessage="Le bouton a été cliqué !" />
       </div>
     </div>
   )

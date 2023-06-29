@@ -4,6 +4,9 @@ import '../styles/Notifications.css'
 import Navbar from '../components/Navbar'
 import { client } from '../api/client'
 
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 const Notifications: FunctionComponent = () => {
   const [alerts, setAlerts] = useState<AlertContainerProps[]>([])
   useEffect(() => {
@@ -36,6 +39,7 @@ export default Notifications
 const getNotifications = async (): Promise<AlertContainerProps[]> => {
   const a = await client.get('/alerts', {})
   if (a.error) {
+    toast.error('Une erreur s\'est produite');
     console.error(a.error)
     return []
   }

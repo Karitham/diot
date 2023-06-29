@@ -3,6 +3,8 @@ import SubmitButton from './SubmitButton'
 import '../styles/compo/EditComponent.css'
 import { useNavigate } from 'react-router-dom'
 import AdminFormContainer from './AdminFormContainer'
+import 'react-toastify/dist/ReactToastify.css'
+
 
 type EditModalProps = {
   onClose?: () => void
@@ -40,7 +42,7 @@ const EditComponent: FunctionComponent<EditModalProps> = memo((props: EditModalP
           <AdminFormContainer onInput={e => setContent(e.currentTarget.value)} icon={<PhUserList></PhUserList>} />
         </div>
       </div>
-      <SubmitButton onClick={onSaveContainerClick} text="Save" />
+      <SubmitButton onClick={onSaveContainerClick} text="Save" toastMessage="Saved"/>
     </div>
   )
 })

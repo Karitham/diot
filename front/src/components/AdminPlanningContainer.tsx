@@ -9,6 +9,8 @@ import MondayComponent from './WeekBar'
 //import SubmitButton from './SubmitButton'
 import AdminDayContainer from './AdminDayContainer'
 import AdminHoursContainer from './AdminHoursContainer'
+import 'react-toastify/dist/ReactToastify.css'
+
 
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 

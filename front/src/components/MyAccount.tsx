@@ -4,6 +4,7 @@ import MultiSelectDropdown from './MultiSelectDropdown'
 import DeleteButton from './DeleteButton'
 import SubmitButton from './SubmitButton'
 import { Account } from './UserAccount'
+import 'react-toastify/dist/ReactToastify.css'
 
 interface MyAccountProps {
   account: Account
@@ -61,7 +62,7 @@ const MyAccount: FunctionComponent<MyAccountProps> = ({
       </div>
       <div className="buttonblock">
         <DeleteButton onClick={onDeleteContainerClick} text="Delete" />
-        <SubmitButton onClick={() => onSaveContainerClick(account)} text="Save" />
+        <SubmitButton onClick={() => onSaveContainerClick(account)} text="Save" toastMessage="Saved" />
       </div>
     </div>
   )
