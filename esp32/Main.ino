@@ -7,6 +7,8 @@
 #include <WiFiClient.h>
 #include <ArduinoHttpClient.h>
 
+#include "base64.h"
+
 #include <Redis.h>
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
@@ -22,6 +24,7 @@
 #define REDIS_PASSWORD "bHhSwb&g#8W28NQr#M2@4ApxHiY&5m$7XzNAN&7Jo5HnSHfizNiw&NAR8HpKtwY"
 
 #define REDIS_SENSOR "iot:sensor"
+#define REDIS_CAMERA "iot:camera"
 
 Adafruit_BME680 bme; // I2C
 
@@ -35,6 +38,13 @@ const int serverPort = 80;
 const char* endpoint = "/video/12345";
 
 bool asSensor = false;
+
+// Déclaration des broches et des variables pour le capteur PIR
+int inputPin = 12;               // Choisissez la broche d'entrée (pour le capteur PIR)
+int pirState = LOW;             // Nous commençons en supposant qu'aucun mouvement n'a été détecté
+int val = 0;                    // Variable pour lire l'état de la broche
+
+int calibrationTime = 10;
 
 WiFiClient wifi;
 WiFiClient redisConn;
@@ -65,12 +75,23 @@ void setup(){
   InitWifi();
   InitCamera();
   setupRedis();
+  calibratePIR();
   setupBME();
 }
-
 void loop(){
   streamVideo();
   captureData();
+  checkMotion();
+}
+
+void calibratePIR(){
+  Serial.print("calibrating sensor ");
+  for(int i = 0; i < calibrationTime; i++){
+    Serial.print(".");
+    delay(1000);
+  }
+  Serial.println();
+  Serial.println("PIR calibrated");
 }
 
 void InitWifi(){
@@ -215,4 +236,64 @@ void streamVideo() {
   client.endRequest();
 
   esp_camera_fb_return(fb);
+}
+
+void checkMotion(){
+  val = digitalRead(inputPin);
+  
+  if (val == HIGH) { // Vérifie si la valeur est HIGH
+    if (pirState == LOW) {
+      // Nous venons de détecter un mouvement
+      Serial.println("Mouvement détecté !");
+      pirState = HIGH;
+      pinMode(4, OUTPUT);
+      digitalWrite(4, HIGH);
+      //capturePhoto();
+    }
+  } else {
+    if (pirState == HIGH) {
+      // Le mouvement s'est terminé
+      Serial.println("Mouvement terminé !");
+      pirState = LOW;
+      pinMode(4, OUTPUT);
+      digitalWrite(4, LOW);
+    }
+  }
+
+  delay(100);
+}
+
+void capturePhoto(){
+  camera_fb_t * fb = NULL;
+  fb = esp_camera_fb_get();
+  if (!fb) {
+    Serial.println("Failed to capture image");
+    return;
+  }
+
+  // Convert the captured image to base64
+  String encodedImage;
+  if (fb->len > 0) {
+    uint8_t* imgData = fb->buf;
+    size_t imgSize = fb->len;
+
+    // Encode the image data in base64
+    encodedImage = base64::encode(imgData, imgSize);
+  }
+
+  esp_camera_fb_return(fb);
+
+  const size_t capacity = JSON_OBJECT_SIZE(2); // Adjust this value as needed
+  DynamicJsonDocument jsonDoc(capacity);
+
+  // Populate the JSON document
+  jsonDoc["id_iot"] = id_iot;
+  jsonDoc["image"] = encodedImage;
+
+  String jsonString;
+  serializeJson(jsonDoc, jsonString);
+
+  Serial.println(jsonString);
+
+  redis.publish(REDIS_CAMERA, jsonString.c_str());
 }

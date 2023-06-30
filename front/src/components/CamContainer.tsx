@@ -140,9 +140,11 @@ export const Cam = (props: CamContainerType) => {
 export type SensorProps = {
   id: string
   label: string
-  temperature?: string
-  humidity?: string
-  iaq?: string
+
+  temperature?: number
+  humidity?: number
+  iaq?: number
+
   alert?: boolean
   disabled?: boolean
   fontColor?: string
