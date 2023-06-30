@@ -6,6 +6,7 @@ import '../styles/Dashboard.css'
 import { subscribePush } from '../api/sw'
 import { Sensor as SensorT, mapSensorData, ws } from '../api/ws'
 import { client } from '../api/client'
+import Pause1 from '../assets/pause1.svg'
 
 const Dashboard: FunctionComponent = () => {
   const [alert, _] = useState<undefined | AlertContainerProps>()
@@ -29,7 +30,7 @@ const Dashboard: FunctionComponent = () => {
         <Alert alert={alert} />
         <div className="camscontainer">
           <div className="titlecontainer1">
-            <img className="pause-icon1 hover-effect" alt="" src="/pause1.svg" />
+            <img className="pause-icon1 hover-effect" alt="" src={Pause1} />
             <div className="titre2">Dashboard</div>
           </div>
           <div className="cam-grid-container">

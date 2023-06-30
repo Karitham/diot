@@ -5,6 +5,10 @@ import SubmitButton from './SubmitButton'
 import MultiSelectDropdown from './MultiSelectDropdown'
 import { permissionOptions } from './AccountClosed'
 import 'react-toastify/dist/ReactToastify.css'
+import Pen from '../assets/pen.svg'
+import Vector2 from '../assets/Vector2.svg'
+import Password from '../assets/password.svg'
+import Pen2 from '../assets/pen2.svg'
 
 export type UserAccountProps = {
   onClose?: () => void
@@ -42,7 +46,7 @@ const UserAccount: FunctionComponent<UserAccountProps> = memo(({ onAccountSave }
       <div className="alert">
         <div className="icongroup">
           <div className="sneak">
-            <img className="pen-icon" alt="" src="/pen.svg" />
+            <img className="pen-icon" alt="" src={Pen} />
           </div>
           <div className="lessgo-we-on">User account</div>
         </div>
@@ -51,21 +55,21 @@ const UserAccount: FunctionComponent<UserAccountProps> = memo(({ onAccountSave }
             title="Name"
             type="text"
             placeholder="René Dupuis"
-            icon={<img src="/pen2.svg" />}
+            icon={<img src={Pen2} />}
             onInput={e => setName(e.currentTarget.value)}
           />
           <AdminFormContainer
             title="Email"
             type="email"
             placeholder="rene.dupuis@gmail.com"
-            icon={<img src="/vector2.svg" />}
+            icon={<img src={Vector2} />}
             onInput={e => setEmail(e.currentTarget.value)}
           />
           <AdminFormContainer
             title="Password"
             type="password"
             placeholder="*****************"
-            icon={<img src="/password.svg" />}
+            icon={<img src={Password} />}
             onInput={e => setPassword(e.currentTarget.value)}
           />
           <div className="select">

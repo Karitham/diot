@@ -12,6 +12,7 @@ import SubmitButton from '../components/SubmitButton'
 import useAuth from '../api/useAuth'
 import { components } from '../api/api'
 import 'react-toastify/dist/ReactToastify.css'
+import Checkbi from '../assets/checkbi.svg'
 
 const AdminPanel: FunctionComponent = () => {
   const [isUserAccountOpen, setUserAccountOpen] = useState(false)
@@ -41,7 +42,7 @@ const AdminPanel: FunctionComponent = () => {
   const Device = (props: components['schemas']['SensorInfo']) => {
     const [icon, setIcon] = useState(<SvgSpinners180Ring></SvgSpinners180Ring>)
     setTimeout(() => {
-      setIcon(<img src="/checkbi.svg"></img>)
+      setIcon(<img src={Checkbi}></img>)
     }, 10000)
 
     return <AdminPanelDeviceContainer name={props.label} icon={icon} />

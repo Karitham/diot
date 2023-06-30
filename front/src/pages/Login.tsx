@@ -1,19 +1,15 @@
-import { FunctionComponent, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { FunctionComponent } from 'react'
 import LoginFormFilterContainer from '../components/LoginFormFilterContainer';
 import '../styles/Login.css'
-const Login: FunctionComponent = () => {
-  const navigate = useNavigate()
+import Logotext3 from '../assets/logotext3.svg'
 
-  const onLogoSloganContainerClick = useCallback(() => {
-    navigate('/dashboard')
-  }, [navigate])
+const Login: FunctionComponent = () => {
 
   return (
     <div className="login">
       <div className="login-container">
-        <div className="logoslogan4" onClick={onLogoSloganContainerClick}>
-          <img className="logotext-icon4" alt="" src="/logotext3.svg" />
+        <div className="logoslogan4">
+          <img className="logotext-icon4" alt="" src={Logotext3} />
           <b className="smart-homes-smarter4">Smart homes, smarter</b>
         </div>
         <div className="titre-group">

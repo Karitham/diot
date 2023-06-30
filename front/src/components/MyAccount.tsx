@@ -5,6 +5,7 @@ import DeleteButton from './DeleteButton'
 import SubmitButton from './SubmitButton'
 import { Account } from './UserAccount'
 import 'react-toastify/dist/ReactToastify.css'
+import Pen2 from '../assets/pen2.svg'
 
 interface MyAccountProps {
   account: Account
@@ -32,7 +33,7 @@ const MyAccount: FunctionComponent<MyAccountProps> = ({
             type="text"
             value={account.name}
             placeholder="René Dupuis"
-            icon={<img src="/pen2.svg" alt="pen" />}
+            icon={<img src={Pen2} alt="pen" />}
           />
         </div>
         <div className="select">
@@ -41,7 +42,7 @@ const MyAccount: FunctionComponent<MyAccountProps> = ({
             type="text"
             value={account.email}
             placeholder="René Dupuis"
-            icon={<img src="/pen2.svg" alt="pen" />}
+            icon={<img src={Pen2} alt="pen" />}
           />
         </div>
         <div className="select">

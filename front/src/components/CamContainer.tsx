@@ -8,6 +8,10 @@ import { client } from '../api/client'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
+import Pen3 from '../assets/pen3.svg'
+import Pause1 from '../assets/pause1.svg'
+import Start from '../assets/start.svg'
+
 const CamContainer = (props: {
   fullwidth?: boolean
   disabled?: boolean
@@ -32,11 +36,11 @@ const CamContainer = (props: {
       <div className={`cam-container ${props.fullwidth ? 'full-width' : ''} ${props.disabled ? 'disabled' : ''}`}>
         <div className="label">
           <div className="label-text">
-            <img className="label-text-icon hover-effect" alt="" src="/pause1.svg" />
+            <img className="label-text-icon hover-effect" alt="" src={Pause1} />
             <div className="label-title">{props.label}</div>
           </div>
           <div className="label-icons">
-            <img className="label-icon hover-effect" alt="" src="/pen3.svg" onClick={openEditComponent} />
+            <img className="label-icon hover-effect" alt="" src={Pen3} onClick={openEditComponent} />
           </div>
         </div>
         {props.children}
@@ -91,7 +95,7 @@ export const Cam = (props: CamContainerType) => {
     return (
       <div className="video disabled">
         <div className="disabled-text">
-          <img className="disabled-icon" alt="" src="/start.svg" />
+          <img className="disabled-icon" alt="" src={Start} />
         </div>
       </div>
     )

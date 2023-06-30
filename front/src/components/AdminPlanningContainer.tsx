@@ -11,6 +11,8 @@ import AdminDayContainer from './AdminDayContainer'
 import AdminHoursContainer from './AdminHoursContainer'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
+import Calendar from '../assets/calendar.svg'
+import Vector10 from '../assets/vector10.svg'
 
 
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -118,16 +120,16 @@ const AdminPlanningContainer: FunctionComponent = memo(() => {
                     name="Start Day"
                     value={startDay}
                     onInput={handleStartDaySelection}
-                    icon="/calendar.svg"
+                    icon={Calendar}
                   />
                   <AdminDayContainer
                     name="End Day"
                     value={endDay}
                     onInput={handleEndDaySelection}
-                    icon="/calendar.svg"
+                    icon={Calendar}
                   />
                   <div className="button1s" onClick={onResetClick}>
-                    <img className="vector-icon6s" alt="" src="/vector10.svg" />
+                    <img className="vector-icon6s" alt="" src={Vector10} />
                   </div>
                 </div>
                 <div className="selects">

@@ -4,6 +4,8 @@ import '../styles/compo/EditComponent.css'
 import { useNavigate } from 'react-router-dom'
 import AdminFormContainer from './AdminFormContainer'
 import 'react-toastify/dist/ReactToastify.css'
+import Pen1 from '../assets/pen1.svg'
+import Vector8 from '../assets/Vector8.svg'
 
 
 type EditModalProps = {
@@ -29,12 +31,12 @@ const EditComponent: FunctionComponent<EditModalProps> = memo((props: EditModalP
       <div className="nameclosecontainer1">
         <div className="icongroup1">
           <div className="sneak1">
-            <img className="pen-icon1" alt="" src="/pen1.svg" />
+            <img className="pen-icon1" alt="" src={Pen1} />
           </div>
           <div className="living-room">{props.label ?? content}</div>
         </div>
         <div>
-          <img className="pen-icon1 hover-effect-xl" alt="" src="/vector8.svg" onClick={props.onClose} />
+          <img className="pen-icon1 hover-effect-xl" alt="" src={Vector8} onClick={props.onClose} />
         </div>
       </div>
       <div className="properties">
