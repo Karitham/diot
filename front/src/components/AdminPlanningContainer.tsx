@@ -9,6 +9,9 @@ import MondayComponent from './WeekBar'
 //import SubmitButton from './SubmitButton'
 import AdminDayContainer from './AdminDayContainer'
 import AdminHoursContainer from './AdminHoursContainer'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
+
 
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
@@ -22,6 +25,7 @@ const AdminPlanningContainer: FunctionComponent = memo(() => {
   const handleEndDaySelection = (selectedDay: string) => setEndDay(selectedDay)
 
   const onResetClick = () => {
+    toast.info("Resetting to default values");
     setStartDay(days[0])
     setEndDay(days[4])
   }

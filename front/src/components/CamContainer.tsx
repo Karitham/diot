@@ -5,6 +5,9 @@ import PortalPopup from './PortalPopup'
 import FlvJs from 'flv.js'
 import { client } from '../api/client'
 
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 const CamContainer = (props: {
   fullwidth?: boolean
   disabled?: boolean
@@ -57,8 +60,12 @@ const CamContainer = (props: {
                   }
                 })
                 .then(() => {
-                  props.refresh()
+                  props.refresh();
                 })
+                .catch((error) => {
+                  toast.error('Une erreur s\'est produite');
+                  console.error(error);
+                });
             }}
           />
         </PortalPopup>
@@ -129,9 +136,11 @@ export const Cam = (props: CamContainerType) => {
 export type SensorProps = {
   id: string
   label: string
-  temperature?: string
-  humidity?: string
-  iaq?: string
+
+  temperature?: number
+  humidity?: number
+  iaq?: number
+
   alert?: boolean
   disabled?: boolean
   fontColor?: string

@@ -4,6 +4,7 @@ import MyAccount from './MyAccount'
 import { useNavigate } from 'react-router-dom'
 import { Account } from './UserAccount'
 import { client } from '../api/client'
+import 'react-toastify/dist/ReactToastify.css'
 
 export const permissionOptions = [
   { value: 'perm', label: 'admin' },
@@ -50,7 +51,7 @@ const AccountClosed = (props: { account: Account; refresh: () => void }) => {
   return (
     <div className="account-closed">
       <div className="xavier-thellier">{props.account.name}</div>
-      <SubmitButton onClick={handleEditContainerClick} text="Edit" />
+      <SubmitButton onClick={handleEditContainerClick} text="Edit" toastMessage="You are going to edit" toastType="info" />
     </div>
   )
 }

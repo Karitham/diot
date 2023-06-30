@@ -11,6 +11,7 @@ import { client } from '../api/client'
 import SubmitButton from '../components/SubmitButton'
 import useAuth from '../api/useAuth'
 import { components } from '../api/api'
+import 'react-toastify/dist/ReactToastify.css'
 
 const AdminPanel: FunctionComponent = () => {
   const [isUserAccountOpen, setUserAccountOpen] = useState(false)
@@ -48,6 +49,7 @@ const AdminPanel: FunctionComponent = () => {
 
   return (
     <>
+
       <div className="admin-panel">
         <Navbar settingsText="Settings" showBreadcrumbs={true} />
         <div className="container contentwrapper1">
@@ -66,8 +68,8 @@ const AdminPanel: FunctionComponent = () => {
               </div>
             </div>
           </div>
-          <SubmitButton className="new-user" onClick={openUserAccount} text="New user"></SubmitButton>
-          <SubmitButton className="logout" onClick={onLogoutContainerClick} text="Log out"></SubmitButton>
+          <SubmitButton className="new-user" onClick={openUserAccount} text="New user"  toastMessage="You are going to create a new user" toastType="info"></SubmitButton>
+          <SubmitButton className="logout" onClick={onLogoutContainerClick} text="Log out" toastMessage="Your logged out"></SubmitButton>
         </div>
       </div>
       {isUserAccountOpen && (
