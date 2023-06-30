@@ -78,7 +78,6 @@ void setup(){
   calibratePIR();
   setupBME();
 }
-
 void loop(){
   streamVideo();
   captureData();
